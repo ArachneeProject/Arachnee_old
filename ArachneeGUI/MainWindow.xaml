@@ -1,0 +1,10 @@
+﻿<Window x:Class="ArachneeGUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Button Content="Add new entry" HorizontalAlignment="Left" Height="24" Margin="204,92,0,0" VerticalAlignment="Top" Width="97" Click="addNewEntry"/>
+        <Button Content="Draw database" HorizontalAlignment="Left" Height="24" Margin="204,140,0,0" VerticalAlignment="Top" Width="97" Click="draw"/>
+
+    </Grid>
+</Window>
