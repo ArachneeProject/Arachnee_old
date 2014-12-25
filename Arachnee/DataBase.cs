@@ -51,16 +51,7 @@ namespace Arachnee
          * */
         public static void initializeDataBaseFromData (String rawData)
         {
-            DataBase.movies = new HashSet<Movie>();
-            DataBase.artists = new HashSet<Artist>();
-            DataBase.jobs = new HashSet<Job>();
-
-            String moviesMatch = Regex.Match(rawData, @"\<Movie\>(.*)\<\\Movie\>").Groups[1].Value;
-            String[] movies = Regex.Split(moviesMatch, @"\=\=");
-            foreach (String movie in movies)
-            {
-                DataBase.addMovie(MovieBuilder.buildMovie(movie));
-            }
+            
         }
 
         /**
