@@ -40,18 +40,18 @@
       <FileName>DataBase.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Arachnee.IHM">
-    <Position X="10.75" Y="2.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAIAAEAAAAAABAAAAAgAAA=</HashCode>
-      <FileName>IHM.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="Arachnee.BuilderFromFile">
     <Position X="4.5" Y="2.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAABAAAAACAAAAgAAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>BuilderFromFile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Arachnee.IHM" Collapsed="true">
+    <Position X="10.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAIAAEAAAAAABAAAAAgAAA=</HashCode>
+      <FileName>IHM.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Interface Name="Arachnee.Entry">
