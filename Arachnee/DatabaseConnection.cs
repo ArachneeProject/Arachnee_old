@@ -41,5 +41,14 @@ namespace Arachnee
 
             return dataSet;
         }
+
+        /**
+         * update database
+         * */
+        public void updateDataBase(System.Data.DataSet dataSet)
+        {
+            System.Data.SqlClient.SqlCommandBuilder cb = new System.Data.SqlClient.SqlCommandBuilder(dataAdapter);
+            cb.DataAdapter.Update(dataSet.Tables[0]);
+        }
     }
 }
