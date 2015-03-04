@@ -4,50 +4,61 @@ using System.Collections;
 
 public class Artist : MonoBehaviour
 {
-    // store the number of Artists
-    public static int artistCounter = 0;
 
     // id
     public int Id
     {
         get;
-        private set;
+        set;
     }
 
     // name
     public string Name
     {
         get;
-        private set;
+        set;
     }
 
     // surname
     public string Surname
     {
         get;
-        private set;
+        set;
     }
 
     // date of birth
     public int Birthdate
     {
         get;
-        private set;
+        set;
     }
 
     // job
     public Job Job
     {
         get;
-        private set;
+        set;
     }
 
+    /// <summary>
+    /// default constructor
+    /// </summary>
     public Artist()
     {
-        this.Id = ++artistCounter;
         this.Name = "Allan";
         this.Surname = "Smithee";
         this.Birthdate = 1950;
+    }
+
+    void OnMouseEnter()
+    {
+        renderer.material.color = Color.blue;
+        Debug.Log(this.Surname + " " + this.Name + " (born in " + this.Birthdate + ")");
+    }
+
+    void OnMouseExit()
+    {
+        renderer.material.color = Color.white;
     }
 }
 

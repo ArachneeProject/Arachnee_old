@@ -4,6 +4,7 @@ using System.Collections;
 
 public class Movie : MonoBehaviour
 {
+    public static int moviesCounter = 0;
 
     // id of the movie
     public int Id
@@ -40,7 +41,7 @@ public class Movie : MonoBehaviour
     {
         this.Id = -1;
         this.Title = "Default title";
-        this.Date = 1950;
+        this.Date = 1899;
     }
 
 
@@ -51,7 +52,7 @@ public class Movie : MonoBehaviour
     public void OnMouseEnter()
     {
         renderer.material.color = Color.red;
-        Debug.Log(this.Id + " : " + this.Title + "," + this.Date);
+        Debug.Log(this.Title + ", " + this.Date);
     }
 
     /// <summary>
