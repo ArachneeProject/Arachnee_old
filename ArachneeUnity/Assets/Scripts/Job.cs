@@ -1,31 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using UnityEngine;
+using System.Collections;
 
-namespace Assets.Scripts
+
+public class Job : MonoBehaviour
 {
-    class Job
+    // store the number of Jobs
+    public static int jobCounter = 0;
+
+    // id
+    public int Id
     {
-        public string Title
-        {
-            get;
-            private set;
-        }
+        get;
+        private set;
+    }
 
-        public string Description
-        {
-            get;
-            private set;
-        }
+    // title of the job
+    public string Title
+    {
+        get;
+        private set;
+    }
 
-        /// <summary>
-        /// default constructor
-        /// </summary>
-        public Job ()
-        {
-            this.Title = "Human";
-            this.Description = "No description available.";
-        }
+    // small description
+    public string Description
+    {
+        get;
+        private set;
+    }
+
+    /// <summary>
+    /// default constructor
+    /// </summary>
+    public Job ()
+    {
+        this.Id = ++jobCounter;
+        this.Title = "Human";
+        this.Description = "No description available.";
     }
 }
+
