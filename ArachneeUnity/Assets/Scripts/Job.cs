@@ -1,31 +1,21 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 
-public class Job : MonoBehaviour
+public class Job : Entry
 {
-    // store the number of Jobs
-    public static int jobCounter = 0;
-
-    // id
-    public int Id
-    {
-        get;
-        private set;
-    }
 
     // title of the job
     public string Title
     {
         get;
-        private set;
+        set;
     }
 
     // small description
     public string Description
     {
         get;
-        private set;
+        set;
     }
 
     /// <summary>
@@ -33,7 +23,6 @@ public class Job : MonoBehaviour
     /// </summary>
     public Job ()
     {
-        this.Id = ++jobCounter;
         this.Title = "Human";
         this.Description = "No description available.";
     }

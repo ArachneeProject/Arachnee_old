@@ -1,18 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 
-public class Movie : MonoBehaviour
+public class Movie : Entry
 {
-    public static int moviesCounter = 0;
-
-    // id of the movie
-    public int Id
-    {
-        get;
-        set;
-    }
-
+    
     // title of the movie
     public string Title
     {
@@ -27,15 +19,10 @@ public class Movie : MonoBehaviour
         set;
     }
 
-    public Artist Director
-    {
-        get;
-        set;
-    }
-
+    
 
     /// <summary>
-    /// default constructor
+    /// constructor
     /// </summary>
     public Movie()
     {
@@ -49,7 +36,7 @@ public class Movie : MonoBehaviour
     /// <summary>
     /// highlights the movie
     /// </summary>
-    public void OnMouseEnter()
+    void OnMouseEnter()
     {
         renderer.material.color = Color.red;
         Debug.Log(this.Title + ", " + this.Date);
@@ -58,10 +45,16 @@ public class Movie : MonoBehaviour
     /// <summary>
     /// stops highlighting the movie
     /// </summary>
-    public void OnMouseExit()
+    void OnMouseExit()
     {
         renderer.material.color = Color.white;
     }
+
+    void OnMouseOver()
+    {
+        Debug.Log("pisse");
+    }
+   
 
 
 

@@ -1,16 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 
-public class Artist : MonoBehaviour
+public class Artist : Entry
 {
-
-    // id
-    public int Id
-    {
-        get;
-        set;
-    }
 
     // name
     public string Name
@@ -28,13 +20,6 @@ public class Artist : MonoBehaviour
 
     // date of birth
     public int Birthdate
-    {
-        get;
-        set;
-    }
-
-    // job
-    public Job Job
     {
         get;
         set;
