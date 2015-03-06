@@ -131,8 +131,8 @@ public class Builder : MonoBehaviour
         foreach (KeyValuePair<int,Movie> pair in buildedMovies)
         {
             reader = getReaderFromQuery("SELECT id_movie2,type FROM 'connexions' WHERE id_movie1="+pair.Key);
-            int connectedMovieId = reader.GetInt32(0);
-            int type = reader.GetInt32(1);
+			int connectedMovieId = 1 ; //reader.GetInt32(1);
+			int type = 1 ; //reader.GetInt32(2);
             switch (type)
             {
                 case 1: // prequel

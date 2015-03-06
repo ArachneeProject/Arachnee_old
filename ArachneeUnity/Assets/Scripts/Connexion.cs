@@ -1,4 +1,5 @@
-﻿
+﻿using UnityEngine;
+
 public class Connexion
 {
     public Entry left
@@ -19,6 +20,7 @@ public class Connexion
         set;
     }
 
+
     public Connexion(Entry eLeft, Entry eRight, Nature nature)
     {
         this.left = eLeft;
@@ -37,5 +39,12 @@ public class Connexion
     {
         this.right = e;
     }
+
+	public void highlight()
+	{
+		Debug.DrawRay(this.left.transform.position,this.right.transform.position);
+		Debug.Log ("right : (" + this.right.transform.position.x + "," + this.right.transform.position.y + "," + this.right.transform.position.z + ")");
+	}
+
 }
 

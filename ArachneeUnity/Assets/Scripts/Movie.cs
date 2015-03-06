@@ -39,6 +39,7 @@ public class Movie : Entry
     void OnMouseEnter()
     {
         renderer.material.color = Color.red;
+
         Debug.Log(this.Title + ", " + this.Date);
     }
 
@@ -52,7 +53,7 @@ public class Movie : Entry
 
     void OnMouseOver()
     {
-        Debug.Log("pisse");
+		ConnexionBank.highlightMovieConnexions(this.Id);
     }
    
 
