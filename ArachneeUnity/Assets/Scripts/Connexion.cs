@@ -42,8 +42,7 @@ public class Connexion
 
 	public void highlight()
 	{
-		Debug.DrawRay(this.left.transform.position,this.right.transform.position);
-		Debug.Log ("right : (" + this.right.transform.position.x + "," + this.right.transform.position.y + "," + this.right.transform.position.z + ")");
+		Debug.DrawLine(this.left.transform.position,this.right.transform.position);
 	}
 
 }

@@ -131,19 +131,54 @@ public class Builder : MonoBehaviour
         foreach (KeyValuePair<int,Movie> pair in buildedMovies)
         {
             reader = getReaderFromQuery("SELECT id_movie2,type FROM 'connexions' WHERE id_movie1="+pair.Key);
-			int connectedMovieId = 1 ; //reader.GetInt32(1);
-			int type = 1 ; //reader.GetInt32(2);
-            switch (type)
+            while(reader.Read())
             {
-                case 1: // prequel
-                    ConnexionBank.connexions.Add(new Connexion(pair.Value,buildedMovies[connectedMovieId],Nature.Prequel));
-                    break;
-                case 2: // sequel
-                    break;
+                int connectedMovieId = reader.GetInt32(0);
+                int type = reader.GetInt32(1);
+                Nature nature = Nature.None;
+                switch (type)
+                {
+                    case 1:
+                        nature = Nature.Prequel;
+                        break;
+                    case 2:
+                        nature = Nature.Sequel;
+                        break;
+                    default:
+                        Debug.Log("Unrecognized nature id :"+type);
+                        break;
+                }
+                ConnexionBank.connexions.Add(new Connexion(pair.Value, buildedMovies[connectedMovieId], nature));
+                Debug.Log(pair.Value.Title + " is the " + nature + " of " + buildedMovies[connectedMovieId].Title);
             }
         }
 
-         
+        // Artist -> Movie
+
+        foreach (KeyValuePair<int, Artist> pair in buildedArtists)
+        {
+            reader = getReaderFromQuery("SELECT id_movie,id_job FROM 'castings' WHERE id_artist=" + pair.Key);
+            while (reader.Read())
+            {
+                int connectedMovieId = reader.GetInt32(0);
+                int job = reader.GetInt32(1);
+                Nature nature = Nature.None;
+                switch (job)
+                {
+                    case 1:
+                        nature = Nature.Director;
+                        break;
+                    case 2:
+                        nature = Nature.Actor;
+                        break;
+                    default:
+                        Debug.Log("Unrecognized job id :" + job);
+                        break;
+                }
+                ConnexionBank.connexions.Add(new Connexion(pair.Value, buildedMovies[connectedMovieId], nature));
+                Debug.Log(pair.Value.Name + " is the " + nature + " of " + buildedMovies[connectedMovieId].Title);
+            }
+        }
     }
     
 

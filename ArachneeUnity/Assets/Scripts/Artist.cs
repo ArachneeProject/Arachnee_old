@@ -45,5 +45,10 @@ public class Artist : Entry
     {
         renderer.material.color = Color.white;
     }
+
+    void OnMouseOver()
+    {
+        ConnexionBank.highlightConnexions<Artist>(this.Id);
+    }
 }
 

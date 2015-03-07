@@ -53,7 +53,7 @@ public class Movie : Entry
 
     void OnMouseOver()
     {
-		ConnexionBank.highlightMovieConnexions(this.Id);
+		ConnexionBank.highlightConnexions<Movie>(this.Id);
     }
    
 
