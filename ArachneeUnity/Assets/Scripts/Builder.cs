@@ -14,7 +14,7 @@ public class Builder : MonoBehaviour
 
     public static Dictionary<int, Movie> buildedMovies = new Dictionary<int, Movie>();
     public static Dictionary<int, Artist> buildedArtists = new Dictionary<int, Artist>();
-    public static Dictionary<int, Job> buildedJobs = new Dictionary<int, Job>(); 
+    //public static Dictionary<int, Job> buildedJobs = new Dictionary<int, Job>(); 
     
     /// <summary>
     /// main
@@ -69,8 +69,11 @@ public class Builder : MonoBehaviour
     {
         this.connexion.Open();
 
+        SqliteDataReader reader;
+
         // generates jobs
-        SqliteDataReader reader = getReaderFromQuery("SELECT * FROM 'jobs'");
+        /*
+        reader = getReaderFromQuery("SELECT * FROM 'jobs'");
         while (reader.Read())
         {
             GameObject createdEntry = (GameObject)Instantiate(entryPrefab, Vector3.zero, Quaternion.identity);
@@ -81,6 +84,7 @@ public class Builder : MonoBehaviour
 
             buildedJobs.Add(createdJob.Id, createdJob);
         }
+         * */
 
         // generates artists
         reader = getReaderFromQuery("SELECT * FROM 'artists'");

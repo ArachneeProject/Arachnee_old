@@ -34,27 +34,25 @@ public class Movie : Entry
 
 
     /// <summary>
-    /// highlights the movie
+    /// highlights the movie and its connexions
     /// </summary>
     void OnMouseEnter()
     {
         renderer.material.color = Color.red;
-
+        ConnexionBank.highlightConnexions<Movie>(this.Id);
         Debug.Log(this.Title + ", " + this.Date);
     }
 
     /// <summary>
-    /// stops highlighting the movie
+    ///  stop highlighting and mask connexions
     /// </summary>
     void OnMouseExit()
     {
         renderer.material.color = Color.white;
+        ConnexionBank.maskAll();
     }
 
-    void OnMouseOver()
-    {
-		ConnexionBank.highlightConnexions<Movie>(this.Id);
-    }
+    
    
 
 

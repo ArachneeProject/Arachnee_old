@@ -20,30 +20,32 @@ public class Connexion
         set;
     }
 
+    private GameObject lineGO;
+
 
     public Connexion(Entry eLeft, Entry eRight, Nature nature)
     {
         this.left = eLeft;
         this.right = eRight;
         this.nature = nature;
-    }
 
-    public Connexion (Entry left, Nature nat)
-    {
-        this.left = left;
-        this.right = new Entry();
-        this.nature = nat;
-    }
-
-    public void addRight(Entry e)
-    {
-        this.right = e;
+        lineGO = new GameObject();
+        LineRenderer line = lineGO.AddComponent<LineRenderer>();
+        line.SetPosition(0, this.right.transform.position);
+        line.SetPosition(1, this.left.transform.position);
+        line.SetWidth(0.05F, 0.05F);
+        lineGO.renderer.enabled = false;
     }
 
 	public void highlight()
 	{
-		Debug.DrawLine(this.left.transform.position,this.right.transform.position);
+		lineGO.renderer.enabled = true;
 	}
+
+    public void mask()
+    {
+        lineGO.renderer.enabled = false;
+    }
 
 }
 
