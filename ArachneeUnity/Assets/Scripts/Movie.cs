@@ -39,7 +39,7 @@ public class Movie : Entry
     void OnMouseEnter()
     {
         renderer.material.color = Color.red;
-        ConnexionBank.highlightConnexions<Movie>(this.Id);
+        Graph.highlightConnexions<Movie>(this.Id);
         Debug.Log(this.Title + ", " + this.Date);
     }
 
@@ -49,7 +49,7 @@ public class Movie : Entry
     void OnMouseExit()
     {
         renderer.material.color = Color.white;
-        ConnexionBank.maskAll();
+        Graph.maskAll();
     }
 
     

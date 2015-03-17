@@ -38,14 +38,14 @@ public class Artist : Entry
     void OnMouseEnter()
     {
         renderer.material.color = Color.blue;
-        ConnexionBank.highlightConnexions<Artist>(this.Id);
+        Graph.highlightConnexions<Artist>(this.Id);
         Debug.Log(this.Surname + " " + this.Name + " (born in " + this.Birthdate + ")");
     }
 
     void OnMouseExit()
     {
         renderer.material.color = Color.white;
-        ConnexionBank.maskAll();
+        Graph.maskAll();
     }
 
     void OnMouseOver()

@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 
-public class Connexion
+public class Connexion : MonoBehaviour
 {
+    // left -> right
     public Entry left
     {
         get;
@@ -20,31 +21,30 @@ public class Connexion
         set;
     }
 
-    private GameObject lineGO;
+    // renderer of the connexion
+    private LineRenderer line;
 
-
-    public Connexion(Entry eLeft, Entry eRight, Nature nature)
+    /// <summary>
+    /// initialize the lineRenderer 
+    /// </summary>
+    /// <param name="lr"></param>
+    public void initializeLineRenderer(LineRenderer lr)
     {
-        this.left = eLeft;
-        this.right = eRight;
-        this.nature = nature;
-
-        lineGO = new GameObject();
-        LineRenderer line = lineGO.AddComponent<LineRenderer>();
+        this.line = lr;
         line.SetPosition(0, this.right.transform.position);
         line.SetPosition(1, this.left.transform.position);
-        line.SetWidth(0.05F, 0.05F);
-        lineGO.renderer.enabled = false;
+        line.SetWidth(0.5F, 0.5F);
+        this.renderer.enabled = false;
     }
 
 	public void highlight()
 	{
-		lineGO.renderer.enabled = true;
+		this.renderer.enabled = true;
 	}
 
     public void mask()
     {
-        lineGO.renderer.enabled = false;
+        this.renderer.enabled = false;
     }
 
 }

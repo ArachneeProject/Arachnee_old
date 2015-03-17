@@ -1,10 +1,16 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
-
-public class ConnexionBank
+public class Graph
 {
+    // vertices
+    public static Dictionary<int, Movie> buildedMovies = new Dictionary<int, Movie>();
+    public static Dictionary<int, Artist> buildedArtists = new Dictionary<int, Artist>();
+
+    // edges
     public static List<Connexion> connexions = new List<Connexion>();
 
+    // highlighted edges
     private static List<Connexion> highlighted = new List<Connexion>();
 
     /// <summary>
@@ -14,12 +20,12 @@ public class ConnexionBank
     /// <param name="id"></param>
 	public static void highlightConnexions<T>(int id)
 	{
-		foreach (Connexion connection in connexions) 
+        foreach (Connexion connexion in connexions) 
 		{
-			if ((connection.left is T && connection.left.Id == id) || connection.right is T && connection.right.Id == id)
+            if ((connexion.left is T && connexion.left.Id == id) || connexion.right is T && connexion.right.Id == id)
 			{
-				connection.highlight();
-                highlighted.Add(connection);
+                connexion.highlight();
+                highlighted.Add(connexion);
 			}
 		}
 	}

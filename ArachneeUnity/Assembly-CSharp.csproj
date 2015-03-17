@@ -49,8 +49,8 @@
      <Compile Include="Assets\Scripts\Artist.cs" />
      <Compile Include="Assets\Scripts\Builder.cs" />
      <Compile Include="Assets\Scripts\Connexion.cs" />
-     <Compile Include="Assets\Scripts\ConnexionBank.cs" />
      <Compile Include="Assets\Scripts\Entry.cs" />
+     <Compile Include="Assets\Scripts\Graph.cs" />
      <Compile Include="Assets\Scripts\Job.cs" />
      <Compile Include="Assets\Scripts\Movie.cs" />
      <Compile Include="Assets\Scripts\Nature.cs" />
