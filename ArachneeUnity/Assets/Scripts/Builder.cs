@@ -8,6 +8,7 @@ using System.Collections.Generic;
 public class Builder : MonoBehaviour
 {
     public GameObject entryPrefab;
+    public Material connexionMaterial;
 
     private string databasePath;
     private SqliteConnection connexion;
@@ -121,11 +122,9 @@ public class Builder : MonoBehaviour
         this.connexion.Close();
     }
 
-
     /// <summary>
-    /// 
+    /// generates connexions between entries
     /// </summary>
-    /// <param name="artist"></param>
     private void generateConnexions()
     {
         this.connexion.Open();
