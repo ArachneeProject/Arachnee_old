@@ -3,8 +3,7 @@ using System.Collections;
 
 public class rotator : MonoBehaviour 
 {
-    public float rotationSpeed;
-    public float accelCoeff;
+    public float rotationSpeed = 1;
 	
 	// Update is called once per frame
 	void Update () 
@@ -12,13 +11,5 @@ public class rotator : MonoBehaviour
         this.transform.Rotate(Vector3.one, rotationSpeed);	
 	}
 
-    void OnMouseEnter()
-    {
-        rotationSpeed *= accelCoeff;
-    }
-
-    void OnMouseExit()
-    {
-        rotationSpeed /= accelCoeff;
-    }
+    
 }

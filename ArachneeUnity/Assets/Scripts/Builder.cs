@@ -78,7 +78,7 @@ public class Builder : MonoBehaviour
         while (reader.Read())
         {
             generatedArtists++;
-            GameObject createdEntry = (GameObject)Instantiate(artistPrefab, new Vector3(0, 0, generatedArtists * 1.5F), Quaternion.identity);
+            GameObject createdEntry = (GameObject)Instantiate(artistPrefab, new Vector3(0, 0, generatedArtists * 1.5F), Quaternion.Euler(Random.value * Vector3.one));
             Artist createdArtist = createdEntry.AddComponent<Artist>();
             createdArtist.Id = (int)reader.GetInt32(0);
             createdArtist.Name = reader.GetString(1);
@@ -94,7 +94,7 @@ public class Builder : MonoBehaviour
         while (reader.Read())
         {
             generatedMovies++;
-            GameObject createdEntry = (GameObject)Instantiate(moviePrefab, new Vector3(generatedMovies * 1.5F, 0, 0), Quaternion.identity);
+            GameObject createdEntry = (GameObject)Instantiate(moviePrefab, new Vector3(generatedMovies * 1.5F, 0, 0), Quaternion.Euler(Random.value * Vector3.one));
             Movie createdMovie = createdEntry.AddComponent<Movie>();
             createdMovie.Id = reader.GetInt32(0);
             createdMovie.Title = reader.GetString(1);
