@@ -8,7 +8,8 @@ using System.Collections.Generic;
 public class Builder : MonoBehaviour
 {
 
-    public GameObject entryPrefab;
+    public GameObject moviePrefab;
+    public GameObject artistPrefab;
     public GameObject connexionPrefab;
 
     private string databasePath;
@@ -77,7 +78,7 @@ public class Builder : MonoBehaviour
         while (reader.Read())
         {
             generatedArtists++;
-            GameObject createdEntry = (GameObject)Instantiate(entryPrefab, new Vector3(0, 0, generatedArtists * 1.5F), Quaternion.LookRotation(Vector3.down));
+            GameObject createdEntry = (GameObject)Instantiate(artistPrefab, new Vector3(0, 0, generatedArtists * 1.5F), Quaternion.identity);
             Artist createdArtist = createdEntry.AddComponent<Artist>();
             createdArtist.Id = (int)reader.GetInt32(0);
             createdArtist.Name = reader.GetString(1);
@@ -93,7 +94,7 @@ public class Builder : MonoBehaviour
         while (reader.Read())
         {
             generatedMovies++;
-            GameObject createdEntry = (GameObject)Instantiate(entryPrefab, new Vector3(generatedMovies * 1.5F, 0, 0), Quaternion.identity);
+            GameObject createdEntry = (GameObject)Instantiate(moviePrefab, new Vector3(generatedMovies * 1.5F, 0, 0), Quaternion.identity);
             Movie createdMovie = createdEntry.AddComponent<Movie>();
             createdMovie.Id = reader.GetInt32(0);
             createdMovie.Title = reader.GetString(1);

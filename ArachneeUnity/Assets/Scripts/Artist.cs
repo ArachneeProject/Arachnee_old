@@ -35,22 +35,23 @@ public class Artist : Entry
         this.Birthdate = 1950;
     }
 
+    /// <summary>
+    /// highlights the movie and its connexions
+    /// </summary>
     void OnMouseEnter()
     {
-        renderer.material.color = Color.blue;
+        this.particleSystem.startSize *= 2.5F;
         Graph.highlightConnexions<Artist>(this.Id);
         Debug.Log(this.Surname + " " + this.Name + " (born in " + this.Birthdate + ")");
     }
-
+    
+    /// <summary>
+    ///  stop highlighting and mask connexions
+    /// </summary>
     void OnMouseExit()
     {
-        renderer.material.color = Color.white;
+        this.particleSystem.startSize /= 2.5F;
         Graph.maskAll();
-    }
-
-    void OnMouseOver()
-    {
-        
     }
 }
 
