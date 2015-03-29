@@ -55,6 +55,7 @@
      <Compile Include="Assets\Scripts\Movie.cs" />
      <Compile Include="Assets\Scripts\Nature.cs" />
      <Compile Include="Assets\Scripts\UnityHierarchy.cs" />
+     <Compile Include="Assets\rotator.cs" />
      <None Include="Assets\Scripts\ClassDiagram1.cd" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>

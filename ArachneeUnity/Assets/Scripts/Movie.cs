@@ -38,7 +38,7 @@ public class Movie : Entry
     /// </summary>
     void OnMouseEnter()
     {
-        renderer.material.color = Color.red;
+        this.particleSystem.startSize *= 3;
         Graph.highlightConnexions<Movie>(this.Id);
         Debug.Log(this.Title + ", " + this.Date);
     }
@@ -48,7 +48,7 @@ public class Movie : Entry
     /// </summary>
     void OnMouseExit()
     {
-        renderer.material.color = Color.white;
+        this.particleSystem.startSize /= 3;
         Graph.maskAll();
     }
 

@@ -93,7 +93,7 @@ public class Builder : MonoBehaviour
         while (reader.Read())
         {
             generatedMovies++;
-            GameObject createdEntry = (GameObject)Instantiate(entryPrefab, new Vector3(generatedMovies * 1.5F, 0, 0), Quaternion.LookRotation(Vector3.down));
+            GameObject createdEntry = (GameObject)Instantiate(entryPrefab, new Vector3(generatedMovies * 1.5F, 0, 0), Quaternion.identity);
             Movie createdMovie = createdEntry.AddComponent<Movie>();
             createdMovie.Id = reader.GetInt32(0);
             createdMovie.Title = reader.GetString(1);
