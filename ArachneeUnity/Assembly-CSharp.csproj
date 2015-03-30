@@ -49,6 +49,7 @@
      <Compile Include="Assets\Controller.cs" />
      <Compile Include="Assets\Scripts\Artist.cs" />
      <Compile Include="Assets\Scripts\Builder.cs" />
+     <Compile Include="Assets\Scripts\CameraGUI.cs" />
      <Compile Include="Assets\Scripts\Connexion.cs" />
      <Compile Include="Assets\Scripts\Entry.cs" />
      <Compile Include="Assets\Scripts\Graph.cs" />

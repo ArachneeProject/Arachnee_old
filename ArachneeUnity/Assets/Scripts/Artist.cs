@@ -42,7 +42,8 @@ public class Artist : Entry
     {
         this.particleSystem.startSize *= 2.5F;
         Graph.highlightConnexions<Artist>(this.Id);
-        Debug.Log(this.Surname + " " + this.Name + " (born in " + this.Birthdate + ")");
+        CameraGUI.Principal = this.Surname + " " + this.Name;
+        CameraGUI.Date = ""+this.Birthdate;
     }
     
     /// <summary>
@@ -51,6 +52,8 @@ public class Artist : Entry
     void OnMouseExit()
     {
         this.particleSystem.startSize /= 2.5F;
+        CameraGUI.Principal = "";
+        CameraGUI.Date = "";
         Graph.maskAll();
     }
 }

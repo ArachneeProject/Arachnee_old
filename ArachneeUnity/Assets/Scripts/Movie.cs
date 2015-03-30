@@ -40,7 +40,8 @@ public class Movie : Entry
     {
         this.particleSystem.startSize *= 3;
         Graph.highlightConnexions<Movie>(this.Id);
-        Debug.Log(this.Title + ", " + this.Date);
+        CameraGUI.Principal = this.Title;
+        CameraGUI.Date = ""+this.Date;
     }
 
     /// <summary>
@@ -48,6 +49,8 @@ public class Movie : Entry
     /// </summary>
     void OnMouseExit()
     {
+        CameraGUI.Principal = "";
+        CameraGUI.Date = "";
         this.particleSystem.startSize /= 3;
         Graph.maskAll();
     }
