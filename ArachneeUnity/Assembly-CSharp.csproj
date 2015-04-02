@@ -52,6 +52,7 @@
      <Compile Include="Assets\Scripts\Connexion.cs" />
      <Compile Include="Assets\Scripts\Controller.cs" />
      <Compile Include="Assets\Scripts\Database edition\DatabaseConnexion.cs" />
+     <Compile Include="Assets\Scripts\Database edition\MenuManager.cs" />
      <Compile Include="Assets\Scripts\Database edition\SceneLoader.cs" />
      <Compile Include="Assets\Scripts\Entry.cs" />
      <Compile Include="Assets\Scripts\Graph.cs" />
