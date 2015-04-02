@@ -46,11 +46,13 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Controller.cs" />
      <Compile Include="Assets\Scripts\Artist.cs" />
      <Compile Include="Assets\Scripts\Builder.cs" />
      <Compile Include="Assets\Scripts\CameraGUI.cs" />
      <Compile Include="Assets\Scripts\Connexion.cs" />
+     <Compile Include="Assets\Scripts\Controller.cs" />
+     <Compile Include="Assets\Scripts\Database edition\DatabaseConnexion.cs" />
+     <Compile Include="Assets\Scripts\Database edition\SceneLoader.cs" />
      <Compile Include="Assets\Scripts\Entry.cs" />
      <Compile Include="Assets\Scripts\Graph.cs" />
      <Compile Include="Assets\Scripts\Job.cs" />
@@ -58,7 +60,6 @@
      <Compile Include="Assets\Scripts\Nature.cs" />
      <Compile Include="Assets\Scripts\UnityHierarchy.cs" />
      <Compile Include="Assets\Scripts\rotator.cs" />
-     <None Include="Assets\Scripts\ClassDiagram1.cd" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>
  </Reference>
