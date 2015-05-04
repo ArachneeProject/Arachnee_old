@@ -40,7 +40,7 @@ public class Artist : Entry
     /// </summary>
     void OnMouseEnter()
     {
-        this.particleSystem.startSize *= 2.5F;
+        this.GetComponent<ParticleSystem>().startSize *= 2.5F;
         Graph.highlightConnexions<Artist>(this.Id);
         CameraGUI.Principal = this.Surname + " " + this.Name;
         CameraGUI.Date = ""+this.Birthdate;
@@ -51,7 +51,7 @@ public class Artist : Entry
     /// </summary>
     void OnMouseExit()
     {
-        this.particleSystem.startSize /= 2.5F;
+        this.GetComponent<ParticleSystem>().startSize /= 2.5F;
         CameraGUI.Principal = "";
         CameraGUI.Date = "";
         Graph.maskAll();

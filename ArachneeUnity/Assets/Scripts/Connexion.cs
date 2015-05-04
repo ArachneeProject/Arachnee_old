@@ -34,17 +34,17 @@ public class Connexion : MonoBehaviour
         line.SetPosition(0, this.right.transform.position);
         line.SetPosition(1, this.left.transform.position);
         line.SetWidth(0.5F, 0.5F);
-        this.renderer.enabled = false;
+        this.GetComponent<Renderer>().enabled = false;
     }
 
 	public void highlight()
 	{
-		this.renderer.enabled = true;
+		this.GetComponent<Renderer>().enabled = true;
 	}
 
     public void mask()
     {
-        this.renderer.enabled = false;
+        this.GetComponent<Renderer>().enabled = false;
     }
 
 }
