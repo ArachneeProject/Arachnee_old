@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Artist.cs" />
      <Compile Include="Assets\Scripts\Builder.cs" />
+     <Compile Include="Assets\Scripts\ButtonDataHolder.cs" />
      <Compile Include="Assets\Scripts\CameraGUI.cs" />
      <Compile Include="Assets\Scripts\Connexion.cs" />
      <Compile Include="Assets\Scripts\Controller.cs" />
