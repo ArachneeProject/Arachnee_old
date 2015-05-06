@@ -9,16 +9,30 @@ public class databaseManager : MonoBehaviour
     private string databasePath;
     private SqliteConnection connexion;
 
+    // "add new entry" menu
+    public GameObject addNewEntryMenu;
+
+    // artist
     public InputField nameIF;
     public InputField surnameIF;
     public InputField yearIF;
 
+    // job
+    public InputField jobIF;
+
+    // movie
+    public InputField titleIF;
+    public InputField dateIF;
+
+    // toggle
     public ToggleGroup toggleGrp;
     public GameObject toggleBtnPrefab;
     public Transform toogleSpawPoint;
     public int spaceBetweenToggles = 1;
 
+    // to be changed
     private List<Toggle> buttons = new List<Toggle>();
+
 
     /// <summary>
     /// initialize connexion to database
@@ -54,7 +68,9 @@ public class databaseManager : MonoBehaviour
 
     void Start()
     {
+        
         initializeConnexion();
+        /*
         this.connexion.Open();
         SqliteDataReader reader;
 
@@ -92,12 +108,13 @@ public class databaseManager : MonoBehaviour
         }
 
         this.connexion.Close();  
+         * */
     }
 
 
-    public void SubmitName()
+    public void SubmitArtist()
     {
-        Debug.Log(nameIF.text + " " + surnameIF.text + " (" + yearIF.text + ")");
+        Debug.Log("Submitting " + nameIF.text + " " + surnameIF.text + " (" + yearIF.text + ")");
         connexion.Open();
         SqliteCommand cmd = new SqliteCommand(this.connexion);
         try
@@ -105,27 +122,72 @@ public class databaseManager : MonoBehaviour
             cmd.CommandText = "INSERT OR ABORT INTO  artists (name,surname,birthdate) VALUES ('" + nameIF.text + "', '" + surnameIF.text + "', " + System.Convert.ToInt32(yearIF.text) + ")";
             cmd.ExecuteNonQuery();
             cmd.Dispose();
-            Debug.Log("Successfully dded to database: " + nameIF.text + " " + surnameIF.text + " (" + yearIF.text + ")");
+            Debug.Log("Successfully added to database: " + nameIF.text + " " + surnameIF.text + " (" + yearIF.text + ")");
         }
         catch (System.Exception e)
         {
             Debug.Log("Failed: " + e.Message);
         }
-        
-
-        
-
-        // to do
-        foreach (Toggle button in buttons)
-        {
-            if (button.isOn)
-            {
-                ButtonDataHolder data = button.GetComponent<ButtonDataHolder>();
-                Debug.Log(data.Identifier);
-
-                return;
-            }
-        }
+        connexion.Close();
+        clearIF();
     }
 
+    public void SubmitMovie()
+    {
+        Debug.Log("Submitting " + titleIF.text + " (" + dateIF.text + ")");
+        connexion.Open();
+        SqliteCommand cmd = new SqliteCommand(this.connexion);
+        try
+        {
+            cmd.CommandText = "INSERT OR ABORT INTO  movies (title,date) VALUES ('" + titleIF.text + "', " + System.Convert.ToInt32(dateIF.text) + ")";
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            Debug.Log("Successfully added to database: " + titleIF.text + " (" + dateIF.text + ")");
+        }
+        catch (System.Exception e)
+        {
+            Debug.Log("Failed: " + e.Message);
+        }
+        connexion.Close();
+        clearIF();
+    }
+
+    public void SubmitJob()
+    {
+        Debug.Log("Submitting " + jobIF.text);
+        connexion.Open();
+        SqliteCommand cmd = new SqliteCommand(this.connexion);
+        try
+        {
+            cmd.CommandText = "INSERT OR ABORT INTO  jobs (title) VALUES ('" + jobIF.text + "')";
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            Debug.Log("Successfully added to database: " + jobIF.text);
+        }
+        catch (System.Exception e)
+        {
+            Debug.Log("Failed: " + e.Message);
+        }
+        connexion.Close();
+        clearIF();
+    }
+
+    void clearIF()
+    {
+        nameIF.text = "";
+        surnameIF.text = "";
+        yearIF.text = "";
+        jobIF.text = "";
+        titleIF.text = "";
+        dateIF.text = "";
+    }
+
+    /// <summary>
+    /// used to activate/desactivate "new entry" menu
+    /// </summary>
+    /// <param name="value"></param>
+    public void setEnabledNewEntryMenu(bool value)
+    {
+        this.addNewEntryMenu.SetActive(value);
+    }
 }
