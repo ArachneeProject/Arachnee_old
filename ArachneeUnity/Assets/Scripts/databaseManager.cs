@@ -25,10 +25,15 @@ public class databaseManager : MonoBehaviour
     public InputField dateIF;
 
     // toggle
-    public ToggleGroup toggleGrp;
+    public ToggleGroup artistToggleGrp;
+    public ToggleGroup movieToggleGrp;
+    public ToggleGroup jobToggleGrp;
+
     public GameObject toggleBtnPrefab;
     public Transform toogleSpawPoint;
+
     public int spaceBetweenToggles = 1;
+    public int spaceBetweenColumnsOfToggles = 100;
 
     // to be changed
     private List<Toggle> buttons = new List<Toggle>();
@@ -66,25 +71,58 @@ public class databaseManager : MonoBehaviour
         return reader;
     }
 
+
     void Start()
     {
-        
         initializeConnexion();
-        /*
+        buildToogles(toogleSpawPoint.position - Vector3.right * spaceBetweenColumnsOfToggles, "SELECT id,name FROM 'artists'", artistToggleGrp);
+        buildToogles(toogleSpawPoint.position, "SELECT id,title FROM 'jobs'", jobToggleGrp);
+        buildToogles(toogleSpawPoint.position + Vector3.right * spaceBetweenColumnsOfToggles, "SELECT id,title FROM 'movies'", movieToggleGrp);
+        setEnabledNewEntryMenu(true);
+    }
+
+    
+    /// <summary>
+    /// build toggle buttons
+    /// </summary>
+    /// <param name="spawnPoint"></param>
+    /// <param name="query"> "SELECT id,title FROM 'jobs'" for example </param>
+    void buildToogles(Vector3 spawnPoint, string query, ToggleGroup group)
+    {
         this.connexion.Open();
         SqliteDataReader reader;
 
-        reader = getReaderFromQuery("SELECT id,title FROM 'jobs'");
+        try
+        {
+            reader = getReaderFromQuery(query);
+        }
+        catch (System.Exception e)
+        {
+            Debug.Log(e.Message);
+            return;
+        }
+        
         int offset = 0;
         while(reader.Read())
         {
-            // get string and id
-            int id = reader.GetInt32(0);
-            string jobTitle = reader.GetString(1);
-            
+            int id = 0;
+            string text = "";
+
+            // get text and id
+            try
+            {
+                id = reader.GetInt32(0);
+                text = reader.GetString(1);
+            }
+            catch (System.Exception e)
+            {
+                Debug.Log("Failed to build toggle buttons.\n"+e.Message);
+                return;
+            }
+           
             // create toggle button
-            GameObject toggleObject = (GameObject)Instantiate(toggleBtnPrefab, toogleSpawPoint.position + -1 * spaceBetweenToggles * offset * Vector3.up, Quaternion.identity);
-            toggleObject.transform.SetParent(toggleGrp.transform);
+            GameObject toggleObject = (GameObject)Instantiate(toggleBtnPrefab, spawnPoint + -1 * spaceBetweenToggles * offset * Vector3.up, Quaternion.identity);
+            toggleObject.transform.SetParent(group.transform);
 
             // add identifier to the toggle button
             ButtonDataHolder dataHolder = toggleObject.AddComponent<ButtonDataHolder>();
@@ -92,15 +130,14 @@ public class databaseManager : MonoBehaviour
 
             // set the toggle group of the toggle button
             Toggle toggleScript = toggleObject.GetComponent<Toggle>();
-            toggleScript.group = toggleGrp;
+            toggleScript.group = group;
             toggleScript.isOn = false;
 
             // set label of the toggle button to title of the job
             Text textInToggle = toggleScript.GetComponentInChildren<Text>();
-            textInToggle.text = jobTitle;
-            Debug.Log(textInToggle.text);
+            textInToggle.text = text;
 
-            // add the created toggle to list
+            // add the created toggle to list (ugly, to be changed)
             this.buttons.Add(toggleScript);
 
             // increase offset to list the toggle buttons in a vertical arrangement
@@ -108,9 +145,11 @@ public class databaseManager : MonoBehaviour
         }
 
         this.connexion.Close();  
-         * */
+
     }
 
+
+    // to be refactored
 
     public void SubmitArtist()
     {
@@ -172,6 +211,10 @@ public class databaseManager : MonoBehaviour
         clearIF();
     }
 
+
+    /// <summary>
+    /// clear Input fields 
+    /// </summary>
     void clearIF()
     {
         nameIF.text = "";
@@ -182,12 +225,67 @@ public class databaseManager : MonoBehaviour
         dateIF.text = "";
     }
 
+
     /// <summary>
     /// used to activate/desactivate "new entry" menu
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value"></param> 
     public void setEnabledNewEntryMenu(bool value)
     {
         this.addNewEntryMenu.SetActive(value);
+        this.toogleSpawPoint.gameObject.SetActive(!value);
+    }
+
+    public void SubmitConnexion()
+    {
+        // soooo ugly, it will cause bugs
+        // order : artist, job, movie
+        Debug.Log("Note: the ugliness of this code is too damn high");
+
+        int id_movie = 0;
+        int id_artist = 0;
+        int id_job = 0;
+
+        bool id_artist_notfound = true;
+        bool id_job_notfound = true;
+        foreach (Toggle button in buttons)
+        {
+            if (button.isOn)
+            {
+                if (id_artist_notfound)
+                {
+                    id_artist = button.GetComponent<ButtonDataHolder>().Identifier;
+                    id_artist_notfound = false;
+                }
+                else if (id_job_notfound)
+                {
+                    id_job = button.GetComponent<ButtonDataHolder>().Identifier;
+                    id_job_notfound = false;
+                }
+                else
+                {
+                    id_movie = button.GetComponent<ButtonDataHolder>().Identifier;
+                    break;
+                }
+            }
+        }
+
+        Debug.Log("Here is what I found: movie " + id_movie + ", job " + id_job + ", artist "+id_artist);
+
+        Debug.Log("Submitting connection...");
+        connexion.Open();
+        SqliteCommand cmd = new SqliteCommand(this.connexion);
+        try
+        {
+            cmd.CommandText = "INSERT OR ABORT INTO  castings (id_movie,id_artist,id_job) VALUES (" + id_movie + ", " + id_artist + ", " + id_job + ")";
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            Debug.Log("Connection successfully added to database.");
+        }
+        catch (System.Exception e)
+        {
+            Debug.Log("Failed: " + e.Message);
+        }
+        connexion.Close();
     }
 }
