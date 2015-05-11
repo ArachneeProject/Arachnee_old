@@ -11,7 +11,7 @@ Because of that, I want to create Arachnee, a 3D database showing all connection
 - Arachnee is written in C# with Visual Studio, because, well, I like this language (and Unity doesn't really accept other languages anyway). VS is a very powerful IDE, so I use it to work with efficiency.
 
 ## It seems cool. How advanced is Arachnee so far?
-Take a look in the Screenshots folder: you'll be able to see the progression of the project. All files are named by date, except the file concept.jpg, which shows what Arachnee "should" look like.
+Take a look in the Screenshots folder: you'll be able to see the progression of the project (all files are named by date).
 
 It's a personnal project that I'm working on, not on full-time, so it's progressing at its own speed. But I hope you'll enjoy it when the first version will be available :)
 
