@@ -14,7 +14,6 @@ public class MenuManager : MonoBehaviour
     {
         
         Vector3 position1 = menuItem1.position;
-        Vector3 position2 = menuItem2.position;
 
         for (float i = position1.x ; i < 50; i++)
         {

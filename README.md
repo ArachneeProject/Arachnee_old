@@ -6,7 +6,7 @@ Did you notice that the kid in Home Alone (1990), played by Macaulay Culkin, was
 Because of that, I want to create Arachnee, a 3D database showing all connections between its entries. The idea is to show a movie and every person linked to this movie. Then, if you move to someone, you should see every movie he/she is connected to. Also, if you select  two entries, Arachnee would show the shortest path between them (if it exists). This is what I want Arachnee to provide.
 
 ## What is used to develop this?
-- I'm using SQLite for the database. I builded it with SqliteBrowser, and it has only 4 entries right now (filling the database will be done later...). 
+- I'm using SQLite for the database. I builded it with SqliteBrowser, and it has only few entries right now (filling the database will be done later...). 
 - Unity3D allows me to create the 3D visualization of the whole thing.
 - Arachnee is written in C# with Visual Studio, because, well, I like this language (and Unity doesn't really accept other languages anyway). VS is a very powerful IDE, so I use it to work with efficiency.
 
