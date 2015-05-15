@@ -10,7 +10,11 @@ public class Builder : MonoBehaviour
 
     public GameObject moviePrefab;
     public GameObject artistPrefab;
-    public GameObject connexionPrefab;
+    public GameObject edgePrefab;
+
+    private int numberOfArtists = 0;
+    private int numberOfJobs = 0;
+    private int numberOfMovies = 0;
 
     private string databasePath;
     private SqliteConnection connexion;
@@ -72,38 +76,40 @@ public class Builder : MonoBehaviour
 
         SqliteDataReader reader;
 
-       
-        // generates artists
-        reader = getReaderFromQuery("SELECT * FROM 'artists'");
-        int generatedArtists = 0;
-        while (reader.Read())
+        try
         {
-            generatedArtists++;
-            GameObject createdEntry = (GameObject)Instantiate(artistPrefab, new Vector3(0, 0, generatedArtists * 1.5F), Quaternion.Euler(Random.value * Vector3.one));
-            Artist createdArtist = createdEntry.AddComponent<Artist>();
-            createdArtist.Id = (int)reader.GetInt32(0);
-            createdArtist.Name = reader.GetString(1);
-            createdArtist.Surname = reader.GetString(2);
-            createdArtist.Birthdate = reader.GetInt32(3);
+            // generates artists
+            reader = getReaderFromQuery("SELECT * FROM 'artists'");
+            while (reader.Read())
+            {
+                GameObject createdEntry = (GameObject)Instantiate(artistPrefab, new Vector3(0, 0, ++this.numberOfArtists * 1.5F), Quaternion.Euler(Random.value * Vector3.one));
+                Artist createdArtist = createdEntry.AddComponent<Artist>();
+                createdArtist.Id = (int)reader.GetInt32(0);
+                createdArtist.Name = reader.GetString(1);
+                createdArtist.Surname = reader.GetString(2);
+                createdArtist.Birthdate = reader.GetInt32(3);
 
-            Graph.buildedArtists.Add(createdArtist.Id, createdArtist);
+                Graph.vertices.Add(createdArtist.Id, createdArtist.transform);
+            }
+
+            // generates movies
+            reader = getReaderFromQuery("SELECT * FROM 'movies'"); 
+            while (reader.Read())
+            {
+                GameObject createdEntry = (GameObject)Instantiate(moviePrefab, new Vector3(++this.numberOfMovies * 1.5F, 0, 0), Quaternion.Euler(Random.value * Vector3.one));
+                Movie createdMovie = createdEntry.AddComponent<Movie>();
+                createdMovie.Id = reader.GetInt32(0) + this.numberOfArtists;
+                createdMovie.Title = reader.GetString(1);
+                createdMovie.Date = reader.GetInt32(2);
+
+                Graph.vertices.Add(createdMovie.Id, createdMovie.transform);
+            }
         }
-
-        // generates movies
-        reader = getReaderFromQuery("SELECT * FROM 'movies'"); 
-        int generatedMovies = 0;
-        while (reader.Read())
+        catch (System.Exception e)
         {
-            generatedMovies++;
-            GameObject createdEntry = (GameObject)Instantiate(moviePrefab, new Vector3(generatedMovies * 1.5F, 0, 0), Quaternion.Euler(Random.value * Vector3.one));
-            Movie createdMovie = createdEntry.AddComponent<Movie>();
-            createdMovie.Id = reader.GetInt32(0);
-            createdMovie.Title = reader.GetString(1);
-            createdMovie.Date = reader.GetInt32(2);
-
-            Graph.buildedMovies.Add(createdMovie.Id, createdMovie);
+            Debug.Log(e.Message);
         }
-
+        
         this.connexion.Close();
     }
 
@@ -115,6 +121,17 @@ public class Builder : MonoBehaviour
         this.connexion.Open();
         SqliteDataReader reader;
 
+        reader = getReaderFromQuery("SELECT id_artist,id_movie FROM 'castings'");
+        while(reader.Read())
+        {
+            GameObject edgeObject = (GameObject) Instantiate(this.edgePrefab, Vector3.zero, Quaternion.identity);
+            LineRenderer lineRend = edgeObject.GetComponent<LineRenderer>();
+            Edge edge = edgeObject.AddComponent<Edge>();
+            edge.setUp(reader.GetInt32(0), reader.GetInt32(1) + this.numberOfArtists, lineRend);
+            Graph.edges.Add(edge);
+        }
+
+        /*
         // Movie -> Movie
         foreach (KeyValuePair<int,Movie> pair in Graph.buildedMovies)
         {
@@ -185,6 +202,9 @@ public class Builder : MonoBehaviour
                 Debug.Log(pair.Value.Name + " is the " + nature + " of " + Graph.buildedMovies[connectedMovieId].Title);
             }
         }
+         * */
+
+
     }
     
     

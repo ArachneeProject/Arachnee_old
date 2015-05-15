@@ -7,4 +7,9 @@ public class SceneLoader : MonoBehaviour
     {
         Application.LoadLevel(sceneIndex);
     }
+
+    public void clearGraph()
+    {
+        Graph.clearGraph();
+    }
 }

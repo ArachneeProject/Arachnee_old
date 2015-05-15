@@ -3,13 +3,38 @@ using System.Collections;
 
 public class Controller : MonoBehaviour {
 
+    // keyboard
     public float keyboardSensitivity = 1;
-    private Vector3 forward = new Vector3(1, 0, 1);
-    private Vector3 right = new Vector3(1, 0, -1);
-	
-	void FixedUpdate () 
+
+    // mouse
+    public float sensitivityX = 1F;
+    public float sensitivityY = 1F;
+
+    public float minimumX = -80F;
+    public float maximumX = 80F;
+    public float minimumY = -60F;
+    public float maximumY = 60F;
+
+    float rotationY = 0F;
+
+    void Start()
     {
-        this.transform.position += forward * Input.GetAxis("Vertical") * keyboardSensitivity;
-        this.transform.position += right * Input.GetAxis("Horizontal") * keyboardSensitivity;
-	}
+        this.rotationY = this.transform.rotation.eulerAngles.y;
+    }
+
+    void Update()
+    {
+        // keyboard
+        this.transform.position += this.transform.forward * Input.GetAxis("Vertical") * keyboardSensitivity;
+        this.transform.position += this.transform.right * Input.GetAxis("Horizontal") * keyboardSensitivity;
+
+        // mouse
+        if (Input.GetMouseButton(0))
+        {
+            float rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivityX;
+            rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+            rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
+            transform.localEulerAngles = new Vector3(rotationY, rotationX, 0);
+        }
+    }
 }

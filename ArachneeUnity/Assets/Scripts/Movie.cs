@@ -39,7 +39,7 @@ public class Movie : Entry
     void OnMouseEnter()
     {
         this.GetComponent<ParticleSystem>().startSize *= 3;
-        Graph.highlightConnexions<Movie>(this.Id);
+        Graph.highlightEdges(this.Id);
         CameraGUI.Principal = this.Title;
         CameraGUI.Date = ""+this.Date;
     }

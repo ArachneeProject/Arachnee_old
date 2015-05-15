@@ -41,7 +41,7 @@ public class Artist : Entry
     void OnMouseEnter()
     {
         this.GetComponent<ParticleSystem>().startSize *= 2.5F;
-        Graph.highlightConnexions<Artist>(this.Id);
+        Graph.highlightEdges(this.Id);
         CameraGUI.Principal = this.Surname + " " + this.Name;
         CameraGUI.Date = ""+this.Birthdate;
     }

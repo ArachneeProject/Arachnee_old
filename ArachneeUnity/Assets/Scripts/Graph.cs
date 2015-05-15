@@ -1,44 +1,55 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Graph
+/**
+ * An artist has his/her own id, but the id of a movie is defined as "number of artist + real id of the film", in order to have unique id for each entry.
+ * */
+public static class Graph
 {
     // vertices
-    public static Dictionary<int, Movie> buildedMovies = new Dictionary<int, Movie>();
-    public static Dictionary<int, Artist> buildedArtists = new Dictionary<int, Artist>();
+    public static Dictionary<int, Transform> vertices = new Dictionary<int, Transform>();
 
     // edges
-    public static List<Connexion> connexions = new List<Connexion>();
+    public static List<Edge> edges = new List<Edge>();
 
     // highlighted edges
-    private static List<Connexion> highlighted = new List<Connexion>();
+    private static List<Edge> highlighted = new List<Edge>();
+
+    public static GameObject yolo;
+
 
     /// <summary>
-    /// highlight all connexions between the specific T and other entries
+    /// highlight all edges connected to this entry
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="id"></param>
-	public static void highlightConnexions<T>(int id)
-	{
-        foreach (Connexion connexion in connexions) 
-		{
-            if ((connexion.left is T && connexion.left.Id == id) || connexion.right is T && connexion.right.Id == id)
-			{
-                connexion.highlight();
-                highlighted.Add(connexion);
-			}
-		}
-	}
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public static void maskAll()
+    /// <param name="entryId"></param>
+    internal static void highlightEdges(int entryId)
     {
-        foreach (Connexion connection in highlighted)
+        foreach (Edge edge in Graph.edges)
         {
-            connection.mask();
+            if (edge.right == entryId || edge.left == entryId)
+            {
+                edge.gameObject.SetActive(true);
+                Graph.highlighted.Add(edge);
+            }
         }
-        highlighted.Clear();
+    }
+
+    /// <summary>
+    /// mask all edges
+    /// </summary>
+    internal static void maskAll()
+    {
+        foreach (Edge edge in Graph.highlighted)
+        {
+            edge.gameObject.SetActive(false);
+        }
+        Graph.highlighted.Clear();
+    }
+
+    internal static void clearGraph()
+    {
+        Graph.highlighted.Clear();
+        Graph.edges.Clear();
+        Graph.vertices.Clear();
     }
 }
