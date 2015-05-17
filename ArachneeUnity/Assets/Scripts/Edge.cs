@@ -3,6 +3,12 @@ using System.Collections;
 
 public class Edge : MonoBehaviour 
 {
+    public Edge(int left, int right)
+    {
+        this.left = left;
+        this.right = right;
+    }
+
     public int left
     {
         get;

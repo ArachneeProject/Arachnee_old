@@ -12,6 +12,8 @@ public class Builder : MonoBehaviour
     public GameObject artistPrefab;
     public GameObject edgePrefab;
 
+    public GameObject labelPrefab;
+
     private int numberOfArtists = 0;
     private int numberOfJobs = 0;
     private int numberOfMovies = 0;
@@ -89,6 +91,11 @@ public class Builder : MonoBehaviour
                 createdArtist.Surname = reader.GetString(2);
                 createdArtist.Birthdate = reader.GetInt32(3);
 
+                GameObject labelObject = (GameObject)Instantiate(this.labelPrefab);
+                labelObject.GetComponent<GUIText>().text = createdArtist.Surname + " " + createdArtist.Name;
+                labelObject.GetComponent<ObjectLabel>().target = createdEntry.transform;
+                createdArtist.label = labelObject;
+
                 Graph.vertices.Add(createdArtist.Id, createdArtist.transform);
             }
 
@@ -101,6 +108,11 @@ public class Builder : MonoBehaviour
                 createdMovie.Id = reader.GetInt32(0) + this.numberOfArtists;
                 createdMovie.Title = reader.GetString(1);
                 createdMovie.Date = reader.GetInt32(2);
+
+                GameObject labelObject = (GameObject)Instantiate(this.labelPrefab);
+                labelObject.GetComponent<GUIText>().text = createdMovie.Title + " (" + createdMovie.Date + ")";
+                labelObject.GetComponent<ObjectLabel>().target = createdEntry.transform;
+                createdMovie.label = labelObject;
 
                 Graph.vertices.Add(createdMovie.Id, createdMovie.transform);
             }

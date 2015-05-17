@@ -46,10 +46,14 @@ public static class Graph
         Graph.highlighted.Clear();
     }
 
+    /// <summary>
+    /// clear the graph
+    /// </summary>
     internal static void clearGraph()
     {
         Graph.highlighted.Clear();
         Graph.edges.Clear();
         Graph.vertices.Clear();
     }
+    
 }
