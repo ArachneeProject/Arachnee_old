@@ -42,6 +42,8 @@ public class Movie : Entry
         Graph.highlightEdges(this.Id);
         CameraGUI.Principal = this.Title;
         CameraGUI.Date = ""+this.Date;
+
+        AudioManager.manager.playOnceAt(0, this.transform.position);
     }
 
     /// <summary>

@@ -44,6 +44,8 @@ public class Artist : Entry
         Graph.highlightEdges(this.Id);
         CameraGUI.Principal = this.Surname + " " + this.Name;
         CameraGUI.Date = ""+this.Birthdate;
+
+        AudioManager.manager.playOnceAt(0, this.transform.position);
     }
     
     /// <summary>
