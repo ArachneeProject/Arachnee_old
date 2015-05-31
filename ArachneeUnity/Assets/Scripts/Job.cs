@@ -18,13 +18,5 @@ public class Job : Entry
         set;
     }
 
-    /// <summary>
-    /// default constructor
-    /// </summary>
-    public Job ()
-    {
-        this.Title = "Human";
-        this.Description = "No description available.";
-    }
 }
 

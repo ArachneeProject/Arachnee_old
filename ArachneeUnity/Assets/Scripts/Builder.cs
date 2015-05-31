@@ -14,8 +14,10 @@ public class Builder : MonoBehaviour
 
     public GameObject labelPrefab;
 
+    public GameObject Replicatooooor; // for test
+    public bool replicatorSpreadAndKillEverything = false;
+
     private int numberOfArtists = 0;
-    private int numberOfJobs = 0;
     private int numberOfMovies = 0;
 
     private string databasePath;
@@ -30,6 +32,12 @@ public class Builder : MonoBehaviour
         initializeConnexion();
         generateEntries();
         generateConnexions();
+
+        if (replicatorSpreadAndKillEverything)
+        {
+            replicatorSpread(); // for test
+        }
+        
     }
 
     
@@ -86,7 +94,7 @@ public class Builder : MonoBehaviour
             {
                 GameObject createdEntry = (GameObject)Instantiate(artistPrefab, new Vector3(0, 0, ++this.numberOfArtists * 1.5F), Quaternion.Euler(Random.value * Vector3.one));
                 Artist createdArtist = createdEntry.AddComponent<Artist>();
-                createdArtist.Id = (int)reader.GetInt32(0);
+                createdArtist.Id = reader.GetInt32(0);
                 createdArtist.Name = reader.GetString(1);
                 createdArtist.Surname = reader.GetString(2);
                 createdArtist.Birthdate = reader.GetInt32(3);
@@ -94,27 +102,29 @@ public class Builder : MonoBehaviour
                 GameObject labelObject = (GameObject)Instantiate(this.labelPrefab);
                 labelObject.GetComponent<GUIText>().text = createdArtist.Surname + " " + createdArtist.Name;
                 labelObject.GetComponent<ObjectLabel>().target = createdEntry.transform;
-                createdArtist.label = labelObject;
+                createdArtist.label = labelObject.GetComponent<ObjectLabel>();
 
                 Graph.vertices.Add(createdArtist.Id, createdArtist.transform);
+                Graph.edges.Add(createdArtist.Id, new List<Edge>());
             }
 
             // generates movies
             reader = getReaderFromQuery("SELECT * FROM 'movies'"); 
             while (reader.Read())
             {
-                GameObject createdEntry = (GameObject)Instantiate(moviePrefab, new Vector3(++this.numberOfMovies * 1.5F, 0, 0), Quaternion.Euler(Random.value * Vector3.one));
+                GameObject createdEntry = (GameObject)Instantiate(moviePrefab, new Vector3(++this.numberOfMovies * 1.5F, 0, 0), Quaternion.identity);
                 Movie createdMovie = createdEntry.AddComponent<Movie>();
-                createdMovie.Id = reader.GetInt32(0) + this.numberOfArtists;
+                createdMovie.Id = - reader.GetInt32(0);
                 createdMovie.Title = reader.GetString(1);
                 createdMovie.Date = reader.GetInt32(2);
 
                 GameObject labelObject = (GameObject)Instantiate(this.labelPrefab);
                 labelObject.GetComponent<GUIText>().text = createdMovie.Title + " (" + createdMovie.Date + ")";
                 labelObject.GetComponent<ObjectLabel>().target = createdEntry.transform;
-                createdMovie.label = labelObject;
+                createdMovie.label = labelObject.GetComponent<ObjectLabel>();
 
                 Graph.vertices.Add(createdMovie.Id, createdMovie.transform);
+                Graph.edges.Add(createdMovie.Id, new List<Edge>());
             }
         }
         catch (System.Exception e)
@@ -130,6 +140,7 @@ public class Builder : MonoBehaviour
     /// </summary>
     private void generateConnexions()
     {
+
         this.connexion.Open();
         SqliteDataReader reader;
 
@@ -139,8 +150,8 @@ public class Builder : MonoBehaviour
             GameObject edgeObject = (GameObject) Instantiate(this.edgePrefab, Vector3.zero, Quaternion.identity);
             LineRenderer lineRend = edgeObject.GetComponent<LineRenderer>();
             Edge edge = edgeObject.AddComponent<Edge>();
-            edge.setUp(reader.GetInt32(0), reader.GetInt32(1) + this.numberOfArtists, lineRend);
-            Graph.edges.Add(edge);
+            edge.setUp(reader.GetInt32(0), - reader.GetInt32(1), lineRend);
+            Graph.addEdge(edge);
         }
 
         /*
@@ -216,6 +227,44 @@ public class Builder : MonoBehaviour
         }
          * */
 
+
+    }
+
+
+    // for tests
+    void replicatorSpread()
+    {
+        int spread = 1000;
+        for (int i = 1; i<spread ; i++)
+        {
+            GameObject createdEntry = (GameObject)Instantiate(Replicatooooor, new Vector3(Random.Range(0, spread / 3), Random.Range(0, spread / 3), Random.Range(0, spread / 3)), Quaternion.identity);
+            Movie createdMovie = createdEntry.AddComponent<Movie>();
+            createdMovie.Id = -1000 - i;
+            createdMovie.Title = "replicator";
+            createdMovie.Date = -1000 - i;
+
+            
+            GameObject labelObject = (GameObject)Instantiate(this.labelPrefab);
+            labelObject.GetComponent<GUIText>().text = createdMovie.Title + " (" + createdMovie.Date + ")";
+            labelObject.GetComponent<ObjectLabel>().target = createdEntry.transform;
+            createdMovie.label = labelObject.GetComponent<ObjectLabel>();
+
+            Graph.vertices.Add(createdMovie.Id, createdMovie.transform);
+            Graph.edges.Add(createdMovie.Id, new List<Edge>());
+        }
+
+        
+        for (int i = 2; i<spread ; i++)
+        {
+            GameObject edgeObject = (GameObject)Instantiate(this.edgePrefab, Vector3.zero, Quaternion.identity);
+            LineRenderer lineRend = edgeObject.GetComponent<LineRenderer>();
+            Edge edge = edgeObject.AddComponent<Edge>();
+            edge.setUp(-1000 - i, - 999 - i, lineRend);
+            Graph.addEdge(edge);
+        }
+       
+
+        
 
     }
     

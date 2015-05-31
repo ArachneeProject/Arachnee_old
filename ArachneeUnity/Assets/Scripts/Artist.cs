@@ -25,25 +25,18 @@ public class Artist : Entry
         set;
     }
 
-    /// <summary>
-    /// default constructor
-    /// </summary>
-    public Artist()
-    {
-        this.Name = "Allan";
-        this.Surname = "Smithee";
-        this.Birthdate = 1950;
-    }
 
     /// <summary>
     /// highlights the movie and its connexions
     /// </summary>
     void OnMouseEnter()
     {
-        this.GetComponent<ParticleSystem>().startSize *= 2.5F;
+        this.particles.startSize *= 2.5F;
         Graph.highlightEdges(this.Id);
         CameraGUI.Principal = this.Surname + " " + this.Name;
         CameraGUI.Date = ""+this.Birthdate;
+
+        this.label.setHighlight(true);
 
         AudioManager.manager.playOnceAt(0, this.transform.position);
     }
@@ -53,9 +46,12 @@ public class Artist : Entry
     /// </summary>
     void OnMouseExit()
     {
-        this.GetComponent<ParticleSystem>().startSize /= 2.5F;
+        this.particles.startSize /= 2.5F;
         CameraGUI.Principal = "";
         CameraGUI.Date = "";
+
+        this.label.setHighlight(false);
+
         Graph.maskAll();
     }
 }

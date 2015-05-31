@@ -21,27 +21,18 @@ public class Movie : Entry
 
     
 
-    /// <summary>
-    /// constructor
-    /// </summary>
-    public Movie()
-    {
-        this.Id = -1;
-        this.Title = "Default title";
-        this.Date = 1899;
-    }
-
-
 
     /// <summary>
     /// highlights the movie and its connexions
     /// </summary>
     void OnMouseEnter()
     {
-        this.GetComponent<ParticleSystem>().startSize *= 3;
+        this.particles.startSize *= 3;
         Graph.highlightEdges(this.Id);
         CameraGUI.Principal = this.Title;
         CameraGUI.Date = ""+this.Date;
+
+        this.label.setHighlight(true);
 
         AudioManager.manager.playOnceAt(0, this.transform.position);
     }
@@ -53,7 +44,10 @@ public class Movie : Entry
     {
         CameraGUI.Principal = "";
         CameraGUI.Date = "";
-        this.GetComponent<ParticleSystem>().startSize /= 3;
+        this.particles.startSize /= 3;
+
+        this.label.setHighlight(false);
+
         Graph.maskAll();
     }
 

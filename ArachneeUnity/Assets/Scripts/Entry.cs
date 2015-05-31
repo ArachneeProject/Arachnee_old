@@ -2,7 +2,7 @@
 
 public class Entry : MonoBehaviour
 {
-    public GameObject label;
+    public ObjectLabel label;
 
     // id
     public int Id
@@ -11,21 +11,31 @@ public class Entry : MonoBehaviour
         set;
     }
 
+
+    protected ParticleSystem particles
+    {
+        get;
+        private set;
+    }
+
+    void Start()
+    {
+        this.particles = this.GetComponent<ParticleSystem>();
+    }
+
+
     void OnBecameVisible()
     {
-        if (label == null)
-        {
-            return;
-        }
-        label.SetActive(true);
+        label.gameObject.SetActive(true);
     }
     void OnBecameInvisible()
     {
-        if (label == null)
+        if (this.label == null)
         {
             return;
         }
-        label.SetActive(false);
+        label.gameObject.SetActive(false);
     }
+
 }
 

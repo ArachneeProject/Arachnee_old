@@ -2,7 +2,7 @@
 using UnityEngine;
 
 /**
- * An artist has his/her own id, but the id of a movie is defined as "number of artist + real id of the film", in order to have unique id for each entry.
+ * positive id for artist; negative id for film
  * */
 public static class Graph
 {
@@ -10,12 +10,11 @@ public static class Graph
     public static Dictionary<int, Transform> vertices = new Dictionary<int, Transform>();
 
     // edges
-    public static List<Edge> edges = new List<Edge>();
+    public static Dictionary<int,List<Edge>> edges = new Dictionary<int,List<Edge>>();
 
     // highlighted edges
     private static List<Edge> highlighted = new List<Edge>();
 
-    public static GameObject yolo;
 
 
     /// <summary>
@@ -24,13 +23,15 @@ public static class Graph
     /// <param name="entryId"></param>
     internal static void highlightEdges(int entryId)
     {
-        foreach (Edge edge in Graph.edges)
+        List<Edge> edgesToHighlight = Graph.edges[entryId];
+        if (edgesToHighlight.Count == 0)
         {
-            if (edge.right == entryId || edge.left == entryId)
-            {
-                edge.gameObject.SetActive(true);
-                Graph.highlighted.Add(edge);
-            }
+            Debug.Log("ah bah y a pas de connexion hein");
+        }
+        foreach(Edge edge in edgesToHighlight)
+        {
+            edge.gameObject.SetActive(true);
+            Graph.highlighted.Add(edge);
         }
     }
 
@@ -55,5 +56,11 @@ public static class Graph
         Graph.edges.Clear();
         Graph.vertices.Clear();
     }
-    
+
+
+    internal static void addEdge(Edge edge)
+    {
+        Graph.edges[edge.left].Add(edge);
+        Graph.edges[edge.right].Add(edge);
+    }
 }
