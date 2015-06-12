@@ -17,10 +17,6 @@ public class Controller : MonoBehaviour {
 
     float rotationY = 0F;
 
-    void Start()
-    {
-        this.rotationY = this.transform.rotation.eulerAngles.y;
-    }
 
     void Update()
     {

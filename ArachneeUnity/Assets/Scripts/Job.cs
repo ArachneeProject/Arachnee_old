@@ -18,5 +18,10 @@ public class Job : Entry
         set;
     }
 
+    public override void goOnGUI()
+    {
+        CameraGUI.Principal = this.Title;
+    }
+
 }
 

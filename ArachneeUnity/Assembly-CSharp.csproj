@@ -61,11 +61,10 @@
      <Compile Include="Assets\Scripts\Pair.cs" />
      <Compile Include="Assets\Scripts\SceneLoader.cs" />
      <Compile Include="Assets\Scripts\UnityHierarchy.cs" />
+     <Compile Include="Assets\Scripts\UrlExctractor.cs" />
      <Compile Include="Assets\Scripts\databaseManager.cs" />
+     <Compile Include="Assets\Scripts\lookAtKamera.cs" />
      <Compile Include="Assets\Scripts\rotator.cs" />
-     <Compile Include="Assets\UrlExctractor.cs" />
-     <Compile Include="Assets\old\Database edition\DatabaseConnexion.cs" />
-     <Compile Include="Assets\old\Database edition\MenuManager.cs" />
      <None Include="Assets\Scene\a faire.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

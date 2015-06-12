@@ -15,8 +15,6 @@ public static class Graph
     // highlighted edges
     private static List<Edge> highlighted = new List<Edge>();
 
-
-
     /// <summary>
     /// highlight all edges connected to this entry
     /// </summary>
@@ -27,11 +25,27 @@ public static class Graph
         if (edgesToHighlight.Count == 0)
         {
             Debug.Log("ah bah y a pas de connexion hein");
+            return;
         }
         foreach(Edge edge in edgesToHighlight)
         {
             edge.gameObject.SetActive(true);
             Graph.highlighted.Add(edge);
+        }
+    }
+
+    internal static void maskEdges(int entryId)
+    {
+        List<Edge> edgesToMask = Graph.edges[entryId];
+        if (edgesToMask.Count == 0)
+        {
+            Debug.Log("ah bah y a pas de connexion hein");
+            return;
+        }
+        foreach (Edge edge in edgesToMask)
+        {
+            edge.gameObject.SetActive(false);
+            Graph.highlighted.Remove(edge);
         }
     }
 
