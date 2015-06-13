@@ -33,7 +33,6 @@ public class Edge : MonoBehaviour
         this.right = right;
         lineRend.SetPosition(0, Graph.vertices[left].position);
         lineRend.SetPosition(1, Graph.vertices[right].position);
-        lineRend.SetWidth(0.5F, 0.5F);
         this.line = lineRend;
         this.gameObject.SetActive(false);
     }

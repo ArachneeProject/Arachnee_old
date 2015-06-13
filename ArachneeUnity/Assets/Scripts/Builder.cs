@@ -20,7 +20,7 @@ public class Builder : MonoBehaviour
     //private int numberOfArtists = 0;
     //private int numberOfMovies = 0;
 
-    private int rangeOfBuild = 50;
+    public int rangeOfBuild = 50;
 
     private string databasePath;
     private SqliteConnection connexion;

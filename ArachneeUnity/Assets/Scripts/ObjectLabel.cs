@@ -7,37 +7,22 @@ public class ObjectLabel : MonoBehaviour
     public Transform target;  // Object that this label should follow
     private GUIText text; // text displayed
 
-    private float maxDistance = 100;
-
     //public float sizeCoeffOnHighlight = 20;
     //private float savedSize = 1;
-    private Transform kamera;
 
     void Start()
     {
         this.text = this.gameObject.GetComponent<GUIText>();
         this.gameObject.SetActive(false);
-        this.kamera = Camera.main.transform;
     }
     
-    void Update()
+    /// <summary>
+    /// update the size of the label
+    /// </summary>
+    /// <param name="distance"></param>
+    public void updateFontSize(float distance)
     {
-        if (this.target == null)
-        {
-            return;
-        }
-        float distance = Vector3.Distance(target.position, kamera.position);
-
-        if (distance > this.maxDistance)
-        {
-            this.text.fontSize = 1;
-        }
-        else
-        {
-            //this.text.fontSize = (int)((200F + this.fontSize) / (1F + Vector3.Distance(target.transform.position, kamera.position)));
-            this.text.fontSize = (int)(3F / Vector3.Distance(target.transform.position, kamera.position));
-            this.transform.position = Camera.main.WorldToViewportPoint(target.position - 4 * Vector3.up);
-        }
+        this.text.fontSize = (int)(3F / distance);
     }
      
 
