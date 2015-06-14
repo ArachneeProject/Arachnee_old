@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Controller : MonoBehaviour {
+public class Controller : MonoBehaviour 
+{
+    public bool canMove = true;
 
     // keyboard
     public float keyboardSensitivity = 1;
@@ -21,9 +23,12 @@ public class Controller : MonoBehaviour {
     void Update()
     {
         // keyboard
-        this.transform.position += this.transform.forward * Input.GetAxis("Vertical") * keyboardSensitivity;
-        this.transform.position += this.transform.right * Input.GetAxis("Horizontal") * keyboardSensitivity;
-
+        if (this.canMove)
+        {
+            this.transform.position += this.transform.forward * Input.GetAxis("Vertical") * keyboardSensitivity;
+            this.transform.position += this.transform.right * Input.GetAxis("Horizontal") * keyboardSensitivity;
+        }
+        
         // mouse
         if (Input.GetMouseButton(0))
         {
@@ -32,5 +37,10 @@ public class Controller : MonoBehaviour {
             rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
             transform.localEulerAngles = new Vector3(rotationY, rotationX, 0);
         }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Collision avec l'ID " + other.gameObject.GetComponent<Entry>().Id);
     }
 }

@@ -55,6 +55,7 @@
      <Compile Include="Assets\Scripts\Edge.cs" />
      <Compile Include="Assets\Scripts\Entry.cs" />
      <Compile Include="Assets\Scripts\Graph.cs" />
+     <Compile Include="Assets\Scripts\InsideBuilder.cs" />
      <Compile Include="Assets\Scripts\Job.cs" />
      <Compile Include="Assets\Scripts\Movie.cs" />
      <Compile Include="Assets\Scripts\ObjectLabel.cs" />

@@ -47,7 +47,7 @@ public class Builder : MonoBehaviour
     /// <summary>
     /// initialize connexion to database
     /// </summary>
-    void initializeConnexion()
+    private void initializeConnexion()
     {
         // path to database.
         this.databasePath = "URI=file:" + Application.dataPath + "/Database/arachneeDatabase.db";
@@ -61,7 +61,7 @@ public class Builder : MonoBehaviour
     /// </summary>
     /// <param name="query"></param>
     /// <returns></returns>
-    public SqliteDataReader getReaderFromQuery(string query)
+    private SqliteDataReader getReaderFromQuery(string query)
     {    
         // create query
         SqliteCommand cmd = new SqliteCommand(this.connexion);
@@ -85,7 +85,6 @@ public class Builder : MonoBehaviour
     private void generateEntries()
     {
         this.connexion.Open();
-
         SqliteDataReader reader;
 
         try
