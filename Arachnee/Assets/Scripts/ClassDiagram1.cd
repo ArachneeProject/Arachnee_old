@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Movie">
+    <Position X="0.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAEAACAAAAAAAAAAAEAEAAAAEAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Graph\Vertices\Movie.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Artist">
+    <Position X="2.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAECAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Assets\Scripts\Graph\Vertices\Artist.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Graph">
+    <Position X="4.75" Y="0.5" Width="1.5" />
+    <AssociationLine Name="Vertices" Type="IEntry" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.094" Y="1.368" />
+        <Point X="5.094" Y="3.062" />
+        <Point X="3.5" Y="3.062" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="Edges" Type="IConnection" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.703" Y="1.368" />
+        <Point X="5.703" Y="3.062" />
+        <Point X="7" Y="3.062" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Graph\Graph.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Vertices" />
+      <Property Name="Edges" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="GameObjectBuilder">
+    <Position X="15.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAAAAQAAAAABAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Builder\GameObjectBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArtistToMovieConnection">
+    <Position X="5.75" Y="4" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAAAAAAAAAAIAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Graph\Edges\ArtistToMovieConnection.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Type" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SceneBuilder">
+    <Position X="11.25" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAEBAgAAAAEAAAAAACAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Builder\SceneBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MovieObjectBuilder">
+    <Position X="14.25" Y="3.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Builder\MovieObjectBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArtistObjectBuilder">
+    <Position X="16.5" Y="3.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Builder\ArtistObjectBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="IEntry">
+    <Position X="2" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Graph\Vertices\Entry.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IConnection">
+    <Position X="7" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Graph\Edges\Connection.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="ArtistToMovieConnectionType">
+    <Position X="5.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Graph\Edges\ArtistToMovieConnectionType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
