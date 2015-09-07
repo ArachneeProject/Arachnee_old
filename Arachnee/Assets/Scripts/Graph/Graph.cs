@@ -5,28 +5,19 @@ using System.Text;
 
 public class Graph
 {
+    
     /// <summary>
     /// Dictionary of Entries
     /// </summary>
-    public Dictionary<int,IEntry> Vertices
+    public Dictionary<uint, Entry> Vertices
     {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
-        set
-        {
-        }
+        get;
+        set;
     }
 
-    public Dictionary<int,IConnection> Edges
+    public Graph()
     {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
-        set
-        {
-        }
+        this.Vertices = new Dictionary<uint, Entry>();
     }
+
 }

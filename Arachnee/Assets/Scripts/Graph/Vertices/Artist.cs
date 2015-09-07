@@ -4,38 +4,29 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class Artist : MonoBehaviour, IEntry
+public class Artist : Entry
 {
-    public int FirstName
+
+    public string FirstName
     {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
-        set
-        {
-        }
+        get;
+        set;
     }
 
-    public int LastName
+    public string LastName
     {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
-        set
-        {
-        }
+        get;
+        set;
     }
 
     public int BirthYear
     {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
-        set
-        {
-        }
+        get;
+        set;
+    }
+
+    public override string ToString()
+    {
+        return this.FirstName + " " + this.LastName;
     }
 }

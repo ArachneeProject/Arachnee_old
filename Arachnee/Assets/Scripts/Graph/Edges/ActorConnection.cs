@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
-public enum ArtistToMovieConnectionType
+public class ActorConnection : Connection
 {
-    Director,
-    Actor
+
 }

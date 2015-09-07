@@ -4,11 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public abstract class Entry : MonoBehaviour
+public class DirectorConnection : Connection
 {
-    public uint Id
-    {
-        get;
-        set;
-    }
+
 }

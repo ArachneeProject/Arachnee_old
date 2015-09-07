@@ -8,45 +8,70 @@ public class SceneBuilder : MonoBehaviour
 {
     public GameObject MoviePrefab;
     public GameObject ArtistPrefab;
+    public LineRenderer ActorConnectionPrefab;
+    public LineRenderer DirectorConnectionPrefab;
+
+
+    private DatabaseDialoger dataDlg = new DatabaseDialoger();
+
+    private GraphBuilder GraphBuilder
+    {
+        get;
+        set;
+    }
 
     void Start()
     {
+        this.dataDlg.Initialize("URI=file:" + Application.dataPath + "/Database/arachneeDatabase.db");
+        this.GraphBuilder = new GraphBuilder();
         buildEntries();
         buildConnections();
     }
 
-    void buildEntries()
+    #region Entries
+    private void buildEntries()
     {
         buildMovies();
         buildArtists();
     }
 
-    void buildMovies()
+    private void buildMovies()
     {
-        MovieObjectBuilder mvBuilder = new MovieObjectBuilder(this.MoviePrefab);
-
-        /*
-        foreach (Movie mv in database.Movies)
-        {
-            mvBuilder.BuildGameObject(mv);
-        }
-         * */
+        MovieObjectBuilder mvBuilder = new MovieObjectBuilder(this.MoviePrefab, this.GraphBuilder);
+        mvBuilder.BuildGameObject(this.dataDlg.GetDataSet("SELECT * FROM 'movies'"));
     }
 
-    void buildArtists()
+    private void buildArtists()
     {
-        ArtistObjectBuilder artBuilder = new ArtistObjectBuilder(this.ArtistPrefab);
-
-        /*
-        foreach (Artist at in database.Artists)
-        {
-            artBuilder.BuildGameObject(at);
-        }
-         * */
+        ArtistObjectBuilder artBuilder = new ArtistObjectBuilder(this.ArtistPrefab, this.GraphBuilder);
+        artBuilder.BuildGameObject(this.dataDlg.GetDataSet("SELECT * FROM 'artists'"));
     }
 
-    void buildConnections()
-    {
+    #endregion Entries
 
+    #region Connections
+    private void buildConnections()
+    {
+        buildArtistToMovieConnections();
     }
+
+    private void buildArtistToMovieConnections()
+    {
+        buildActorsConnections();
+        buildDirectorsConnections();
+    }
+
+    private void buildActorsConnections()
+    {
+        ActorConnectionBuilder acb = new ActorConnectionBuilder(this.ActorConnectionPrefab, this.GraphBuilder);
+        acb.BuildGameObject(this.dataDlg.GetDataSet("SELECT * FROM 'Actors'"));
+    }
+
+    private void buildDirectorsConnections()
+    {
+        DirectorConnectionBuilder dcb = new DirectorConnectionBuilder(this.DirectorConnectionPrefab, this.GraphBuilder);
+        dcb.BuildGameObject(this.dataDlg.GetDataSet("SELECT * FROM 'Directors'"));
+    }
+    #endregion Connections
+
 }

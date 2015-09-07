@@ -4,28 +4,19 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class Movie : MonoBehaviour,IEntry
+public class Movie : Entry
 {
-    public int Title
+
+    public string Title
     {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
-        set
-        {
-        }
+        get;
+        set;
     }
 
     public int Year
     {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
-        set
-        {
-        }
+        get;
+        set;
     }
 
     public int Runtime
@@ -70,5 +61,10 @@ public class Movie : MonoBehaviour,IEntry
         set
         {
         }
+    }
+
+    public override string ToString()
+    {
+        return this.Title;
     }
 }
