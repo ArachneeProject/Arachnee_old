@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class SceneBuilder : MonoBehaviour
 {
+    public bool build = true;
+
     public GameObject MoviePrefab;
     public GameObject ArtistPrefab;
     public LineRenderer ActorConnectionPrefab;
@@ -22,11 +24,16 @@ public class SceneBuilder : MonoBehaviour
 
     void Start()
     {
+        if (!build)
+        {
+            return;
+        }
         this.dataDlg.Initialize("URI=file:" + Application.dataPath + "/Database/arachneeDatabase.db");
         this.GraphBuilder = new GraphBuilder();
         buildEntries();
         buildConnections();
     }
+
 
     #region Entries
     private void buildEntries()

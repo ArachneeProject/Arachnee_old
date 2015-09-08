@@ -9,7 +9,7 @@ using UnityEngine;
 public abstract class EntryGameObjectBuilder : IGameObjectBuilder
 {
     public GameObject prefab; // prefab of the GameObject to build
-    public float rangeOfBuilding = 5;
+    private float rangeOfBuilding = 20;
 
     protected GraphBuilder GraphBuilder
     {

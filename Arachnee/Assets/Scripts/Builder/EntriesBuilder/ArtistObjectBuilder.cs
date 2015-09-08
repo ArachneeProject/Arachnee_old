@@ -26,7 +26,7 @@ public class ArtistObjectBuilder : EntryGameObjectBuilder
         art.FirstName = (string) row[1];
         art.LastName = (string) row[2];
 
-        Logger.Trace("Building " + art.FirstName + " " + art.LastName, LogLevel.Debug);
+        //Logger.Trace("Building " + art.FirstName + " " + art.LastName, LogLevel.Debug);
 
         return art;
     }

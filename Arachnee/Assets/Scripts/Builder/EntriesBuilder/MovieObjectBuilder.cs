@@ -27,7 +27,7 @@ public class MovieObjectBuilder : EntryGameObjectBuilder
         mv.Title = (string)row[1];
         mv.Year = (int)((Int64) row[2]);
 
-        Logger.Trace("Building " + mv.Title + " " + mv.Year, LogLevel.Debug);
+        //Logger.Trace("Building " + mv.Title + " " + mv.Year, LogLevel.Debug);
 
         return mv;
     }
