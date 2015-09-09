@@ -11,10 +11,11 @@ public class ArtistObjectBuilder : EntryGameObjectBuilder
     /// Constructor 
     /// </summary>
     /// <param name="prefab"></param>
-    public ArtistObjectBuilder(GameObject prefab, GraphBuilder gBuilder)
+    public ArtistObjectBuilder(GameObject prefab, GraphBuilder gBuilder, int rangeOfBuild)
     {
         this.prefab = prefab;
         this.GraphBuilder = gBuilder;
+        this.rangeOfBuilding = rangeOfBuild;
     }
 
 

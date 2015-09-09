@@ -18,7 +18,7 @@ public class GraphBuilder
     /// <param name="entry"></param>
     public void AddEntryToGraph(Entry entry)
     {
-        Logger.Trace(entry.ToString() + " - old id: " + entry.Id + " - new id: " + idCounter, LogLevel.Debug);
+        //Logger.Trace(entry.ToString() + " - old id: " + entry.Id + " - new id: " + idCounter, LogLevel.Debug);
 
         if (entry is Movie)
         {

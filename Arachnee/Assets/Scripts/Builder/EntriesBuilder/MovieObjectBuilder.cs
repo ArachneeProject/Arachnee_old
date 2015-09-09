@@ -12,10 +12,11 @@ public class MovieObjectBuilder : EntryGameObjectBuilder
     /// Constructor
     /// </summary>
     /// <param name="prefab"></param>
-    public MovieObjectBuilder(GameObject prefab, GraphBuilder gBuild)
+    public MovieObjectBuilder(GameObject prefab, GraphBuilder gBuild, int rangeOfBuild)
     {
         this.prefab = prefab;
         this.GraphBuilder = gBuild;
+        this.rangeOfBuilding = rangeOfBuild;
     }
 
 

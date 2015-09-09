@@ -7,6 +7,7 @@ using UnityEngine;
 public class SceneBuilder : MonoBehaviour
 {
     public bool build = true;
+    public int rangeOfBuilding = 20;
 
     public GameObject MoviePrefab;
     public GameObject ArtistPrefab;
@@ -44,13 +45,13 @@ public class SceneBuilder : MonoBehaviour
 
     private void buildMovies()
     {
-        MovieObjectBuilder mvBuilder = new MovieObjectBuilder(this.MoviePrefab, this.GraphBuilder);
+        MovieObjectBuilder mvBuilder = new MovieObjectBuilder(this.MoviePrefab, this.GraphBuilder, this.rangeOfBuilding);
         mvBuilder.BuildGameObject(this.dataDlg.GetDataSet("SELECT * FROM 'movies'"));
     }
 
     private void buildArtists()
     {
-        ArtistObjectBuilder artBuilder = new ArtistObjectBuilder(this.ArtistPrefab, this.GraphBuilder);
+        ArtistObjectBuilder artBuilder = new ArtistObjectBuilder(this.ArtistPrefab, this.GraphBuilder, this.rangeOfBuilding);
         artBuilder.BuildGameObject(this.dataDlg.GetDataSet("SELECT * FROM 'artists'"));
     }
 
