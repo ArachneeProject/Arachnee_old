@@ -20,7 +20,8 @@ namespace DatabaseEditor
             this.connection = new SQLiteConnection("URI=file:" + System.IO.Directory.GetCurrentDirectory() + "/../../../../Arachnee/Assets/Database/arachneeDatabase.db");
 
             initMovieSelectorMenu();
-            initDirectorSelectorMenu();
+            initArtistSelectorMenu();
+            initJobSelectorMenu();
         }
         
         private SQLiteConnection connection;
@@ -43,9 +44,9 @@ namespace DatabaseEditor
         }
 
         /// <summary>
-        /// init the director selector
+        /// init the artist selector
         /// </summary>
-        void initDirectorSelectorMenu()
+        void initArtistSelectorMenu()
         {
             string sql = "SELECT * FROM Artists";
             SQLiteCommand command = new SQLiteCommand(sql, this.connection);
@@ -55,13 +56,23 @@ namespace DatabaseEditor
 
             while (reader.Read())
             {
-                this.DirectorSelector.Items.Add((string) reader["first_name"] + " " + reader["last_name"]);
+                string artist = (string)reader["first_name"] + " " + reader["last_name"];
+                this.ArtistSelector.Items.Add(artist);
             }
             this.connection.Close();
-
-
-            this.DirectorSelector.SelectedIndex = -1;
+            this.ArtistSelector.SelectedIndex = -1;
         }
+
+        /// <summary>
+        /// init the job selector
+        /// </summary>
+        void initJobSelectorMenu()
+        {
+            this.JobSelector.Items.Add("Director"); // 0
+            this.JobSelector.Items.Add("Actor");    // 1
+        }
+
+
 
         /// <summary>
         /// update the form when a movie is selected
@@ -70,22 +81,48 @@ namespace DatabaseEditor
         /// <param name="e"></param>
         private void MovieSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.DirectorSelector.Enabled = true;
+            this.ArtistSelector.Enabled = true;
+            this.JobSelector.Enabled = true;
+
+            this.DirectorLabel.Text = this.getNames("Directors");
+            this.ActorsLabel.Text = this.getNames("Actors");
+        }
+
+        /// <summary>
+        /// return the string with the names of the artists implied in the movie selected
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
+        private string getNames(string tableName)
+        {
+            string res = "";
+            var list = this.getArtistListFromQuery("SELECT id_artist FROM " + tableName + " WHERE id_movie=" + (this.MovieSelector.SelectedIndex + 1));
+            foreach (string s in list)
+            {
+                res += s + " - ";
+            }
+            return res;
+        }
+
+        /// <summary>
+        /// return a list of string
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        private List<string> getArtistListFromQuery(string query)
+        {
+            List<string> list = new List<string>();
+
             try
             {
-                string directorIdQuery = "SELECT id_artist FROM Directors WHERE id_movie = " + (this.MovieSelector.SelectedIndex + 1);
-                SQLiteCommand command = new SQLiteCommand(directorIdQuery, this.connection);
+                SQLiteCommand command = new SQLiteCommand("SELECT first_name,last_name FROM Artists WHERE id IN (" + query + ")", this.connection);
                 this.connection.Open();
                 SQLiteDataReader reader = command.ExecuteReader();
-                if (reader.Read())
+                while (reader.Read())
                 {
-                    this.DirectorSelector.SelectedIndex = (int)((Int64)reader["id_artist"] - 1);
-                    this.DirectorSelector.Enabled = false;
+                    list.Add((string)reader["first_name"] + reader["last_name"]);
                 }
-                else
-                {
-                    this.DirectorSelector.SelectedIndex = -1;
-                }
+                reader.Dispose();
                 this.connection.Close();
             }
             catch (Exception ex)
@@ -93,9 +130,8 @@ namespace DatabaseEditor
                 this.connection.Close();
                 MessageBox.Show(ex.Message);
             }
+            return list;
         }
-
-
 
 
         /// <summary>
@@ -105,23 +141,50 @@ namespace DatabaseEditor
         /// <param name="e"></param>
         private void UpdateDatabase(object sender, EventArgs e)
         {
-            if (this.DirectorSelector.Enabled)
+            if (this.ArtistSelector.SelectedIndex == -1)
             {
-                string sql = "INSERT INTO Directors values ("+(this.DirectorSelector.SelectedIndex+1) + ","+ (this.MovieSelector.SelectedIndex+1) + ")";
-                SQLiteCommand command = new SQLiteCommand(sql, this.connection);
-                try
-                {
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                    connection.Close();
-                }
-                catch (Exception exc)
-                {
-                    this.connection.Close();
-                    MessageBox.Show(exc.Message);
-                }
+                MessageBox.Show("Please select an artist");
+                return;
+            }
 
-                this.MovieSelector_SelectedIndexChanged(sender, e);
+            string tableName = "";
+            switch (this.JobSelector.SelectedIndex)
+            {
+                case 0:
+                    tableName = "Directors";
+                    break;
+                case 1:
+                    tableName = "Actors";
+                    break;
+
+                default:
+                    MessageBox.Show("Nothing added");
+                    return;
+            }
+            this.insertInDatabase(tableName);
+
+            this.MovieSelector_SelectedIndexChanged(sender, e);
+        }
+
+        /// <summary>
+        /// insert (artist_id,movie_id) in tableName
+        /// </summary>
+        /// <param name="tableName"></param>
+        private void insertInDatabase(string tableName)
+        {
+            try
+            {
+                SQLiteCommand command = new SQLiteCommand("INSERT INTO " + tableName + " values (" + (this.ArtistSelector.SelectedIndex + 1) + "," + (this.MovieSelector.SelectedIndex +1) + ")",this.connection);
+                this.connection.Open();
+
+                command.ExecuteNonQuery();
+                
+                this.connection.Close();
+            }
+            catch (Exception ex)
+            {
+                this.connection.Close();
+                MessageBox.Show(ex.Message);
             }
         }
 

@@ -19,7 +19,13 @@ public abstract class Entry : MonoBehaviour
         this.GUI = this.GetComponentInChildren<GUIEntry>();
         this.GUI.text = this.ToString();
 
-        this.GetComponent<Renderer>().material.mainTexture = Resources.Load(this.ToString()) as Texture;
+        var loadedTexture = Resources.Load(this.ToString()) as Texture;
+        if (loadedTexture == null)
+        {
+            loadedTexture = Resources.Load("default") as Texture;
+        }
+        this.GetComponent<Renderer>().material.mainTexture = loadedTexture;
+            
     }
 
     void OnBecameVisible()
