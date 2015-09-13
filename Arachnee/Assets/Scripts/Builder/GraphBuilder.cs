@@ -10,7 +10,22 @@ public class GraphBuilder
     private Dictionary<uint, uint> movieIds = new Dictionary<uint, uint>();
     private Dictionary<uint, uint> artistIds = new Dictionary<uint, uint>();
 
-    private Graph graph = new Graph();
+    public Graph Graph
+    {
+        get;
+        private set;
+    }
+
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <param name="coulombRepulsion"></param>
+    /// <param name="hookAttraction"></param>
+    public GraphBuilder(float coulombRepulsion, float hookeAttraction)
+    {
+        this.Graph = new Graph(coulombRepulsion, hookeAttraction);
+    }
+
 
     /// <summary>
     /// Assign a new unique id to the movie
@@ -35,15 +50,23 @@ public class GraphBuilder
         }
         
         entry.Id = idCounter;
-        this.graph.Vertices.Add(entry.Id, entry);
+        this.Graph.Vertices.Add(entry.Id, entry);
 
         this.idCounter++;
     }
 
+
+    /// <summary>
+    /// Update the matrix of the graph
+    /// </summary>
+    /// <param name="c"></param>
     public void AddConnectionToGraph(Connection c)
     {
-        throw new NotImplementedException();
+        this.Graph.Edges.Add(c);
+
+        // update matrix
     }
+
 
     /// <summary>
     /// Return the unique id of the movie
@@ -93,7 +116,7 @@ public class GraphBuilder
     public Entry GetEntryWithId(uint id)
     {
         Entry e;
-        if (this.graph.Vertices.TryGetValue(id, out e))
+        if (this.Graph.Vertices.TryGetValue(id, out e))
         {
             return e;
         }

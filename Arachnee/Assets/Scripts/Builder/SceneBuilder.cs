@@ -9,6 +9,9 @@ public class SceneBuilder : MonoBehaviour
     public bool build = true;
     public int rangeOfBuilding = 20;
 
+    public float coulombRepulsion = 1;
+    public float hookeAttraction = 1;
+
     public GameObject MoviePrefab;
     public GameObject ArtistPrefab;
     public LineRenderer ActorConnectionPrefab;
@@ -23,6 +26,9 @@ public class SceneBuilder : MonoBehaviour
         set;
     }
 
+    /// <summary>
+    /// Init scene
+    /// </summary>
     void Start()
     {
         if (!build)
@@ -30,7 +36,7 @@ public class SceneBuilder : MonoBehaviour
             return;
         }
         this.dataDlg.Initialize("URI=file:" + Application.dataPath + "/Database/arachneeDatabase.db");
-        this.GraphBuilder = new GraphBuilder();
+        this.GraphBuilder = new GraphBuilder(this.coulombRepulsion,this.hookeAttraction);
         buildEntries();
         buildConnections();
     }
@@ -82,4 +88,8 @@ public class SceneBuilder : MonoBehaviour
     }
     #endregion Connections
 
+    void FixedUpdate()
+    {
+        this.GraphBuilder.Graph.UpdateForces();
+    }
 }

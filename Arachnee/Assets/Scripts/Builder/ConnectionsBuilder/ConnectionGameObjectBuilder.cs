@@ -34,6 +34,8 @@ public abstract class ConnectionGameObjectBuilder : IGameObjectBuilder
             connect.Right = this.getRightEntry(rightId);
 
             connect.SetUpPositions();
+
+            this.GraphBuilder.AddConnectionToGraph(connect);
         }
     }
 
