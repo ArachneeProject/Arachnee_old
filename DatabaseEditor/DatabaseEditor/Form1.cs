@@ -26,19 +26,26 @@ namespace DatabaseEditor
         
         private SQLiteConnection connection;
 
+        private Dictionary<int, Int64> movieIds = new Dictionary<int, long>();
+        private Dictionary<int, Int64> artistIds = new Dictionary<int, long>();
+
+
+        #region selectorInit
         /// <summary>
         /// init the movie selector
         /// </summary>
         void initMovieSelectorMenu()
         {
-            string sql = "SELECT * FROM 'Movies'";
+            string sql = "SELECT * FROM 'Movies' ORDER BY title";
             SQLiteCommand command = new SQLiteCommand(sql, this.connection);
 
             this.connection.Open();
             SQLiteDataReader reader = command.ExecuteReader();
+            int i = 0;
             while (reader.Read())
             {
                 this.MovieSelector.Items.Add(reader["title"]);
+                this.movieIds.Add(i++, (Int64) reader["id"]);
             }
             this.connection.Close();
         }
@@ -48,16 +55,18 @@ namespace DatabaseEditor
         /// </summary>
         void initArtistSelectorMenu()
         {
-            string sql = "SELECT * FROM Artists";
+            string sql = "SELECT * FROM Artists ORDER BY first_name";
             SQLiteCommand command = new SQLiteCommand(sql, this.connection);
 
             this.connection.Open();
             SQLiteDataReader reader = command.ExecuteReader();
 
+            int i = 0;
             while (reader.Read())
             {
                 string artist = (string)reader["first_name"] + " " + reader["last_name"];
                 this.ArtistSelector.Items.Add(artist);
+                this.artistIds.Add(i++, (Int64)reader["id"]);
             }
             this.connection.Close();
             this.ArtistSelector.SelectedIndex = -1;
@@ -72,6 +81,7 @@ namespace DatabaseEditor
             this.JobSelector.Items.Add("Actor");    // 1
         }
 
+        #endregion selectorInit
 
 
         /// <summary>
@@ -96,7 +106,7 @@ namespace DatabaseEditor
         private string getNames(string tableName)
         {
             string res = "";
-            var list = this.getArtistListFromQuery("SELECT id_artist FROM " + tableName + " WHERE id_movie=" + (this.MovieSelector.SelectedIndex + 1));
+            var list = this.getArtistListFromQuery("SELECT id_artist FROM " + tableName + " WHERE id_movie=" + this.movieIds[this.MovieSelector.SelectedIndex]);
             foreach (string s in list)
             {
                 res += s + " - ";
@@ -134,6 +144,7 @@ namespace DatabaseEditor
         }
 
 
+
         /// <summary>
         /// Update database
         /// </summary>
@@ -161,20 +172,20 @@ namespace DatabaseEditor
                     MessageBox.Show("Nothing added");
                     return;
             }
-            this.insertInDatabase(tableName);
+            this.insertInDatabase(tableName, (int)this.artistIds[this.ArtistSelector.SelectedIndex], (int)this.movieIds[this.MovieSelector.SelectedIndex]);
 
             this.MovieSelector_SelectedIndexChanged(sender, e);
         }
 
         /// <summary>
-        /// insert (artist_id,movie_id) in tableName
+        /// insert (valueA,ValueB) in the table tableName of the database
         /// </summary>
         /// <param name="tableName"></param>
-        private void insertInDatabase(string tableName)
+        private void insertInDatabase(string tableName, int valueA, int valueB)
         {
             try
             {
-                SQLiteCommand command = new SQLiteCommand("INSERT INTO " + tableName + " values (" + (this.ArtistSelector.SelectedIndex + 1) + "," + (this.MovieSelector.SelectedIndex +1) + ")",this.connection);
+                SQLiteCommand command = new SQLiteCommand("INSERT INTO " + tableName + " values (" + valueA + "," + valueB + ")",this.connection);
                 this.connection.Open();
 
                 command.ExecuteNonQuery();
@@ -187,6 +198,7 @@ namespace DatabaseEditor
                 MessageBox.Show(ex.Message);
             }
         }
+
 
 
         
