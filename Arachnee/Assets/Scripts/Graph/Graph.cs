@@ -37,7 +37,9 @@ public class Graph
     }
 
 
-
+    /// <summary>
+    /// Update the force between the entries
+    /// </summary>
     public void UpdateForces()
     {
         
@@ -48,11 +50,15 @@ public class Graph
             {
                 if (entry.Id != otherEntry.Id)
                 {
-                    Vector3 repulsion = this.coulombRepulsion * (entry.transform.position - otherEntry.transform.position) * (float)Math.Pow((1F / Vector3.Distance(entry.transform.position,otherEntry.transform.position)),2);
-                    if (entry.RigidBody != null)
+                    float distance = Vector3.Distance(entry.transform.position, otherEntry.transform.position);
+                    if (distance < 100)
                     {
-                        entry.RigidBody.AddForce(repulsion);
-                    }                    
+                        Vector3 repulsion = this.coulombRepulsion * (entry.transform.position - otherEntry.transform.position) * (float)Math.Pow((1F / distance), 2);
+                        if (entry.RigidBody != null)
+                        {
+                            entry.RigidBody.AddForce(repulsion);
+                        }
+                    }                                        
                 }
             }
 

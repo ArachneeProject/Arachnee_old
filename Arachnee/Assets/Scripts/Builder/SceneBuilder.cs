@@ -39,6 +39,7 @@ public class SceneBuilder : MonoBehaviour
         this.GraphBuilder = new GraphBuilder(this.coulombRepulsion,this.hookeAttraction);
         buildEntries();
         buildConnections();
+
     }
 
 
@@ -92,4 +93,5 @@ public class SceneBuilder : MonoBehaviour
     {
         this.GraphBuilder.Graph.UpdateForces();
     }
+
 }
