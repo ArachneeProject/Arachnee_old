@@ -3,7 +3,7 @@
   <Class Name="Graph">
     <Position X="5" Y="3" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAgAAgAAAAAAAAAAAAEAAAAAAAAAAAEAAAAAAIAAA=</HashCode>
       <FileName>Assets\Scripts\Graph\Graph.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -18,7 +18,7 @@
   <Class Name="SceneBuilder">
     <Position X="11.5" Y="1" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAgAAACAAAAAAAAAAEERAgAQAAEAAAIIACAIABAA=</HashCode>
+      <HashCode>AAAAAgAgAiAAAAAAAAAAEGRAgAQAAEAAAIIACAIABAA=</HashCode>
       <FileName>Assets\Scripts\Builder\SceneBuilder.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -57,7 +57,7 @@
   <Class Name="GraphBuilder">
     <Position X="9.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAABAAAAAAAEQQAAAAAAAAAQCAAAgAAAAQAAEAAAAAA=</HashCode>
+      <HashCode>AAABAAAAAAAEQQAAAAAAAAAQAAAAgAgAAQAAEAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Builder\GraphBuilder.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -78,7 +78,7 @@
   <Class Name="Entry">
     <Position X="3.5" Y="6" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAACAIAAAAAAAAAAAABAQAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAACAAAAACAIAAAAAAAAAAAABAQAAAAAAAAAAAAACAA=</HashCode>
       <FileName>Assets\Scripts\Graph\Vertices\Entry.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -120,8 +120,34 @@
   <Class Name="Connection">
     <Position X="7.25" Y="5.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ACAAAAAAAAAAAAAAAAgAAAAAAAAAAAAACACAAAAAAAA=</HashCode>
+      <HashCode>ACQAAAAAAAAAAAAAAAgAAAAAAAAAAAAACACAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Graph\Edges\Connection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IMDBDLL.IMDbManager">
+    <Position X="24.25" Y="3.25" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="IMDBDLL.IMDbManager.errorCall" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\IMDBDLL\IMDbManager.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="IMDBDLL.IMDbManager.progressCall" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\IMDBDLL\IMDbManager.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>IACAAAAAAAAAQDAkAAEAIAAAAAAAAAEBhAAIBAAgAAA=</HashCode>
+      <FileName>Assets\Scripts\IMDBDLL\IMDbManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OnlineRetriever" Collapsed="true">
+    <Position X="8.75" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Online\OnlineRetriever.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Interface Name="IGameObjectBuilder">
