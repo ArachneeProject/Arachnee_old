@@ -2,13 +2,33 @@
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="Graph">
     <Position X="5" Y="3" Width="1.5" />
+    <AssociationLine Name="Edges" Type="Connection" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.781" Y="4.94" />
+        <Point X="5.781" Y="5.315" />
+        <Point X="8" Y="5.315" />
+        <Point X="8" Y="5.75" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="Vertices" Type="Entry" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.391" Y="4.94" />
+        <Point X="5.391" Y="5.625" />
+        <Point X="4.188" Y="5.625" />
+        <Point X="4.188" Y="6" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
       <HashCode>AAAAgAAgAAAAAAAAAAAAEAAAAAAAAAAAEAAAAAAIAAA=</HashCode>
       <FileName>Assets\Scripts\Graph\Graph.cs</FileName>
     </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Edges" />
+      <Property Name="Vertices" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="EntryGameObjectBuilder">
-    <Position X="14.25" Y="4.5" Width="1.5" />
+    <Position X="15" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAQAAAAAAAAACYAAAAAAQAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Builder\EntriesBuilder\EntryGameObjectBuilder.cs</FileName>
@@ -23,17 +43,18 @@
     </TypeIdentifier>
     <ShowAsAssociation>
       <Field Name="dataDlg" />
+      <Property Name="GraphBuilder" />
     </ShowAsAssociation>
   </Class>
   <Class Name="MovieObjectBuilder">
-    <Position X="13.5" Y="7.75" Width="1.75" />
+    <Position X="14.25" Y="6.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Builder\EntriesBuilder\MovieObjectBuilder.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ArtistObjectBuilder">
-    <Position X="15.5" Y="7.75" Width="1.75" />
+    <Position X="16.25" Y="6.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Builder\EntriesBuilder\ArtistObjectBuilder.cs</FileName>
@@ -47,7 +68,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="ConnectionGameObjectBuilder">
-    <Position X="18.5" Y="4.5" Width="2.75" />
+    <Position X="19.25" Y="3.25" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAQAAAAAAAAAAQgABAAAQAAAAEAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Builder\ConnectionsBuilder\ConnectionGameObjectBuilder.cs</FileName>
@@ -55,21 +76,24 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="GraphBuilder">
-    <Position X="9.25" Y="1.75" Width="1.5" />
+    <Position X="8.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABAAAAAAAEQQAAAAAAAAAQAAAAgAgAAQAAEAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Builder\GraphBuilder.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Graph" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="ActorConnection">
-    <Position X="6.5" Y="8.25" Width="1.5" />
+    <Position X="6.5" Y="8.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Graph\Edges\ActorConnection.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ArtistToMovieConnectionBuilder">
-    <Position X="17.75" Y="7.75" Width="2.5" />
+    <Position X="18.5" Y="6.5" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAEAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Builder\ConnectionsBuilder\ArtistToMovieConnectionBuilder.cs</FileName>
@@ -97,21 +121,21 @@
     </TypeIdentifier>
   </Class>
   <Class Name="ActorConnectionBuilder">
-    <Position X="16.75" Y="10.25" Width="1.5" />
+    <Position X="17.5" Y="9" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Builder\ConnectionsBuilder\ActorConnectionBuilder.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DirectorConnectionBuilder">
-    <Position X="19.25" Y="10.25" Width="1.5" />
+    <Position X="20" Y="9" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Builder\ConnectionsBuilder\DirectorConnectionBuilder.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DirectorConnection">
-    <Position X="8" Y="8.25" Width="1.5" />
+    <Position X="8" Y="8.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Graph\Edges\DirectorConnection.cs</FileName>
@@ -124,34 +148,32 @@
       <FileName>Assets\Scripts\Graph\Edges\Connection.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="IMDBDLL.IMDbManager">
-    <Position X="24.25" Y="3.25" Width="1.5" />
-    <NestedTypes>
-      <Delegate Name="IMDBDLL.IMDbManager.errorCall" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Assets\Scripts\IMDBDLL\IMDbManager.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Delegate>
-      <Delegate Name="IMDBDLL.IMDbManager.progressCall" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Assets\Scripts\IMDBDLL\IMDbManager.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Delegate>
-    </NestedTypes>
+  <Class Name="OnlineRetriever">
+    <Position X="8" Y="12.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IACAAAAAAAAAQDAkAAEAIAAAAAAAAAEBhAAIBAAgAAA=</HashCode>
-      <FileName>Assets\Scripts\IMDBDLL\IMDbManager.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="OnlineRetriever" Collapsed="true">
-    <Position X="8.75" Y="10" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AIAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAEAAAAAAAACAAAAAJCAAAAAAAAAAABAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Online\OnlineRetriever.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="StartMenu">
+    <Position X="8" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAQAAAAAAAACAAAAAAAiAACAAAAAAAAAAAgA=</HashCode>
+      <FileName>Assets\Scripts\Online\StartMenu.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="onlineRetriever" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="DatabaseBuilder">
+    <Position X="11.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgA=</HashCode>
+      <FileName>Assets\Scripts\Online\DatabaseBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Interface Name="IGameObjectBuilder">
-    <Position X="16.5" Y="2.25" Width="1.5" />
+    <Position X="17.25" Y="1" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Builder\IGameObjectBuilder.cs</FileName>

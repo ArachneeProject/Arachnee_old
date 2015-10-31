@@ -7,7 +7,7 @@ using System.Text;
 
 public class DatabaseDialoger
 {
-    private SqliteConnection sqltConnection;
+    private SqliteConnection sqltConnection = null;
 
     /// <summary>
     /// Initializes the database connection
@@ -26,6 +26,12 @@ public class DatabaseDialoger
     /// <returns></returns>
     public DataSet GetDataSet(string query)
     {
+        if (this.sqltConnection == null)
+        {
+            Logger.Trace("Database Dialoger not initialized!", LogLevel.Error);
+            return new DataSet();
+        }
+
         this.sqltConnection.Open();
 
         DataSet set = new DataSet();

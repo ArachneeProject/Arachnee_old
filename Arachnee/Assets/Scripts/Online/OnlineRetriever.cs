@@ -8,12 +8,10 @@ public class OnlineRetriever
     //private string testurl = "https://api.themoviedb.org/3/movie/550?api_key= x x x";
     //private string testurlSerach = "https://api.themoviedb.org/3/search/movie?query=cube&api_key= x x x";
     //private string testposterUrl = "http://image.tmdb.org/t/p/w500/u50r6chJGO2iqxVAvtQ07obiCkB.jpg";
-
     
-
     private string urlSearch = "https://api.themoviedb.org/3/search/movie?query=";
     private string posterUrl = "http://image.tmdb.org/t/p/w500";
-    private string apiKey = " x x x ";
+    private string apiKey = "&api_key= x x";
 
     public JSONNode LastJSONNodeRetrieved
     {
@@ -43,7 +41,6 @@ public class OnlineRetriever
         input = this.processInput(input);
 
         WWW www = new WWW(this.urlSearch + input + this.apiKey);
-        Debug.Log(this.urlSearch + input + this.apiKey);
         yield return www;
 
         JSONNode node = JSON.Parse(www.text);

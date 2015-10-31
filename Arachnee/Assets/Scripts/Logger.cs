@@ -13,17 +13,26 @@ public class Logger : MonoBehaviour
 {
     public static void Trace (string message, LogLevel level)
     {
-        if (false
-            || level == LogLevel.Debug
-            || level == LogLevel.Info
-            || level == LogLevel.Warning
-            || level == LogLevel.Error
-            || level == LogLevel.Fatal
-            )
+        if (level == LogLevel.Debug)
         {
-            Debug.Log(message);
+            Debug.Log("Debug: " + message);
         }
-        
+        else if (level == LogLevel.Info)
+        {
+            Debug.Log("Info: " + message);
+        }
+        else if (level == LogLevel.Warning)
+        {
+            Debug.LogWarning("Warning: " + message);
+        }
+        else if (level == LogLevel.Error)
+        {
+            Debug.LogError("ERROR: " + message);
+        }
+        else
+        {
+            Debug.LogError("FATAL: " + message);
+        }
     }
 
 	

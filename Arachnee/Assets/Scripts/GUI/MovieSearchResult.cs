@@ -6,7 +6,7 @@ public class MovieSearchResult : MonoBehaviour
 {
     public Image Image;
     public Text Title;
-    public Text OverviewBox;
+    public Text overview;
 
     public int Id
     {
@@ -22,8 +22,9 @@ public class MovieSearchResult : MonoBehaviour
     }
 
 
-    public void SetOverviewBox()
+    public void SelectThis()
     {
-        this.OverviewBox.text = this.Overview;
+        this.overview.text = this.Overview;
+        PlayerPrefs.SetInt("MovieID", this.Id);
     }
 }
