@@ -41,16 +41,6 @@ public class Movie : Entry
         }
     }
 
-    public int Poster
-    {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
-        set
-        {
-        }
-    }
 
     public int Rating
     {
@@ -62,6 +52,7 @@ public class Movie : Entry
         {
         }
     }
+
 
     public override string ToString()
     {

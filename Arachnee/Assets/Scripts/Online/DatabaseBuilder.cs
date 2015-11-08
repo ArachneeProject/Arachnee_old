@@ -105,8 +105,9 @@ public class DatabaseBuilder : MonoBehaviour
             {
                 Convert.ToInt64(d.Substring(0, 4));
             }
-            
-            this.dlg.InsertMovie(i,title,date);
+            string posterPath = node["poster_path"].Value;
+                        
+            this.dlg.InsertMovie(i,title,date,posterPath);
         }
 
         // artists

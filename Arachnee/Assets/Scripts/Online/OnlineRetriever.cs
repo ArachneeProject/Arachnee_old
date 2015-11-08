@@ -15,7 +15,7 @@ public class OnlineRetriever
     private string personUrl = "https://api.themoviedb.org/3/person/";
     private string castQuery = "/credits?";
     private string creditsQuery = "/movie_credits?";
-    private string apiKey = "api_key= x x x";
+    private string apiKey = "api_key=The Skeleton Key";
 
 
     private JSONNode jNode = new JSONNode();
@@ -30,8 +30,12 @@ public class OnlineRetriever
             jNode = value;
         }
     }
-    
 
+    public Texture Texture
+    {
+        get;
+        private set;
+    }
 
     /// <summary>
     /// modify the input field to be sent as a query
@@ -76,6 +80,15 @@ public class OnlineRetriever
         {
             img.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), Vector2.zero);
         }
+    }
+
+
+    public IEnumerator RetrievePoster(string posterPath)
+    {
+        WWW www = new WWW(this.posterUrl + posterPath);
+        yield return www;
+        
+        this.Texture = www.texture;        
     }
 
     /// <summary>

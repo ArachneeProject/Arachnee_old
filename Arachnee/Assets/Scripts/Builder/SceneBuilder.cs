@@ -40,6 +40,7 @@ public class SceneBuilder : MonoBehaviour
         buildEntries();
         buildConnections();
 
+        StartCoroutine(retrievePosters());
     }
 
 
@@ -62,6 +63,26 @@ public class SceneBuilder : MonoBehaviour
         artBuilder.BuildGameObject(this.dataDlg.GetDataSet("SELECT * FROM 'artists'"));
     }
 
+    /// <summary>
+    /// Retrive poster for each entry
+    /// </summary>
+    /// <returns></returns>
+    private System.Collections.IEnumerator retrievePosters()
+    {
+        OnlineRetriever onlret = new OnlineRetriever();
+        foreach (Entry e in this.GraphBuilder.Graph.Vertices.Values)
+        {
+            if (e.PosterPath == "null")
+            {
+                continue;
+            }
+            yield return StartCoroutine(onlret.RetrievePoster(e.PosterPath));
+            if (onlret.Texture != null)
+            {
+                e.gameObject.GetComponent<Renderer>().material.mainTexture = onlret.Texture;
+            }            
+        }
+    }
     #endregion Entries
 
     #region Connections

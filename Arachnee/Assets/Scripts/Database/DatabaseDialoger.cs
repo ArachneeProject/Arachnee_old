@@ -94,7 +94,7 @@ public class DatabaseDialoger
         this.sqltConnection.Close();
     }
 
-    internal void InsertMovie(int id, string title, Int64 date)
+    internal void InsertMovie(int id, string title, Int64 date, string poster)
     {
         if (this.sqltConnection == null)
         {
@@ -103,7 +103,7 @@ public class DatabaseDialoger
         }
 
         this.sqltConnection.Open();
-        SqliteCommand insertSQL = new SqliteCommand("INSERT INTO movies VALUES (" + id + ", \"" + title + "\", " + date + ");", this.sqltConnection);
+        SqliteCommand insertSQL = new SqliteCommand("INSERT INTO movies VALUES (" + id + ", \"" + title + "\", " + date +", \"" + poster + "\");", this.sqltConnection);
         try
         {
             insertSQL.ExecuteNonQuery();

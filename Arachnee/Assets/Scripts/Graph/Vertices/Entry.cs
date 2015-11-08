@@ -20,6 +20,12 @@ public abstract class Entry : MonoBehaviour
         set;
     }
 
+    public string PosterPath
+    {
+        get;
+        set;
+    }
+
     /// <summary>
     /// Init
     /// </summary>
@@ -31,12 +37,15 @@ public abstract class Entry : MonoBehaviour
         this.GUI.gameObject.SetActive(false);
 
         // load the texture
+        /*
         var loadedTexture = Resources.Load(this.ToString()) as Texture;
         if (loadedTexture == null)
         {
             loadedTexture = Resources.Load("default") as Texture;
         }
         this.GetComponent<Renderer>().material.mainTexture = loadedTexture;
+        */
+        this.GetComponent<Renderer>().material.mainTexture = Resources.Load("default") as Texture;
 
         // init the rigidbody
         this.RigidBody = this.GetComponent<Rigidbody>();

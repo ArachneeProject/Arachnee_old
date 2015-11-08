@@ -27,6 +27,7 @@ public class MovieObjectBuilder : EntryGameObjectBuilder
         mv.Id = (uint)(Int64) row[0];
         mv.Title = (string)row[1];
         mv.Year = (int)((Int64) row[2]);
+        mv.PosterPath = (string)row[3];
 
         //Logger.Trace("Building " + mv.Title + " " + mv.Year, LogLevel.Debug);
 
