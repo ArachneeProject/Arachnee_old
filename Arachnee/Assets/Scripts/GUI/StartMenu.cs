@@ -31,7 +31,7 @@ public class StartMenu : MonoBehaviour
 
         yield return StartCoroutine(this.onlineRetriever.RetrieveResultOfSerach(this.inputField.text));
 
-        JSONNode resultsNode = this.onlineRetriever.LastJSONNodeRetrieved;
+        JSONNode resultsNode = this.onlineRetriever.NodeRetrieved;
 
         if (resultsNode == null)
         {

@@ -34,7 +34,7 @@ public class GraphBuilder
     public void AddEntryToGraph(Entry entry)
     {
         //Logger.Trace(entry.ToString() + " - old id: " + entry.Id + " - new id: " + idCounter, LogLevel.Debug);
-
+        
         if (entry is Movie)
         {
             this.movieIds.Add(entry.Id, idCounter);            
@@ -62,7 +62,14 @@ public class GraphBuilder
     /// <param name="c"></param>
     public void AddConnectionToGraph(Connection c)
     {
-        this.Graph.Edges.Add(c);
+        if (c.Right != null && c.Left != null)
+        {
+            this.Graph.Edges.Add(c);
+        }
+        else
+        {
+            UnityEngine.Object.Destroy(c.gameObject);
+        }
 
         // update matrix
     }

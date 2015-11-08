@@ -21,18 +21,10 @@ public abstract class Connection : MonoBehaviour
         set;
     }
 
-    /// <summary>
-    /// sets up the position of the linerenderer
-    /// </summary>
-    public void SetUpPositions()
+      
+    void Update()
     {
         this.LineRenderer.SetPosition(0, this.Left.transform.position);
         this.LineRenderer.SetPosition(1, this.Right.transform.position);
-    }
-
-    
-    void Update()
-    {
-        this.SetUpPositions();
     }
 }

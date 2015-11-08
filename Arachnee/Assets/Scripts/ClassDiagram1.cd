@@ -2,14 +2,6 @@
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="Graph">
     <Position X="5" Y="3" Width="1.5" />
-    <AssociationLine Name="Edges" Type="Connection" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="5.781" Y="4.94" />
-        <Point X="5.781" Y="5.315" />
-        <Point X="8" Y="5.315" />
-        <Point X="8" Y="5.75" />
-      </Path>
-    </AssociationLine>
     <AssociationLine Name="Vertices" Type="Entry" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="5.391" Y="4.94" />
@@ -18,13 +10,21 @@
         <Point X="4.188" Y="6" />
       </Path>
     </AssociationLine>
+    <AssociationLine Name="Edges" Type="Connection" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.781" Y="4.94" />
+        <Point X="5.781" Y="5.315" />
+        <Point X="8" Y="5.315" />
+        <Point X="8" Y="5.75" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
       <HashCode>AAAAgAAgAAAAAAAAAAAAEAAAAAAAAAAAEAAAAAAIAAA=</HashCode>
       <FileName>Assets\Scripts\Graph\Graph.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
-      <Property Name="Edges" />
       <Property Name="Vertices" />
+      <Property Name="Edges" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="EntryGameObjectBuilder">
@@ -63,7 +63,7 @@
   <Class Name="DatabaseDialoger">
     <Position X="11.25" Y="9.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AIAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AIAIAAAAAAACAQAAAAAAAIEAAAAAAAAAAAAQAACAAAA=</HashCode>
       <FileName>Assets\Scripts\Database\DatabaseDialoger.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -144,22 +144,22 @@
   <Class Name="Connection">
     <Position X="7.25" Y="5.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ACQAAAAAAAAAAAAAAAgAAAAAAAAAAAAACACAAAAAAAA=</HashCode>
+      <HashCode>AAQAAAAAAAAAAAAAAAgAAAAAAAAAAAAACACAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Graph\Edges\Connection.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="OnlineRetriever">
     <Position X="8" Y="12.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAEAAAAAAAACAAAAAJCAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <HashCode>gAAAAEAAAAAgAACAEAAAZCAACAAAAAAAAAAABgAAAgA=</HashCode>
       <FileName>Assets\Scripts\Online\OnlineRetriever.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="StartMenu">
     <Position X="8" Y="16.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAEAQAAAAAAAACAAAAAAAiAACAAAAAAAAAAAgA=</HashCode>
-      <FileName>Assets\Scripts\Online\StartMenu.cs</FileName>
+      <HashCode>AAAAAAAEAQAAAgAAAACAAAAAAAiAACAAAAAAAAAAAgA=</HashCode>
+      <FileName>Assets\Scripts\GUI\StartMenu.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Field Name="onlineRetriever" />
@@ -168,7 +168,7 @@
   <Class Name="DatabaseBuilder">
     <Position X="11.25" Y="12.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgA=</HashCode>
+      <HashCode>CAAAAABAACAAAAAAQECAAAIABAAAAAAAAAAAIAAAJAA=</HashCode>
       <FileName>Assets\Scripts\Online\DatabaseBuilder.cs</FileName>
     </TypeIdentifier>
   </Class>

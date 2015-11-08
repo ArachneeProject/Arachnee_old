@@ -20,7 +20,7 @@ public class DatabaseDialoger
 
 
     /// <summary>
-    /// Return 
+    /// Return dataset corresponding to query
     /// </summary>
     /// <param name="query"></param>
     /// <returns></returns>
@@ -43,4 +43,97 @@ public class DatabaseDialoger
         return set;
     }
 
+    /// <summary>
+    /// Checki if the id exist in the given table
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="tableName"></param>
+    /// <returns></returns>
+    public bool CheckIfEntryExistsInTable(Int64 id, string tableName)
+    {
+        return (this.GetDataSet("SELECT id FROM " + tableName + " WHERE id=\"" + id + "\" LIMIT 1;").Tables[0].Rows.Count != 0);
+    }
+
+    /// <summary>
+    /// Check if the actor->movie connection exists in the given table
+    /// </summary>
+    /// <param name="artistId"></param>
+    /// <param name="movieId"></param>
+    /// <param name="tableName"></param>
+    /// <returns></returns>
+    public bool CheckIfAMConnectionExistsInTable(Int64 artistId, Int64 movieId, string tableName)
+    {
+        return (this.GetDataSet("SELECT id_artist FROM " + tableName + " WHERE id_artist=\"" + artistId + "\" AND id_movie=\"" + movieId + "\" LIMIT 1;").Tables[0].Rows.Count != 0);
+    }
+
+
+    /// <summary>
+    /// Insert new values in database
+    /// </summary>
+    /// <param name="leftId"></param>
+    /// <param name="rightId"></param>
+    /// <param name="tableName"></param>
+    internal void InsertConnection(Int64 leftId, Int64 rightId, string tableName)
+    {
+        if (this.sqltConnection == null)
+        {
+            Logger.Trace("Database Dialoger not initialized!", LogLevel.Error);
+            return;
+        }
+
+        this.sqltConnection.Open();
+        SqliteCommand insertSQL = new SqliteCommand("INSERT INTO " + tableName + " VALUES (" + leftId + "," + rightId + ")", this.sqltConnection);
+        try 
+        {
+            insertSQL.ExecuteNonQuery();
+        }
+        catch (Exception ex) 
+        {
+            Logger.Trace(ex.Message, LogLevel.Error);
+        }
+        this.sqltConnection.Close();
+    }
+
+    internal void InsertMovie(int id, string title, Int64 date)
+    {
+        if (this.sqltConnection == null)
+        {
+            Logger.Trace("Database Dialoger not initialized!", LogLevel.Error);
+            return;
+        }
+
+        this.sqltConnection.Open();
+        SqliteCommand insertSQL = new SqliteCommand("INSERT INTO movies VALUES (" + id + ", \"" + title + "\", " + date + ");", this.sqltConnection);
+        try
+        {
+            insertSQL.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace("query: " + "INSERT INTO movies VALUES (" + id + ", \"" + title + "\", " + date + ");" + " - has a problem", LogLevel.Error);
+            Logger.Trace(ex.Message, LogLevel.Error);
+        }
+        this.sqltConnection.Close();
+    }
+
+    internal void InsertArtist(int id)
+    {
+        if (this.sqltConnection == null)
+        {
+            Logger.Trace("Database Dialoger not initialized!", LogLevel.Error);
+            return;
+        }
+
+        this.sqltConnection.Open();
+        SqliteCommand insertSQL = new SqliteCommand("INSERT INTO artists VALUES (" + id + ", \"John\", \"Doe\")", this.sqltConnection);
+        try
+        {
+            insertSQL.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace(ex.Message, LogLevel.Error);
+        }
+        this.sqltConnection.Close();
+    }
 }
