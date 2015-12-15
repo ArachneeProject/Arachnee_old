@@ -48,7 +48,7 @@ public class Graph
             // repulsion
             foreach (Entry otherEntry in this.Vertices.Values)
             {
-                if (entry.Id != otherEntry.Id)
+                if (entry.GraphId != otherEntry.GraphId)
                 {
                     float distance = Vector3.Distance(entry.transform.position, otherEntry.transform.position);
                     if (distance < 100)

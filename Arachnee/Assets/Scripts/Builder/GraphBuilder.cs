@@ -37,11 +37,11 @@ public class GraphBuilder
         
         if (entry is Movie)
         {
-            this.movieIds.Add(entry.Id, idCounter);            
+            this.movieIds.Add(entry.GraphId, idCounter);            
         }
         else if (entry is Artist)
         {
-            this.artistIds.Add(entry.Id, idCounter);
+            this.artistIds.Add(entry.GraphId, idCounter);
         }
         else
         {
@@ -49,8 +49,8 @@ public class GraphBuilder
             return;
         }
         
-        entry.Id = idCounter;
-        this.Graph.Vertices.Add(entry.Id, entry);
+        entry.GraphId = idCounter;
+        this.Graph.Vertices.Add(entry.GraphId, entry);
 
         this.idCounter++;
     }

@@ -72,7 +72,7 @@ public class SceneBuilder : MonoBehaviour
         OnlineRetriever onlret = new OnlineRetriever();
         foreach (Entry e in this.GraphBuilder.Graph.Vertices.Values)
         {
-            if (e.PosterPath == "null")
+            if (e is Artist || e.PosterPath == "null")
             {
                 continue;
             }

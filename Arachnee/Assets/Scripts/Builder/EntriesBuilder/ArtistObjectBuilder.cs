@@ -23,7 +23,7 @@ public class ArtistObjectBuilder : EntryGameObjectBuilder
     {
         Artist art = obj.AddComponent<Artist>();
 
-        art.Id = (uint)((Int64)row[0]);
+        art.GraphId = (uint)((Int64)row[0]);
         art.FirstName = (string) row[1];
         art.LastName = (string) row[2];
 

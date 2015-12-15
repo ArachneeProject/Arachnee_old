@@ -38,7 +38,7 @@
   <Class Name="SceneBuilder">
     <Position X="11.5" Y="1" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAgAgAiAAAAAAAAAAEGRAgAQAAEAAAIIACAIABAA=</HashCode>
+      <HashCode>AAAAAgAgAiAAAAAEAAAAEGRAgAQAAEAAAIIACAIABAA=</HashCode>
       <FileName>Assets\Scripts\Builder\SceneBuilder.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -102,7 +102,7 @@
   <Class Name="Entry">
     <Position X="3.5" Y="6" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAKAIAAAAAAAAAAAABAQAAAAAAAAAAAAACAA=</HashCode>
+      <HashCode>AIAAAAAAAKAIAAAAAAAAAAAABAQAAAAAQAAAAAAACAA=</HashCode>
       <FileName>Assets\Scripts\Graph\Vertices\Entry.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -116,7 +116,7 @@
   <Class Name="Movie">
     <Position X="4" Y="9.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAABAAAAEAECAAAAAAAAAAAEAEAAAAEAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAABAAAAEAECAAAAAAAAAAAAAEAAAAEAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Graph\Vertices\Movie.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -151,12 +151,12 @@
   <Class Name="OnlineRetriever">
     <Position X="8" Y="12.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>gAAAAEAAAAAgAACAMAAAZCAACAAAAAAAAAAABgAAAgA=</HashCode>
+      <HashCode>gAAAAEAAAAAgAACAMAAAZCAACAAAAAAAAAIABgAAAgA=</HashCode>
       <FileName>Assets\Scripts\Online\OnlineRetriever.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="StartMenu">
-    <Position X="8" Y="16.75" Width="1.5" />
+    <Position X="5" Y="15.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAEAQAAAgAAAACAAAAAAAiAACAAAAAAAAAAAgA=</HashCode>
       <FileName>Assets\Scripts\GUI\StartMenu.cs</FileName>
@@ -166,11 +166,14 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="DatabaseBuilder">
-    <Position X="11.25" Y="12.5" Width="1.5" />
+    <Position X="11" Y="13.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CAAAAABAACAAAAAAQECAAAIABAAAAAAAAAAAIAAAJCA=</HashCode>
       <FileName>Assets\Scripts\Online\DatabaseBuilder.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="dlg" />
+    </ShowAsAssociation>
   </Class>
   <Interface Name="IGameObjectBuilder">
     <Position X="17.25" Y="1" Width="1.5" />
