@@ -116,7 +116,7 @@ public class DatabaseDialoger
         this.sqltConnection.Close();
     }
 
-    internal void InsertArtist(int id)
+    internal void InsertArtist(int id, string firstName, string lastName)
     {
         if (this.sqltConnection == null)
         {
@@ -125,7 +125,7 @@ public class DatabaseDialoger
         }
 
         this.sqltConnection.Open();
-        SqliteCommand insertSQL = new SqliteCommand("INSERT INTO artists VALUES (" + id + ", \"John\", \"Doe\")", this.sqltConnection);
+        SqliteCommand insertSQL = new SqliteCommand("INSERT INTO artists VALUES (" + id + ", \""+ firstName  + "\", \"" + lastName + "\")", this.sqltConnection);
         try
         {
             insertSQL.ExecuteNonQuery();

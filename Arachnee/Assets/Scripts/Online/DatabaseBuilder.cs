@@ -9,150 +9,122 @@ public class DatabaseBuilder : MonoBehaviour
 {
     public Text message;
     private DatabaseDialoger dlg = new DatabaseDialoger();
+    private OnlineRetriever onlRet = new OnlineRetriever();
 
-    // entries
-    private HashSet<int> artistsIds = new HashSet<int>();
-    private HashSet<int> moviesIds = new HashSet<int>();
-
-    // connections
-    private HashSet<Tuple> actorConnections = new HashSet<Tuple>();
-
-
-	// Use this for initialization
-	void Start () 
+    void Start()
     {
-        Logger.Trace("ID of movie: " + PlayerPrefs.GetInt("MovieID"), LogLevel.Debug);
+        int seedId = PlayerPrefs.GetInt("MovieID");
+
+        Logger.Trace("ID of movie: " + seedId, LogLevel.Debug);
         this.dlg.Initialize("URI=file:" + Application.dataPath + "/Database/arachneeDatabase.db");
-        StartCoroutine(this.buildDatabase(PlayerPrefs.GetInt("MovieID")));
-	}
-	
-    IEnumerator buildDatabase(int startingPoint)
+        StartCoroutine(this.mainCoroutine(seedId));        
+    }
+
+    private IEnumerator mainCoroutine(int seedId)
     {
-        yield return StartCoroutine(this.getCast(startingPoint));
-        foreach(int idArtist in this.artistsIds)
+        // if movie is not present in database
+        if (!this.dlg.CheckIfEntryExistsInTable(seedId, "movies"))
         {
-            yield return StartCoroutine(this.getCredits(idArtist));
+            this.message.text = "Movie is not present in the database, getting info from the internet...";
+            yield return StartCoroutine(addMovieToDatabase(seedId));
         }
-        yield return StartCoroutine(this.insertConnections());
-        yield return StartCoroutine(this.insertEntries());
+
+        // if movie successfully added, get casting
+        if (this.dlg.CheckIfEntryExistsInTable(seedId, "movies"))
+        {
+            yield return StartCoroutine(this.getCast(seedId));
+        }
+        
+
+        // launch scene
         this.message.text = "Launching scene...";
         Application.LoadLevel(2);
     }
 
-    IEnumerator getCast(int movieId)
+
+    /// <summary>
+    /// Add the movie and all infos about it in database (only if it has a poster)
+    /// </summary>
+    /// <param name="movieId"></param>
+    /// <returns></returns>
+    private IEnumerator addMovieToDatabase(int movieId)
+    {
+        yield return StartCoroutine(onlRet.RetrieveMovie(movieId));
+        JSONNode node = onlRet.NodeRetrieved;
+
+        string posterPath = node["poster_path"].Value;
+        if (posterPath == null)
+        {
+            yield break;
+        }
+        string title = node["original_title"].Value;
+        Int64 date = 1;
+        string d = node["release_date"].Value;
+        if (d.Length > 4)
+        {
+            date = Convert.ToInt64(d.Substring(0, 4));
+        }
+        
+        this.dlg.InsertMovie(movieId, title, date, posterPath);
+    }
+
+
+    private IEnumerator addArtistToDatabase(int artistId)
+    {
+        yield return StartCoroutine(this.onlRet.RetrieveArtist(artistId));
+        JSONNode node = this.onlRet.NodeRetrieved;
+
+        string posterPath = node["profile_path"].Value;
+        if (posterPath == null)
+        {
+            yield break;
+        }
+        
+        string name = node["name"].Value;
+        int idx = name.LastIndexOf(' ');
+        string firstName = name.Substring(0, idx); 
+        string lastName = name.Substring(idx + 1);
+
+        this.dlg.InsertArtist(artistId, firstName, lastName);
+    }
+
+    /// <summary>
+    /// Get the cast of the movie, add each new artist and each new connections in 'actors' table
+    /// </summary>
+    /// <param name="movieId"></param>
+    /// <returns></returns>
+    private IEnumerator getCast(int movieId)
     {
         this.message.text = "Getting casting...";
 
-        OnlineRetriever onlineRetriever = new OnlineRetriever();
+        yield return StartCoroutine(this.onlRet.RetrieveCast(movieId));
+        JSONNode node = this.onlRet.NodeRetrieved;
 
-        yield return StartCoroutine(onlineRetriever.RetrieveCast(movieId));
-        JSONNode node = onlineRetriever.NodeRetrieved;
-
+        List<int> actors = new List<int>();
         for (int i = 0; i < node.Count; i++)
         {
             int artistId = Convert.ToInt32(node[i]["id"].Value);
-            this.artistsIds.Add(artistId);
-            this.actorConnections.Add(new Tuple(artistId,movieId));
+            actors.Add(artistId);
         }
-    }
 
-    IEnumerator getCredits(int artistId)
-    {
-        this.message.text = "Getting credits...";
-
-        OnlineRetriever onlineRetriever = new OnlineRetriever();
-
-        yield return StartCoroutine(onlineRetriever.RetrieveCredits(artistId));
-        JSONNode node = onlineRetriever.NodeRetrieved;
-
-        for (int i = 0; i < node.Count; i++)
+        List<int> actorsAdded = new List<int>();
+        foreach (int a in actors)
         {
-            int movieId = Convert.ToInt32(node[i]["id"].Value);
-            this.moviesIds.Add(movieId);
-            this.actorConnections.Add(new Tuple(artistId, movieId));
-        }
-    }
-
-    /// <summary>
-    /// Insert artist->movie connections in database
-    /// </summary>
-    IEnumerator insertConnections()
-    {
-        this.message.text = "Inserting new connections...";
-
-        this.actorConnections = this.cleanList(this.actorConnections,"actors");        
-        foreach (Tuple t in this.actorConnections)
-        {   
-            this.dlg.InsertConnection((Int64)t.Left, (Int64)t.Right, "actors");
-            yield return null;
-        }
-    }
-
-    IEnumerator insertEntries()
-    {
-        OnlineRetriever onlRet = new OnlineRetriever();
-        // movies
-        this.message.text = "Inserting new movies...";
-        this.moviesIds = this.cleanList(this.moviesIds, "movies");
-        foreach (int i in this.moviesIds)
-        {
-            yield return StartCoroutine(onlRet.RetrieveMovie(i));
-            JSONNode node = onlRet.NodeRetrieved;
-            string title = node["original_title"].Value;
-            Int64 date = 1;
-            string d = node["release_date"].Value;
-            if (d.Length > 4)
+            // if artist doesn't exist in db
+            if (!this.dlg.CheckIfEntryExistsInTable(a, "artists"))
             {
-                Convert.ToInt64(d.Substring(0, 4));
-            }
-            string posterPath = node["poster_path"].Value;
-                        
-            this.dlg.InsertMovie(i,title,date,posterPath);
-        }
-
-        // artists
-        this.message.text = "Inserting new artists...";
-        this.artistsIds = this.cleanList(this.artistsIds, "artists");
-        foreach (int i in this.artistsIds)
-        {
-            this.dlg.InsertArtist(i);
-        }
-    }
-
-    /// <summary>
-    /// Remove connexions already existing in database
-    /// </summary>
-    /// <param name="l"></param>
-    /// <returns></returns>
-    HashSet<Tuple> cleanList(HashSet<Tuple> l, string tableName)
-    {
-        HashSet<Tuple> cl = new HashSet<Tuple>();
-        foreach (Tuple t in l)
-        {
-            if (!this.dlg.CheckIfAMConnectionExistsInTable(t.Left, t.Right, tableName))
-            {
-                cl.Add(t);
+                yield return StartCoroutine(addArtistToDatabase(a));
+                if (this.dlg.CheckIfEntryExistsInTable(a, "artists"))
+                {
+                    actorsAdded.Add(a);
+                }
             }
         }
-        return cl;
+
+        foreach (int a in actorsAdded)
+        {
+            this.dlg.InsertConnection(a, movieId, "actors");
+        }
     }
 
-    /// <summary>
-    /// Remove entries already existing in database
-    /// </summary>
-    /// <param name="l"></param>
-    /// <param name="tableName"></param>
-    /// <returns></returns>
-    HashSet<int> cleanList(HashSet<int> l, string tableName)
-    {
-        HashSet<int> cl = new HashSet<int>();
-        foreach (int i in l)
-        {
-            if (!this.dlg.CheckIfEntryExistsInTable(i,tableName))
-            {
-                cl.Add(i);
-            }
-        }
-        return cl;
-    }
 }

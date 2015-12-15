@@ -128,4 +128,13 @@ public class OnlineRetriever
         JSONNode node = JSON.Parse(www.text);
         this.NodeRetrieved = node;
     }
+
+    internal IEnumerator RetrieveArtist(int id)
+    {
+        WWW www = new WWW(this.personUrl + id + "?" + this.apiKey);
+        yield return www;
+
+        JSONNode node = JSON.Parse(www.text);
+        this.NodeRetrieved = node;
+    }
 }

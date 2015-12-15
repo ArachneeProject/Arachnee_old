@@ -54,13 +54,14 @@ public class SceneBuilder : MonoBehaviour
     private void buildMovies()
     {
         MovieObjectBuilder mvBuilder = new MovieObjectBuilder(this.MoviePrefab, this.GraphBuilder, this.rangeOfBuilding);
-        mvBuilder.BuildGameObject(this.dataDlg.GetDataSet("SELECT * FROM 'movies'"));
+        mvBuilder.BuildGameObject(this.dataDlg.GetDataSet("SELECT * FROM movies WHERE id=" + PlayerPrefs.GetInt("MovieID")));
     }
 
     private void buildArtists()
     {
         ArtistObjectBuilder artBuilder = new ArtistObjectBuilder(this.ArtistPrefab, this.GraphBuilder, this.rangeOfBuilding);
-        artBuilder.BuildGameObject(this.dataDlg.GetDataSet("SELECT * FROM 'artists'"));
+        artBuilder.BuildGameObject(this.dataDlg.GetDataSet("SELECT * FROM artists WHERE id IN (SELECT id_artist FROM actors WHERE id_movie=" + PlayerPrefs.GetInt("MovieID") + ")"));
+        artBuilder.BuildGameObject(this.dataDlg.GetDataSet("SELECT * FROM artists WHERE id IN (SELECT id_artist FROM directors WHERE id_movie=" + PlayerPrefs.GetInt("MovieID") + ")"));
     }
 
     /// <summary>
@@ -100,13 +101,13 @@ public class SceneBuilder : MonoBehaviour
     private void buildActorsConnections()
     {
         ActorConnectionBuilder acb = new ActorConnectionBuilder(this.ActorConnectionPrefab, this.GraphBuilder);
-        acb.BuildGameObject(this.dataDlg.GetDataSet("SELECT * FROM 'Actors'"));
+        acb.BuildGameObject(this.dataDlg.GetDataSet("SELECT * FROM 'Actors' WHERE id_movie=" + PlayerPrefs.GetInt("MovieID")));
     }
 
     private void buildDirectorsConnections()
     {
         DirectorConnectionBuilder dcb = new DirectorConnectionBuilder(this.DirectorConnectionPrefab, this.GraphBuilder);
-        dcb.BuildGameObject(this.dataDlg.GetDataSet("SELECT * FROM 'Directors'"));
+        dcb.BuildGameObject(this.dataDlg.GetDataSet("SELECT * FROM 'Directors' WHERE id_movie=" + PlayerPrefs.GetInt("MovieID")));
     }
     #endregion Connections
 
