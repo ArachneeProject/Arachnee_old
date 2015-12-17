@@ -82,10 +82,14 @@ public class DatabaseBuilder : MonoBehaviour
         
         string name = node["name"].Value;
         int idx = name.LastIndexOf(' ');
+        if (idx < 0)
+        {
+            idx = 0;
+        }
         string firstName = name.Substring(0, idx); 
         string lastName = name.Substring(idx + 1);
 
-        this.dlg.InsertArtist(artistId, firstName, lastName);
+        this.dlg.InsertArtist(artistId, firstName, lastName, posterPath);
     }
 
     /// <summary>

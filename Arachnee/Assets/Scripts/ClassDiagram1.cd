@@ -107,14 +107,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Artist">
-    <Position X="2" Y="9.25" Width="1.5" />
+    <Position X="2.5" Y="9.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAECAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
       <FileName>Assets\Scripts\Graph\Vertices\Artist.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Movie">
-    <Position X="4" Y="9.25" Width="1.5" />
+    <Position X="4.5" Y="9.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAABAAAAEAECAAAAAAAAAAAAAEAAAAEAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Graph\Vertices\Movie.cs</FileName>
@@ -151,7 +151,7 @@
   <Class Name="OnlineRetriever">
     <Position X="8" Y="12.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>gAAAAEAAAAAgAACAMAAAZCAACAAAAAAAAAIABgAAAgA=</HashCode>
+      <HashCode>gAAAAEAABAAgAACAMAAAYCAACAAAAAAAAAIABgAAAgA=</HashCode>
       <FileName>Assets\Scripts\Online\OnlineRetriever.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -168,7 +168,7 @@
   <Class Name="DatabaseBuilder">
     <Position X="11" Y="13.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CAAAAABAACAAAAAAQECAAAIABAAAAAAAAAAAIAAAJCA=</HashCode>
+      <HashCode>AAAAQAAAACAABAAAQAAgAAAAAAABAAAAAAAAAAAABCA=</HashCode>
       <FileName>Assets\Scripts\Online\DatabaseBuilder.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>

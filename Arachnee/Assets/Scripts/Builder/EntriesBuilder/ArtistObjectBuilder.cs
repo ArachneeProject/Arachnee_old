@@ -26,6 +26,7 @@ public class ArtistObjectBuilder : EntryGameObjectBuilder
         art.GraphId = (uint)((Int64)row[0]);
         art.FirstName = (string) row[1];
         art.LastName = (string) row[2];
+        art.PosterPath = (string)row[3];
 
         //Logger.Trace("Building " + art.FirstName + " " + art.LastName, LogLevel.Debug);
 

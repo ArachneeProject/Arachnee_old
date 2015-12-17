@@ -86,10 +86,12 @@ public class OnlineRetriever
     public IEnumerator RetrievePoster(string posterPath)
     {
         WWW www = new WWW(this.posterUrl + posterPath);
+        Debug.Log("retrieving " + this.posterUrl + posterPath);
         yield return www;
-        
-        this.Texture = www.texture;        
+
+        this.Texture = www.texture; 
     }
+
 
     /// <summary>
     /// Retrive the cast of the movie
