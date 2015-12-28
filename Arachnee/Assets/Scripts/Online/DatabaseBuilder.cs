@@ -53,7 +53,7 @@ public class DatabaseBuilder : MonoBehaviour
         JSONNode node = onlRet.NodeRetrieved;
 
         string posterPath = node["poster_path"].Value;
-        if (posterPath == null)
+        if (posterPath == "null")
         {
             yield break;
         }
@@ -75,7 +75,7 @@ public class DatabaseBuilder : MonoBehaviour
         JSONNode node = this.onlRet.NodeRetrieved;
 
         string posterPath = node["profile_path"].Value;
-        if (posterPath == null)
+        if (posterPath == "null")
         {
             yield break;
         }
