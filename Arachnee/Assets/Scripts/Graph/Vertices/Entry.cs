@@ -20,7 +20,7 @@ public abstract class Entry : MonoBehaviour
         set;
     }
 
-    public Int64 DatabaseId
+    public uint DatabaseId
     {
         get;
         set;

@@ -28,20 +28,13 @@ public abstract class ConnectionGameObjectBuilder : IGameObjectBuilder
 
             connect.LineRenderer = lr;
 
-            uint leftId = (uint)((Int64) row[0]);
-            uint rightId = (uint)((Int64) row[1]);
-            connect.Left = this.getLeftEntry(leftId);
-            connect.Right = this.getRightEntry(rightId);
-
-            //connect.SetUpPositions();
-
+            connect.InitLeftId = (uint)((Int64) row[0]);
+            connect.InitRightId = (uint)((Int64) row[1]);
+            
             this.GraphBuilder.AddConnectionToGraph(connect);
         }
     }
 
     protected abstract Connection addConcreteComponent(GameObject go);
-
-    protected abstract Entry getLeftEntry(uint idLeft);
-    protected abstract Entry getRightEntry(uint idRight);
 
 }

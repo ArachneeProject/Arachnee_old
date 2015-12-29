@@ -38,7 +38,7 @@
   <Class Name="SceneBuilder">
     <Position X="11.5" Y="1" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAgAgAiAAAAAEAAAAEGRAgAQAAEAAAIIACAIABAA=</HashCode>
+      <HashCode>AAAAAgQgAiAAAAAEAAAAEGRAAAQAAEAgAIIAAAIABAA=</HashCode>
       <FileName>Assets\Scripts\Builder\SceneBuilder.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -70,7 +70,7 @@
   <Class Name="ConnectionGameObjectBuilder">
     <Position X="19.25" Y="3.25" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAQAAAAAAAAAAQgABAAAQAAAAEAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAQAAAAAAAAAAQgAAAAAQAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Builder\ConnectionsBuilder\ConnectionGameObjectBuilder.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -78,7 +78,7 @@
   <Class Name="GraphBuilder">
     <Position X="8.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAABAAAAAAAEQQAAAAAAAAAQAAAAgAgAAQAAEAAAAAA=</HashCode>
+      <HashCode>AABAAAAAAAAEAAAAAAAAAAAQAAAAgAgAAQAAEAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Builder\GraphBuilder.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -86,17 +86,10 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="ActorConnection">
-    <Position X="6.5" Y="8.5" Width="1.5" />
+    <Position X="6.25" Y="8.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Graph\Edges\ActorConnection.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="ArtistToMovieConnectionBuilder">
-    <Position X="18.5" Y="6.5" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAEAAAAAAAA=</HashCode>
-      <FileName>Assets\Scripts\Builder\ConnectionsBuilder\ArtistToMovieConnectionBuilder.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Entry">
@@ -135,23 +128,23 @@
     </TypeIdentifier>
   </Class>
   <Class Name="DirectorConnection">
-    <Position X="8" Y="8.5" Width="1.5" />
+    <Position X="8.25" Y="8.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Graph\Edges\DirectorConnection.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Connection">
     <Position X="7.25" Y="5.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAAAAAAgAAAAAAAAAAAAACACAAAAAAAA=</HashCode>
+      <HashCode>AAQAAAAAAAAAAAAAgBgAAIAAAAAAAIAACgCAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Graph\Edges\Connection.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="OnlineRetriever">
     <Position X="8" Y="12.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>gAAAAEAABAAgAACAMAAAYCAACAAAAAAAAAIABgAAAgA=</HashCode>
+      <HashCode>gAAAAEAABAAgAACAMAAAZCAACAAAAAAAAAIABgAAAgA=</HashCode>
       <FileName>Assets\Scripts\Online\OnlineRetriever.cs</FileName>
     </TypeIdentifier>
   </Class>

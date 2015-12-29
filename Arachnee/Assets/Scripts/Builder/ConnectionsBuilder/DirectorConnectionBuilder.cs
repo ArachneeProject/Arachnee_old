@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class DirectorConnectionBuilder : ArtistToMovieConnectionBuilder
+public class DirectorConnectionBuilder : ConnectionGameObjectBuilder
 {
     public DirectorConnectionBuilder(UnityEngine.LineRenderer lineRenderer, GraphBuilder graphBuilder)
     {
