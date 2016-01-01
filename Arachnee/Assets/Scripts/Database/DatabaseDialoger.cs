@@ -89,7 +89,7 @@ public class DatabaseDialoger
         }
         catch (Exception ex) 
         {
-            Logger.Trace(ex.Message, LogLevel.Error);
+            Logger.Trace(ex.Message + " (on " + leftId + " - " + rightId + ")", LogLevel.Error);
         }
         this.sqltConnection.Close();
     }

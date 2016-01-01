@@ -23,6 +23,15 @@ public class ActorConnection : Connection
                 continue;
             }
         }
-        Debug.Log("Actor " + Left.DatabaseId + " Movie " + Right.DatabaseId);
+
+        if (this.Left == null)
+        {
+            Logger.Trace("Artist with id " + this.InitLeftId + " was not found", LogLevel.Error);
+        }
+        if (this.Right == null)
+        {
+            Logger.Trace("Movie with id " + this.InitRightId + " was not found", LogLevel.Error);
+        }
+        //Debug.Log("Actor " + Left.DatabaseId + " Movie " + Right.DatabaseId);
     }
 }

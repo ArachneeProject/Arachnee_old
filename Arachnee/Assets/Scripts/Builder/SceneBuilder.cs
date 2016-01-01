@@ -56,7 +56,7 @@ public class SceneBuilder : MonoBehaviour
         set.Add((uint) PlayerPrefs.GetInt("MovieID"));
         setStr = this.formatCollection(set);
 
-        int range = 2;
+        int range = 3;
 
         while (range-- > 0)
         {
@@ -88,7 +88,6 @@ public class SceneBuilder : MonoBehaviour
 
             // build artists
             buildArtists(setStr);
-            Debug.Log("list artists " + setStr);
 
             
             // build connections artist->movie
@@ -163,8 +162,6 @@ public class SceneBuilder : MonoBehaviour
         {
             query = "SELECT * FROM 'Actors' WHERE id_movie IN " + list;
         }
-
-        Debug.Log("query : " + query);
 
         ActorConnectionBuilder acb = new ActorConnectionBuilder(this.ActorConnectionPrefab, this.GraphBuilder);
         acb.BuildGameObject(this.dataDlg.GetDataSet(query));

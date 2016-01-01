@@ -61,6 +61,12 @@ public class OnlineRetriever
         yield return www;
 
         JSONNode node = JSON.Parse(www.text);
+        if (node == null)
+        {
+            Logger.Trace("Query returned no result: " + this.urlSearch + input + "&" + "(apiKey)", LogLevel.Warning);
+            this.NodeRetrieved = null;
+            yield break;
+        }
         this.NodeRetrieved = node["results"];
     }
 
@@ -86,7 +92,6 @@ public class OnlineRetriever
     public IEnumerator RetrievePoster(string posterPath)
     {
         WWW www = new WWW(this.posterUrl + posterPath);
-        //Debug.Log("retrieving " + this.posterUrl + posterPath);
         yield return www;
 
         this.Texture = www.texture; 
@@ -104,7 +109,13 @@ public class OnlineRetriever
         yield return www;
 
         JSONNode node = JSON.Parse(www.text);
-        this.NodeRetrieved = node["cast"];
+        if (node == null)
+        {
+            Logger.Trace("Query returned no result: " + this.movieUrl + movieId + this.castQuery + "(apiKey)", LogLevel.Warning);
+            this.NodeRetrieved = null;
+            yield break;
+        }
+        this.NodeRetrieved = node;
     }
 
     /// <summary>
@@ -118,10 +129,20 @@ public class OnlineRetriever
         yield return www;
 
         JSONNode node = JSON.Parse(www.text);
-        this.NodeRetrieved = node["cast"];
+        if (node == null)
+        {
+            Logger.Trace("Query returned no result: " + this.personUrl + artistId + this.creditsQuery + "(apiKey)", LogLevel.Warning);
+            this.NodeRetrieved = null;
+            yield break;
+        }
+        this.NodeRetrieved = node;
     }
 
-
+    /// <summary>
+    /// Get infos about the movie with specified id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     internal IEnumerator RetrieveMovie(int id)
     {
         WWW www = new WWW(this.movieUrl + id + "?" + this.apiKey);
@@ -129,8 +150,17 @@ public class OnlineRetriever
 
         JSONNode node = JSON.Parse(www.text);
         this.NodeRetrieved = node;
+        if (node == null)
+        {
+            Logger.Trace("Query returned no result: " + this.movieUrl + id + "?" + "(apiKey)", LogLevel.Warning);
+        }
     }
 
+    /// <summary>
+    /// Get infos about the artist with the specified id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     internal IEnumerator RetrieveArtist(int id)
     {
         WWW www = new WWW(this.personUrl + id + "?" + this.apiKey);
@@ -138,5 +168,9 @@ public class OnlineRetriever
 
         JSONNode node = JSON.Parse(www.text);
         this.NodeRetrieved = node;
+        if (node == null)
+        {
+            Logger.Trace("Query returned no result: " + this.personUrl + id + "?" + "(apiKey)", LogLevel.Warning);
+        }
     }
 }
