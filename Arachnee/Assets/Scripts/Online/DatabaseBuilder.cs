@@ -102,6 +102,18 @@ public class DatabaseBuilder : MonoBehaviour
             actors.Add(artistId);
         }
 
+        // for each director in the movie
+        List<int> directors = new List<int>();
+        for (int i = 0; i < node["crew"].Count; i++)
+        {
+            if (node["crew"][i]["job"].Value == "Director")
+            {
+                int artistId = Convert.ToInt32(node["crew"][i]["id"].Value);
+                directors.Add(artistId);
+            }            
+        }
+
+        // insert all those artists
         this.message.text = "Inserting artists...";
         List<int> artistsNotAdded = new List<int>();
         foreach (int a in actors)
@@ -114,13 +126,28 @@ public class DatabaseBuilder : MonoBehaviour
                 if (!this.dlg.CheckIfEntryExistsInTable(a, "artists"))
                 {
                     artistsNotAdded.Add(a);
-                }            
+                }
             }
         }
+        foreach (int a in directors)
+        {
+            // if artist doesn't exist in db
+            if (!this.dlg.CheckIfEntryExistsInTable(a, "artists"))
+            {
+                // add artist to database
+                yield return StartCoroutine(addArtistToDatabase(a));
+                if (!this.dlg.CheckIfEntryExistsInTable(a, "artists"))
+                {
+                    artistsNotAdded.Add(a);
+                }
+            }
+        }
+        
         // remove useless artists
         foreach (int a in artistsNotAdded)
         {
             actors.Remove(a);
+            directors.Remove(a);
         }
 
         // insert connections
@@ -130,8 +157,14 @@ public class DatabaseBuilder : MonoBehaviour
             // if (not exist in actors...)
             this.dlg.InsertConnection(a, movieId, "actors");
         }
+        foreach (int a in directors)
+        {
+            // if (not exist in directors...)
+            this.dlg.InsertConnection(a, movieId, "directors");
+        }
 
         yield return StartCoroutine(addCredits(actors));
+        yield return StartCoroutine(addCredits(directors));
     }
 
 
@@ -163,6 +196,20 @@ public class DatabaseBuilder : MonoBehaviour
                 }
             }
 
+            // for each movie the artist directed
+            for (int i = 0; i < node["crew"].Count; i++)
+            {
+                if (node["crew"][i]["job"].Value == "Director")
+                {
+                    Int64 mvId = Convert.ToInt64(node["crew"][i]["id"].Value);
+                    if (this.dlg.CheckIfEntryExistsInTable(mvId, "movies"))
+                    {
+                        // if not exist...
+                        this.dlg.InsertConnection(artId, mvId, "directors");
+                    }
+                }
+            }
+
             // this is where you have to continue...  https://api.themoviedb.org/3/person/76489/movie_credits?api_key=The Skeleton Key
         }
     }
@@ -191,13 +238,20 @@ public class DatabaseBuilder : MonoBehaviour
         }
 
         string name = node["name"].Value;
+        string firstName = "";
+        string lastName = "";
+
         int idx = name.LastIndexOf(' ');
         if (idx < 0)
         {
-            idx = 0;
+            lastName = name;
+            // also known as...
         }
-        string firstName = name.Substring(0, idx);
-        string lastName = name.Substring(idx + 1);
+        else
+        {
+            firstName = name.Substring(0, idx);
+            lastName = name.Substring(idx + 1);
+        }
 
         this.dlg.InsertArtist(artistId, firstName, lastName, posterPath);
     }
