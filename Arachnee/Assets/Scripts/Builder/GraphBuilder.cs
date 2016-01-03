@@ -7,9 +7,6 @@ public class GraphBuilder
 {
     private uint idCounter = 1;
 
-    private Dictionary<uint, uint> movieIds = new Dictionary<uint, uint>();
-    private Dictionary<uint, uint> artistIds = new Dictionary<uint, uint>();
-
     public Graph Graph
     {
         get;

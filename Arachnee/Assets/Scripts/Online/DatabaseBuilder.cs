@@ -21,6 +21,11 @@ public class DatabaseBuilder : MonoBehaviour
         StartCoroutine(this.mainCoroutine(seedId));        
     }
 
+    /// <summary>
+    /// Main coroutine
+    /// </summary>
+    /// <param name="seedId"></param>
+    /// <returns></returns>
     private IEnumerator mainCoroutine(int seedId)
     {
         // if movie is not present in database
@@ -43,7 +48,7 @@ public class DatabaseBuilder : MonoBehaviour
 
 
     /// <summary>
-    /// Add the movie and all infos about it in database (only if it has a poster)
+    /// Insert the movie and all infos about it in database (only if it has a poster)
     /// </summary>
     /// <param name="movieId"></param>
     /// <returns></returns>
@@ -78,7 +83,7 @@ public class DatabaseBuilder : MonoBehaviour
 
 
     /// <summary>
-    /// Get the cast of the movie, add each new artist and each new connections in 'actors' table
+    /// Get the cast of the movie, insert each new artist and each new connections in 'actors' and 'directors' table
     /// </summary>
     /// <param name="movieId"></param>
     /// <returns></returns>
@@ -154,13 +159,17 @@ public class DatabaseBuilder : MonoBehaviour
         this.message.text = "Inserting casting...";
         foreach (int a in actors)
         {
-            // if (not exist in actors...)
-            this.dlg.InsertConnection(a, movieId, "actors");
+            if (!this.dlg.CheckIfAMConnectionExistsInTable(a,movieId, "actors"))
+            {
+                this.dlg.InsertConnection(a, movieId, "actors");
+            }            
         }
         foreach (int a in directors)
         {
-            // if (not exist in directors...)
-            this.dlg.InsertConnection(a, movieId, "directors");
+            if (!this.dlg.CheckIfAMConnectionExistsInTable(a, movieId, "directors"))
+            {
+                this.dlg.InsertConnection(a, movieId, "directors");
+            }
         }
 
         yield return StartCoroutine(addCredits(actors));
@@ -168,7 +177,11 @@ public class DatabaseBuilder : MonoBehaviour
     }
 
 
-
+    /// <summary>
+    /// Insert the 'actors' and 'directors' connections for each artist in the list
+    /// </summary>
+    /// <param name="artistsAdded"></param>
+    /// <returns></returns>
     private IEnumerator addCredits(List<int> artistsAdded)
     {
         this.message.text = "Getting credits...";
@@ -191,8 +204,10 @@ public class DatabaseBuilder : MonoBehaviour
 
                 if (this.dlg.CheckIfEntryExistsInTable(mvId, "movies"))
                 {
-                    // if not exist...
-                    this.dlg.InsertConnection(artId, mvId, "actors");
+                    if (!this.dlg.CheckIfAMConnectionExistsInTable(artId,mvId,"actors"))
+                    {
+                        this.dlg.InsertConnection(artId, mvId, "actors");
+                    }                    
                 }
             }
 
@@ -204,8 +219,10 @@ public class DatabaseBuilder : MonoBehaviour
                     Int64 mvId = Convert.ToInt64(node["crew"][i]["id"].Value);
                     if (this.dlg.CheckIfEntryExistsInTable(mvId, "movies"))
                     {
-                        // if not exist...
-                        this.dlg.InsertConnection(artId, mvId, "directors");
+                        if (!this.dlg.CheckIfAMConnectionExistsInTable(artId, mvId, "directors"))
+                        {
+                            this.dlg.InsertConnection(artId, mvId, "directors");
+                        }
                     }
                 }
             }
@@ -217,7 +234,7 @@ public class DatabaseBuilder : MonoBehaviour
 
 
     /// <summary>
-    /// Insert the artist in the database
+    /// Insert the artist's infos in the database (only if he/she has a poster)
     /// </summary>
     /// <param name="artistId"></param>
     /// <returns></returns>

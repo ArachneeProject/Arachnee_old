@@ -12,6 +12,8 @@ public class SceneBuilder : MonoBehaviour
     public float coulombRepulsion = 1;
     public float hookeAttraction = 1;
 
+    public int rangeOfConnection = 1;
+
     public GameObject MoviePrefab;
     public GameObject ArtistPrefab;
     public LineRenderer ActorConnectionPrefab;
@@ -44,7 +46,7 @@ public class SceneBuilder : MonoBehaviour
         StartCoroutine(retrievePosters());
     }
 
-
+    // main
     private void buildScene()
     {
         HashSet<uint> moviesDone = new HashSet<uint>();
@@ -55,13 +57,11 @@ public class SceneBuilder : MonoBehaviour
         string setStr = "";
         set.Add((uint) PlayerPrefs.GetInt("MovieID"));
         setStr = this.formatCollection(set);
+        
 
-        int range = 3;
-
-        while (range-- > 0)
+        while (this.rangeOfConnection-- > 0)
         {
             // build movies
-            Debug.Log("list movies " + setStr);
             buildMovies(setStr);
 
             // build connections movie -> artist
@@ -110,22 +110,37 @@ public class SceneBuilder : MonoBehaviour
                 }                
             }
             setStr = this.formatCollection(set);
-                      
+
+            // terminate
+            if (this.rangeOfConnection == 0)
+            {
+                buildMovies(setStr);
+            }
+                                  
         }
 
         this.GraphBuilder.InitEdges();
-        
+
+        Logger.Trace("Vertices " + this.GraphBuilder.Graph.Vertices.Count, LogLevel.Info);
+        Logger.Trace("Edges " + this.GraphBuilder.Graph.Edges.Count, LogLevel.Info);
     }
 
     #region Entries
     
-
+    /// <summary>
+    /// Build the gameobjects of movies
+    /// </summary>
+    /// <param name="list"></param>
     private void buildMovies(string list)
     {
         MovieObjectBuilder mvBuilder = new MovieObjectBuilder(this.MoviePrefab, this.GraphBuilder, this.rangeOfBuilding);
         mvBuilder.BuildGameObject(this.dataDlg.GetDataSet("SELECT * FROM movies WHERE id IN " + list));
     }
 
+    /// <summary>
+    /// Build the gameobjects of artists
+    /// </summary>
+    /// <param name="list"></param>
     private void buildArtists(string list)
     {
         ArtistObjectBuilder artBuilder = new ArtistObjectBuilder(this.ArtistPrefab, this.GraphBuilder, this.rangeOfBuilding);
@@ -155,6 +170,11 @@ public class SceneBuilder : MonoBehaviour
     #endregion Entries
 
     #region Connections
+    /// <summary>
+    /// Build the gameobjects for 'actor' connections
+    /// </summary>
+    /// <param name="list"></param>
+    /// <param name="isMovieList"></param>
     private void buildActorsConnections(string list, bool isMovieList)
     {
         string query = "SELECT * FROM 'Actors' WHERE id_artist IN " + list;
@@ -167,6 +187,11 @@ public class SceneBuilder : MonoBehaviour
         acb.BuildGameObject(this.dataDlg.GetDataSet(query));
     }
 
+    /// <summary>
+    /// Build the gameobject for 'director' connections
+    /// </summary>
+    /// <param name="list"></param>
+    /// <param name="isMovieList"></param>
     private void buildDirectorsConnections(string list, bool isMovieList)
     {
         string query = "SELECT * FROM 'Directors' WHERE id_artist IN " + list;
@@ -180,9 +205,26 @@ public class SceneBuilder : MonoBehaviour
     }
     #endregion Connections
 
+    /// <summary>
+    /// Update the forces in the graph
+    /// </summary>
     void FixedUpdate()
     {
-        this.GraphBuilder.Graph.UpdateForces();
+        if (updateForces)
+        {
+            this.GraphBuilder.Graph.UpdateForces();
+        }            
+    }
+
+    bool updateForces = true;
+
+    // for debug
+    void OnGUI()
+    {
+        if (GUI.Button(new Rect(10, 10, 100, 30),"Disable forces"))
+        {
+            updateForces = false;
+        }            
     }
 
     /// <summary>

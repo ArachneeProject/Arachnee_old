@@ -67,6 +67,7 @@ public class DatabaseDialoger
     }
 
 
+
     /// <summary>
     /// Insert new values in database
     /// </summary>

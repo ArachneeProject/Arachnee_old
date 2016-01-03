@@ -9,16 +9,44 @@ public class StartMenu : MonoBehaviour
     public MovieSearchResult[] movieResults;
     public Text loading;
     public Text overview;
+    public Button buildButton;
 
     private OnlineRetriever onlineRetriever = new OnlineRetriever();
 
     
+    void Start()
+    {
+        this.loading.gameObject.SetActive(false);
+        foreach (MovieSearchResult msr in this.movieResults)
+        {
+            msr.gameObject.SetActive(false);
+        }
+        buildButton.gameObject.SetActive(false);
+        this.overview.text = "";
+    }
+
     /// <summary>
     /// public function for the button in menu
     /// </summary>
     public void GoGetResults()
     {
-        StartCoroutine(this.goGetResultsOnline());
+        if (this.inputField.text != "")
+        {
+            foreach (MovieSearchResult msr in this.movieResults)
+            {
+                msr.gameObject.SetActive(true);
+            }
+            StartCoroutine(this.goGetResultsOnline());
+        }
+        else
+        {
+            foreach (MovieSearchResult msr in this.movieResults)
+            {
+                msr.gameObject.SetActive(false);
+            }
+            this.buildButton.gameObject.SetActive(false);
+        }
+        
     }
 
     /// <summary>
@@ -26,6 +54,7 @@ public class StartMenu : MonoBehaviour
     /// </summary>
     private IEnumerator goGetResultsOnline()
     {
+        this.buildButton.gameObject.SetActive(false);
         this.resetFields();
         this.loading.gameObject.SetActive(true);
 
@@ -33,10 +62,15 @@ public class StartMenu : MonoBehaviour
 
         JSONNode resultsNode = this.onlineRetriever.NodeRetrieved;
 
-        if (resultsNode == null)
+        if (resultsNode == null || resultsNode.Count == 0)
         {
             Logger.Trace("No result", LogLevel.Info);
             this.loading.gameObject.SetActive(false);
+            foreach (MovieSearchResult msr in this.movieResults)
+            {
+                msr.gameObject.SetActive(false);
+            }
+            this.overview.text = "No result.";
             yield break;
         }
 
@@ -68,9 +102,13 @@ public class StartMenu : MonoBehaviour
         for (int i = 0; i < this.movieResults.Length; i++)
         {
             this.movieResults[i].Image.sprite = null;
-            this.movieResults[i].Title.text = "-";
+            this.movieResults[i].Title.text = "loading...";
         }
-        this.overview.text = "";
+        this.overview.text = "";        
     }
 
+    public void activateBuildButton()
+    {
+        this.buildButton.gameObject.SetActive(true);
+    }
 }
