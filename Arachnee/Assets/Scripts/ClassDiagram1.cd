@@ -38,7 +38,7 @@
   <Class Name="SceneBuilder">
     <Position X="11.5" Y="1" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAgQgAiAAAAAEAAAAEGRAAAQAAEAgAIIAAAIABAA=</HashCode>
+      <HashCode>AAAAAgQgAiAACAAEAAAAEGRAAAQAAEAgAIKAAAIABAA=</HashCode>
       <FileName>Assets\Scripts\Builder\SceneBuilder.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -78,7 +78,7 @@
   <Class Name="GraphBuilder">
     <Position X="8.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AABAAAAAAAAEAAAAAAAAAAAQAAAAgAgAAQAAEAAAAAA=</HashCode>
+      <HashCode>AABAAAAAAAAEAAAAAAAAAAAQAAAAAAgAAQAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Builder\GraphBuilder.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -86,7 +86,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="ActorConnection">
-    <Position X="6.25" Y="8.75" Width="1.5" />
+    <Position X="6.5" Y="9.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Graph\Edges\ActorConnection.cs</FileName>
@@ -128,7 +128,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="DirectorConnection">
-    <Position X="8.25" Y="8.75" Width="1.5" />
+    <Position X="8.25" Y="9.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Graph\Edges\DirectorConnection.cs</FileName>
@@ -151,7 +151,7 @@
   <Class Name="StartMenu">
     <Position X="5" Y="15.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAEAQAAAgAAAACAAAAAAAiAACAAAAAAAAAAAgA=</HashCode>
+      <HashCode>AAAAAAAEASAAAgAAAACAAAAAgBiAACAAAAAAAAAAAgA=</HashCode>
       <FileName>Assets\Scripts\GUI\StartMenu.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -161,15 +161,16 @@
   <Class Name="DatabaseBuilder">
     <Position X="11" Y="13.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAQAAAACAABAAAQAAgAAAAAAABAAAAAAAAAAAABCA=</HashCode>
+      <HashCode>AAAAQAAAACAABAQAQAAgAAAAAAABAAAAAAAAAAAABCA=</HashCode>
       <FileName>Assets\Scripts\Online\DatabaseBuilder.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Field Name="dlg" />
+      <Field Name="onlRet" />
     </ShowAsAssociation>
   </Class>
   <Interface Name="IGameObjectBuilder">
-    <Position X="17.25" Y="1" Width="1.5" />
+    <Position X="17.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Builder\IGameObjectBuilder.cs</FileName>

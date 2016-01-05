@@ -221,10 +221,14 @@ public class SceneBuilder : MonoBehaviour
     // for debug
     void OnGUI()
     {
-        if (GUI.Button(new Rect(10, 10, 100, 30),"Disable forces"))
+        if (GUI.Button(new Rect(10, 10, 100, 30), "Disable forces"))
         {
             updateForces = false;
-        }            
+        }
+        if (GUI.Button(new Rect(Screen.width - 110, 10, 100, 30), "Back to menu"))
+        {
+            Application.LoadLevel(0);
+        }    
     }
 
     /// <summary>
