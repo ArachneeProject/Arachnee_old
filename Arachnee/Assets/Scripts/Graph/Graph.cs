@@ -50,13 +50,14 @@ public class Graph
             {
                 if (entry.GraphId != otherEntry.GraphId)
                 {
-                    float distance = Vector3.Distance(entry.transform.position, otherEntry.transform.position);
-                    if (distance < 100)
+                    float squaredDistance = MiniMath.getSquaredDistance(entry.transform.position, otherEntry.transform.position);
+                    if (squaredDistance < 10000)
                     {
-                        Vector3 repulsion = this.coulombRepulsion * (entry.transform.position - otherEntry.transform.position) * (float)Math.Pow((1F / distance), 2);
+                        Vector3 repulsion = this.coulombRepulsion * (entry.transform.position - otherEntry.transform.position) * (1F / squaredDistance);
                         if (entry.RigidBody != null)
                         {
                             entry.RigidBody.AddForce(repulsion);
+                            
                         }
                     }                                        
                 }
