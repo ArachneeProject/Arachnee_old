@@ -1,42 +1,66 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class Visualizer : MonoBehaviour 
 {
-    public GameObject[] vertices;
-    public FakeEdge[] edges;
+    public Slider slider;
+    public FakeVertice[] vert;
     public float repulsion = 1;
     public float attraction = 1;
 
 
-    private List<GameObject> v;
+    private List<FakeVertice> vertices = new List<FakeVertice>();
+    private List<FakeEdge> edges = new List<FakeEdge>();
 
 	// Use this for initialization
 	void Start () 
     {
-	    
+        UpdateValue();
 	}
 	
-	// Update is called once per frame
-	void Update () 
+    // event
+	public void UpdateValue() 
     {
-	    
+        this.vertices.Clear();
+        this.edges.Clear();
+        float level = this.slider.value;
+        foreach (FakeVertice v in this.vert)
+        {
+            if (v.level <= level)
+            {
+                v.gameObject.SetActive(true);
+                v.SetEdgeActive(true);
+                this.vertices.Add(v);
+                foreach(FakeEdge e in v.edges)
+                {
+                    this.edges.Add(e);
+                }
+            }
+            else
+            {                
+                v.SetEdgeActive(false);
+                v.gameObject.SetActive(false);
+            }
+        }
 	}
 
     void FixedUpdate()
     {
-        foreach (GameObject go in this.vertices)
+        foreach (FakeVertice v in this.vertices)
         {
-            foreach (GameObject otherGo in this.vertices)
+            foreach (FakeVertice otherV in this.vertices)
             {
-                if (otherGo.name == go.name)
+                if (otherV.name == v.name)
                 {
                     continue;
                 }
-                Vector3 repulsion = this.repulsion * (go.transform.position - otherGo.transform.position) *   (float)System.Math.Pow((1F / Vector3.Distance(go.transform.position, otherGo.transform.position)), 2);
-                go.GetComponent<Rigidbody>().AddForce(repulsion);
+                Vector3 repulsion = this.repulsion * (v.transform.position - otherV.transform.position) *   (1F / MiniMath.getSquaredDistance(v.transform.position,otherV.transform.position));
+                v.RigidBody.AddForce(repulsion);
             }
+
+            v.RigidBody.AddForce(-100 * v.transform.position);
         }
 
         foreach (FakeEdge e in this.edges)
@@ -47,11 +71,4 @@ public class Visualizer : MonoBehaviour
         }
     }
 
-    void OnGUI()
-    {
-        if (GUI.Button(new Rect(10, 10, 100, 30), "Kill someone"))
-        {
-            this.vertices[1].SetActive(false);
-        }
-    }
 }

@@ -38,7 +38,7 @@ public abstract class Connection : MonoBehaviour
     /// Set up the two entries from the existing entries of the graph
     /// </summary>
     /// <param name="valueCollection"></param>
-    internal abstract void InitEntries(System.Collections.Generic.Dictionary<uint, Entry>.ValueCollection valueCollection);
+    internal abstract void InitEntries(System.Collections.Generic.List<Entry> valueCollection);
 
 
     public override int GetHashCode()
@@ -51,7 +51,7 @@ public abstract class Connection : MonoBehaviour
         if (o is Connection)
         {
             var otherConnec = (Connection)o;
-            return this.InitLeftId == otherConnec.InitLeftId && this.InitRightId == otherConnec.InitRightId;
+            return System.Object.ReferenceEquals(this,o) && this.InitLeftId == otherConnec.InitLeftId && this.InitRightId == otherConnec.InitRightId;
         }
         return false;
     }

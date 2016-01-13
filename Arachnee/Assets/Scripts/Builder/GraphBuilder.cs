@@ -31,7 +31,7 @@ public class GraphBuilder
     public void AddEntryToGraph(Entry entry)
     {
         entry.GraphId = idCounter++;
-        this.Graph.Vertices.Add(entry.GraphId, entry);
+        this.Graph.Vertices.Add(entry);
     }
 
 
@@ -42,11 +42,12 @@ public class GraphBuilder
     public void AddConnectionToGraph(Connection c)
     {
         if (this.Graph.Edges.Contains(c))
-        {
+        {            
+            Logger.Trace("A duplicate is being destroyed: " + c.gameObject.name, LogLevel.Warning);
             UnityEngine.GameObject.Destroy(c.gameObject);
             return;
         }
-
+        
         this.Graph.Edges.Add(c);       
 
         // update matrix
@@ -60,7 +61,7 @@ public class GraphBuilder
     {
         foreach (Connection e in this.Graph.Edges)
         {
-            e.InitEntries(this.Graph.Vertices.Values);
+            e.InitEntries(this.Graph.Vertices);
         }
     }
 }

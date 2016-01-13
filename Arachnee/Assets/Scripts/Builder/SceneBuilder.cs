@@ -154,7 +154,7 @@ public class SceneBuilder : MonoBehaviour
     private System.Collections.IEnumerator retrievePosters()
     {
         OnlineRetriever onlret = new OnlineRetriever();
-        foreach (Entry e in this.GraphBuilder.Graph.Vertices.Values)
+        foreach (Entry e in this.GraphBuilder.Graph.Vertices)
         {
             if (e.PosterPath == "null")
             {

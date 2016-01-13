@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class DirectorConnection : Connection
 {
-    internal override void InitEntries(Dictionary<uint, Entry>.ValueCollection valueCollection)
+    internal override void InitEntries(List<Entry> valueCollection)
     {
         foreach (Entry e in valueCollection)
         {

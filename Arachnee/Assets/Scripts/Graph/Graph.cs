@@ -10,7 +10,7 @@ public class Graph
     private float hookeAttraction = 1;
     
     
-    public Dictionary<uint, Entry> Vertices
+    public List<Entry> Vertices
     {
         get;
         set;
@@ -29,7 +29,7 @@ public class Graph
     /// <param name="hookeAttraction"></param>
     public Graph(float coulombRepulsion, float hookeAttraction)
     {
-        this.Vertices = new Dictionary<uint, Entry>();
+        this.Vertices = new List<Entry>();
         this.Edges = new List<Connection>();
 
         this.coulombRepulsion = Math.Max(coulombRepulsion, 0);
@@ -41,12 +41,11 @@ public class Graph
     /// Update the force between the entries
     /// </summary>
     public void UpdateForces()
-    {
-        
-        foreach (Entry entry in this.Vertices.Values)
+    {        
+        foreach (Entry entry in this.Vertices)
         {
             // repulsion
-            foreach (Entry otherEntry in this.Vertices.Values)
+            foreach (Entry otherEntry in this.Vertices)
             {
                 if (entry.GraphId != otherEntry.GraphId)
                 {
