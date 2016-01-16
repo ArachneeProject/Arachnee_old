@@ -22,6 +22,17 @@ public class Graph
         set;
     }
 
+    private List<Entry> activeVertices = new List<Entry>(); // entries affected by physics
+    private List<Connection> activeEdges = new List<Connection>(); // connections affecting physics
+
+
+    public int ActiveVerticesCount
+    {
+        get { return this.activeVertices.Count; }
+        private set {  }
+    }
+    
+
     /// <summary>
     /// Constructor
     /// </summary>
@@ -42,10 +53,10 @@ public class Graph
     /// </summary>
     public void UpdateForces()
     {        
-        foreach (Entry entry in this.Vertices)
+        foreach (Entry entry in this.activeVertices)
         {
             // repulsion
-            foreach (Entry otherEntry in this.Vertices)
+            foreach (Entry otherEntry in this.activeVertices)
             {
                 if (entry.GraphId != otherEntry.GraphId)
                 {
@@ -70,7 +81,7 @@ public class Graph
         }
 
         // attraction
-        foreach (Connection connect in this.Edges)
+        foreach (Connection connect in this.activeEdges)
         {
             Vector3 attraction = this.hookeAttraction * (connect.Left.transform.position - connect.Right.transform.position);
             if (connect.Left.RigidBody != null && connect.Right.RigidBody != null)
@@ -81,6 +92,37 @@ public class Graph
         }
 
         
+    }
+
+
+    public void ActiveConnectedVertices(int minimumConnectivity)
+    {
+        this.activeVertices.Clear();
+        this.activeEdges.Clear();
+        foreach(Connection c in this.Edges)
+        {
+            if (c.Left.ConnectedEdges.Count >= minimumConnectivity && c.Right.ConnectedEdges.Count >= minimumConnectivity)
+            {
+                c.Left.gameObject.SetActive(true);
+                c.Right.gameObject.SetActive(true);
+                c.gameObject.SetActive(true);
+                this.activeVertices.Add(c.Left);
+                this.activeVertices.Add(c.Right);
+                this.activeEdges.Add(c);
+            }
+            else
+            {
+                c.gameObject.SetActive(false);
+                if (c.Left.ConnectedEdges.Count < minimumConnectivity)
+                {
+                    c.Left.gameObject.SetActive(false);
+                }
+                if (c.Right.ConnectedEdges.Count < minimumConnectivity)
+                {
+                    c.Right.gameObject.SetActive(false);
+                }
+            }
+        }
     }
 
 }

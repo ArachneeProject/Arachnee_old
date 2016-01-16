@@ -13,6 +13,7 @@ public class SceneBuilder : MonoBehaviour
     public float hookeAttraction = 1;
 
     public int rangeOfConnection = 1;
+    public int maxNumberOfActiveVertices = 250;
 
     public GameObject MoviePrefab;
     public GameObject ArtistPrefab;
@@ -42,6 +43,7 @@ public class SceneBuilder : MonoBehaviour
 
 
         buildScene();
+        this.GraphBuilder.OrganizeGraph(this.maxNumberOfActiveVertices);
 
         StartCoroutine(retrievePosters());
     }
@@ -228,8 +230,18 @@ public class SceneBuilder : MonoBehaviour
         if (GUI.Button(new Rect(Screen.width - 110, 10, 100, 30), "Back to menu"))
         {
             Application.LoadLevel(0);
-        }    
+        }
+        if (GUI.Button(new Rect(10, Screen.height - 70, 100, 60), "Fold single connected"))
+        {
+            this.GraphBuilder.Graph.ActiveConnectedVertices(yolo++);
+        }
+        if (GUI.Button(new Rect(Screen.width - 110, Screen.height - 70, 100, 60), "Unfold all"))
+        {
+            this.GraphBuilder.Graph.ActiveConnectedVertices(0);
+        }
     }
+
+    int yolo = 2;
 
     /// <summary>
     /// Convert the collection to a string like (1,2,3,4)

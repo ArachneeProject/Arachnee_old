@@ -51,7 +51,7 @@ public abstract class Connection : MonoBehaviour
         if (o is Connection)
         {
             var otherConnec = (Connection)o;
-            return System.Object.ReferenceEquals(this,o) && this.InitLeftId == otherConnec.InitLeftId && this.InitRightId == otherConnec.InitRightId;
+            return this.InitLeftId == otherConnec.InitLeftId && this.InitRightId == otherConnec.InitRightId;
         }
         return false;
     }

@@ -32,6 +32,15 @@ public abstract class Entry : MonoBehaviour
         set;
     }
 
+
+    private List<Connection> _connectedEdges = new List<Connection>();
+    public List<Connection> ConnectedEdges
+    {
+        get { return _connectedEdges; }
+        set { _connectedEdges = value; }
+    }
+    
+
     /// <summary>
     /// Init
     /// </summary>

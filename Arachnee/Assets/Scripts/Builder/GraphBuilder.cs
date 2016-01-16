@@ -64,4 +64,15 @@ public class GraphBuilder
             e.InitEntries(this.Graph.Vertices);
         }
     }
+
+
+    internal void OrganizeGraph(int maxNumberOfVertices)
+    {
+        this.Graph.ActiveConnectedVertices(0);
+        int i = 1;
+        while (this.Graph.ActiveVerticesCount > maxNumberOfVertices)
+        {
+            this.Graph.ActiveConnectedVertices(i++);
+        }
+    }
 }
