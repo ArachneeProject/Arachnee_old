@@ -6,14 +6,11 @@ using UnityEngine;
 
 public class SceneBuilder : MonoBehaviour
 {
-    public bool build = true;
     public int rangeOfBuilding = 20;
 
-    public float coulombRepulsion = 1;
-    public float hookeAttraction = 1;
+    public Graph graph;
 
     public int rangeOfConnection = 1;
-    public int maxNumberOfActiveVertices = 250;
 
     public GameObject MoviePrefab;
     public GameObject ArtistPrefab;
@@ -34,18 +31,10 @@ public class SceneBuilder : MonoBehaviour
     /// </summary>
     void Start()
     {
-        if (!build)
-        {
-            return;
-        }
         this.dataDlg.Initialize("URI=file:" + Application.dataPath + "/Database/arachneeDatabase.db");
-        this.GraphBuilder = new GraphBuilder(this.coulombRepulsion,this.hookeAttraction);
+        this.GraphBuilder = new GraphBuilder(this.graph);
 
-
-        buildScene();
-        this.GraphBuilder.OrganizeGraph(this.maxNumberOfActiveVertices);
-
-        StartCoroutine(retrievePosters());
+        buildScene();        
     }
 
     // main
@@ -121,10 +110,31 @@ public class SceneBuilder : MonoBehaviour
                                   
         }
 
-        this.GraphBuilder.InitEdges();
+        
 
         Logger.Trace("Vertices " + this.GraphBuilder.Graph.Vertices.Count, LogLevel.Info);
         Logger.Trace("Edges " + this.GraphBuilder.Graph.Edges.Count, LogLevel.Info);
+
+        StartCoroutine(retrievePosters());
+    }
+
+    /// <summary>
+    /// Convert the collection to a string like (1,2,3,4)
+    /// </summary>
+    /// <param name="collection"></param>
+    /// <returns></returns>
+    private string formatCollection(ICollection<uint> collection)
+    {
+        if (collection.Count == 0)
+        {
+            return "()";
+        }
+        string res = "(";
+        foreach (uint i in collection)
+        {
+            res += i + ",";
+        }
+        return res.Remove(res.Length - 1, 1) + ")";
     }
 
     #region Entries
@@ -166,7 +176,11 @@ public class SceneBuilder : MonoBehaviour
             if (onlret.Texture != null)
             {
                 e.gameObject.GetComponent<Renderer>().material.mainTexture = onlret.Texture;
-            }            
+            }
+            else
+            {
+                e.gameObject.GetComponent<Renderer>().material.mainTexture = Resources.Load("default") as Texture;
+            }
         }
     }
     #endregion Entries
@@ -207,58 +221,24 @@ public class SceneBuilder : MonoBehaviour
     }
     #endregion Connections
 
-    /// <summary>
-    /// Update the forces in the graph
-    /// </summary>
-    void FixedUpdate()
-    {
-        if (updateForces)
-        {
-            this.GraphBuilder.Graph.UpdateForces();
-        }            
-    }
-
-    bool updateForces = true;
-
+    
     // for debug
     void OnGUI()
     {
-        if (GUI.Button(new Rect(10, 10, 100, 30), "Disable forces"))
-        {
-            updateForces = false;
-        }
         if (GUI.Button(new Rect(Screen.width - 110, 10, 100, 30), "Back to menu"))
         {
             Application.LoadLevel(0);
         }
         if (GUI.Button(new Rect(10, Screen.height - 70, 100, 60), "Fold single connected"))
         {
-            this.GraphBuilder.Graph.ActiveConnectedVertices(yolo++);
+            Debug.Log("Not working yet");
         }
         if (GUI.Button(new Rect(Screen.width - 110, Screen.height - 70, 100, 60), "Unfold all"))
         {
-            this.GraphBuilder.Graph.ActiveConnectedVertices(0);
+            Debug.Log("lol no");
         }
     }
 
-    int yolo = 2;
 
-    /// <summary>
-    /// Convert the collection to a string like (1,2,3,4)
-    /// </summary>
-    /// <param name="collection"></param>
-    /// <returns></returns>
-    private string formatCollection(ICollection<uint> collection)
-    {
-        if (collection.Count == 0)
-        {
-            return "()";
-        }
-        string res = "(";
-        foreach (uint i in collection)
-        {
-            res += i + ",";
-        }
-        return res.Remove(res.Length - 1, 1) + ")";
-    }
+    
 }

@@ -94,7 +94,14 @@ public class OnlineRetriever
         WWW www = new WWW(this.posterUrl + posterPath);
         yield return www;
 
-        this.Texture = www.texture; 
+        if (www.isDone)
+        {
+            this.Texture = www.texture; 
+        }        
+        else
+        {
+            this.Texture = Resources.Load("default") as Texture;
+        }
     }
 
 

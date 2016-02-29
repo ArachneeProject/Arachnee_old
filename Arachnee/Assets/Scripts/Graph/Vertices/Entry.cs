@@ -60,7 +60,7 @@ public abstract class Entry : MonoBehaviour
         }
         this.GetComponent<Renderer>().material.mainTexture = loadedTexture;
         */
-        this.GetComponent<Renderer>().material.mainTexture = Resources.Load("default") as Texture;
+        this.GetComponent<Renderer>().material.mainTexture = Resources.Load("loading") as Texture;
 
         // init the rigidbody
         this.RigidBody = this.GetComponent<Rigidbody>();
@@ -83,4 +83,18 @@ public abstract class Entry : MonoBehaviour
         this.GUI.gameObject.SetActive(false);
     }
 
+
+
+    // Define an Event based on the above Delegate
+    public delegate void EntryClickHandler(Entry e);
+
+    public event EntryClickHandler EntryClickedEvent;
+
+    void OnMouseDown()
+    {
+        if (EntryClickedEvent != null) // check if there is at least one suscriber
+        {
+            EntryClickedEvent(this);
+        }
+    }
 }

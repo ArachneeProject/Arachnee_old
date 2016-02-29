@@ -18,9 +18,9 @@ public class GraphBuilder
     /// </summary>
     /// <param name="coulombRepulsion"></param>
     /// <param name="hookAttraction"></param>
-    public GraphBuilder(float coulombRepulsion, float hookeAttraction)
+    public GraphBuilder(Graph g)
     {
-        this.Graph = new Graph(coulombRepulsion, hookeAttraction);
+        this.Graph = g;
     }
 
 
@@ -54,25 +54,7 @@ public class GraphBuilder
         // ...
     }
 
-    /// <summary>
-    /// Set up the left and right entries for each edges of the graph
-    /// </summary>
-    internal void InitEdges()
-    {
-        foreach (Connection e in this.Graph.Edges)
-        {
-            e.InitEntries(this.Graph.Vertices);
-        }
-    }
+    
 
 
-    internal void OrganizeGraph(int maxNumberOfVertices)
-    {
-        this.Graph.ActiveConnectedVertices(0);
-        int i = 1;
-        while (this.Graph.ActiveVerticesCount > maxNumberOfVertices)
-        {
-            this.Graph.ActiveConnectedVertices(i++);
-        }
-    }
 }

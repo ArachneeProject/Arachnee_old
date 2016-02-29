@@ -4,54 +4,94 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class Graph
+public class Graph : MonoBehaviour
 {
-    private float coulombRepulsion = 1;
-    private float hookeAttraction = 1;
-    
-    
+    public float coulombRepulsion = 150;
+    public float hookeAttraction = 1;
+    public int maxVertices = 200;
+
+    private HashSet<Entry> activeVertices = new HashSet<Entry>(); // entries affected by physics
+    private HashSet<Connection> activeEdges = new HashSet<Connection>(); // connections affecting physics
+
+
+    private List<Entry> _vertices = new List<Entry>();
     public List<Entry> Vertices
     {
-        get;
-        set;
+        get { return _vertices; }
+        set { _vertices = value; }
     }
 
+    private List<Connection> _edges = new List<Connection>();
     public List<Connection> Edges
     {
-        get;
-        set;
-    }
-
-    private List<Entry> activeVertices = new List<Entry>(); // entries affected by physics
-    private List<Connection> activeEdges = new List<Connection>(); // connections affecting physics
-
-
-    public int ActiveVerticesCount
-    {
-        get { return this.activeVertices.Count; }
-        private set {  }
+        get { return _edges; }
+        set { _edges = value; }
     }
     
-
-    /// <summary>
-    /// Constructor
-    /// </summary>
-    /// <param name="coulombRepulsion"></param>
-    /// <param name="hookeAttraction"></param>
-    public Graph(float coulombRepulsion, float hookeAttraction)
+    void Start()
     {
-        this.Vertices = new List<Entry>();
-        this.Edges = new List<Connection>();
+        
 
-        this.coulombRepulsion = Math.Max(coulombRepulsion, 0);
-        this.hookeAttraction = Math.Max(hookeAttraction, 0);
+        // init the connections
+        foreach (Connection c in this.Edges)
+        {
+            c.InitEntries(this.Vertices);
+            c.gameObject.SetActive(false);       
+        }
+
+        List<Entry> toUnfold = new List<Entry>();
+        uint seedMovieId = (uint)PlayerPrefs.GetInt("MovieID");
+        foreach (Entry e in this.Vertices)
+        {
+            // init the event handling on entries
+            e.EntryClickedEvent += new Entry.EntryClickHandler(FoldEntry);
+            if (e is Movie && e.DatabaseId == seedMovieId)
+            {
+                toUnfold.Add(e);
+            }
+            e.gameObject.SetActive(false);
+        }
+
+        int counter = 0;
+
+        while (counter < this.maxVertices)
+        {
+            List<Entry> nextStep = new List<Entry>();
+            foreach (Entry e in toUnfold)
+            {                
+                if (counter++ < this.maxVertices)
+                {
+                    e.gameObject.SetActive(true);
+                    this.activeVertices.Add(e);
+                }
+                foreach (Connection c in e.ConnectedEdges)
+                {
+                    nextStep.Add(c.OppositeEntry(e));
+                }
+            }
+            toUnfold = nextStep;
+        }
+        
+        foreach (Entry e in this.activeVertices)
+        {
+            foreach (Connection c in e.ConnectedEdges)
+            {
+                if (this.activeVertices.Contains(c.OppositeEntry(e)))
+                {
+                    c.gameObject.SetActive(true);
+                    this.activeEdges.Add(c);
+                }
+            }
+        }
+
+        
     }
 
-
+    
     /// <summary>
     /// Update the force between the entries
     /// </summary>
-    public void UpdateForces()
+    void FixedUpdate()
     {        
         foreach (Entry entry in this.activeVertices)
         {
@@ -95,34 +135,41 @@ public class Graph
     }
 
 
-    public void ActiveConnectedVertices(int minimumConnectivity)
+    private int numberOfActiveEdges(Entry e)
     {
-        this.activeVertices.Clear();
-        this.activeEdges.Clear();
-        foreach(Connection c in this.Edges)
+        int counter = 0;
+        foreach (Connection c in e.ConnectedEdges)
         {
-            if (c.Left.ConnectedEdges.Count >= minimumConnectivity && c.Right.ConnectedEdges.Count >= minimumConnectivity)
+            if (this.activeEdges.Contains(c))
             {
-                c.Left.gameObject.SetActive(true);
-                c.Right.gameObject.SetActive(true);
-                c.gameObject.SetActive(true);
-                this.activeVertices.Add(c.Left);
-                this.activeVertices.Add(c.Right);
-                this.activeEdges.Add(c);
+                counter++;
             }
-            else
+        }
+        return counter;
+    }
+
+    public void FoldEntry(Entry e)
+    {
+        Debug.Log("Entry clicked");
+        foreach (Connection c in e.ConnectedEdges)
+        {
+            if (this.activeEdges.Contains(c))
             {
-                c.gameObject.SetActive(false);
-                if (c.Left.ConnectedEdges.Count < minimumConnectivity)
+                Entry oppositeEntry = c.OppositeEntry(e);
+                if (numberOfActiveEdges(oppositeEntry) == 1)
                 {
-                    c.Left.gameObject.SetActive(false);
-                }
-                if (c.Right.ConnectedEdges.Count < minimumConnectivity)
-                {
-                    c.Right.gameObject.SetActive(false);
+                    this.activeVertices.Remove(oppositeEntry);
+                    oppositeEntry.gameObject.SetActive(false);
+                    this.activeEdges.Remove(c);
+                    c.gameObject.SetActive(false);
                 }
             }
         }
+    }
+
+    public void UnfoldEntry(Entry e)
+    {
+        
     }
 
 }

@@ -40,6 +40,23 @@ public abstract class Connection : MonoBehaviour
     /// <param name="valueCollection"></param>
     internal abstract void InitEntries(System.Collections.Generic.List<Entry> valueCollection);
 
+    /// <summary>
+    /// Return the opposite entry
+    /// </summary>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    public Entry OppositeEntry(Entry e)
+    {
+        if (e.Equals(this.Left))
+        {
+            return this.Right;
+        }
+        if (e.Equals(this.Right))
+        {
+            return this.Left;
+        }
+        return null;
+    }
 
     public override int GetHashCode()
     {
