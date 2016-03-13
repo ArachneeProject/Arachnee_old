@@ -229,14 +229,6 @@ public class SceneBuilder : MonoBehaviour
         {
             Application.LoadLevel(0);
         }
-        if (GUI.Button(new Rect(10, Screen.height - 70, 100, 60), "Fold single connected"))
-        {
-            Debug.Log("Not working yet");
-        }
-        if (GUI.Button(new Rect(Screen.width - 110, Screen.height - 70, 100, 60), "Unfold all"))
-        {
-            Debug.Log("lol no");
-        }
     }
 
 

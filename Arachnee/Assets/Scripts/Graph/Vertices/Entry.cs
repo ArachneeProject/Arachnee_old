@@ -83,8 +83,7 @@ public abstract class Entry : MonoBehaviour
         this.GUI.gameObject.SetActive(false);
     }
 
-
-
+    
     // Define an Event based on the above Delegate
     public delegate void EntryClickHandler(Entry e);
 

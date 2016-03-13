@@ -30,8 +30,6 @@ public class Graph : MonoBehaviour
     
     void Start()
     {
-        
-
         // init the connections
         foreach (Connection c in this.Edges)
         {
@@ -44,7 +42,7 @@ public class Graph : MonoBehaviour
         foreach (Entry e in this.Vertices)
         {
             // init the event handling on entries
-            e.EntryClickedEvent += new Entry.EntryClickHandler(FoldEntry);
+            e.EntryClickedEvent += new Entry.EntryClickHandler(SelectEntry);
             if (e is Movie && e.DatabaseId == seedMovieId)
             {
                 toUnfold.Add(e);
@@ -135,20 +133,12 @@ public class Graph : MonoBehaviour
     }
 
 
-    private int numberOfActiveEdges(Entry e)
-    {
-        int counter = 0;
-        foreach (Connection c in e.ConnectedEdges)
-        {
-            if (this.activeEdges.Contains(c))
-            {
-                counter++;
-            }
-        }
-        return counter;
-    }
 
-    public void FoldEntry(Entry e)
+    /// <summary>
+    /// Fold the entries that have only one active connection to the provided entry
+    /// </summary>
+    /// <param name="e"></param>
+    public void FoldSingleConnected(Entry e)
     {
         Debug.Log("Entry clicked");
         foreach (Connection c in e.ConnectedEdges)
@@ -167,9 +157,79 @@ public class Graph : MonoBehaviour
         }
     }
 
-    public void UnfoldEntry(Entry e)
+
+    /// <summary>
+    /// Return the number of edges that are active for the provided entry
+    /// </summary>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    private int numberOfActiveEdges(Entry e)
     {
-        
+        int counter = 0;
+        foreach (Connection c in e.ConnectedEdges)
+        {
+            if (this.activeEdges.Contains(c))
+            {
+                counter++;
+            }
+        }
+        return counter;
     }
 
+
+    public void FoldEntry(Entry e)
+    {
+        foreach (Connection c in e.ConnectedEdges)
+        {
+            this.activeEdges.Remove(c);
+            c.gameObject.SetActive(false);
+        }
+        this.activeVertices.Remove(e);
+        e.gameObject.SetActive(false);
+    }
+
+    public void UnfoldEntry(Entry e)
+    {
+        foreach (Connection c in e.ConnectedEdges)
+        {
+            Entry opposite = c.OppositeEntry(e);
+            opposite.gameObject.SetActive(true);
+            this.activeVertices.Add(opposite);
+
+            this.activeEdges.Add(c);
+            c.gameObject.SetActive(true);
+        }
+    }
+
+
+    void OnGUI()
+    {
+        if (this.selectedEntry == null)
+        {
+            return;
+        }
+
+        if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height - 70, 400, 40), "Unfold all connected to " + selectedEntry.GUI.text))
+        {
+            this.UnfoldEntry(this.selectedEntry);
+        }
+        if (GUI.Button(new Rect(10, Screen.height - 70, 400, 40), "Fold single connected to " + selectedEntry.GUI.text))
+        {
+            this.FoldSingleConnected(this.selectedEntry);
+        }
+        if (GUI.Button(new Rect(Screen.width - 410, Screen.height - 70, 400, 40), "Fold " + selectedEntry.GUI.text))
+        {
+            this.FoldEntry(this.selectedEntry);
+            this.selectedEntry = null;
+        }
+    }
+
+
+    private Entry selectedEntry;
+
+    void SelectEntry(Entry e)
+    {
+        Debug.Log("You clicked on " + e.GUI.text);
+        this.selectedEntry = e;
+    }
 }
