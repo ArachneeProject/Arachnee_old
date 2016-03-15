@@ -110,7 +110,7 @@ public class OnlineRetriever
     /// </summary>
     /// <param name="movieId"></param>
     /// <returns></returns>
-    public IEnumerator RetrieveCast(int movieId)
+    public IEnumerator RetrieveCast(long movieId)
     {
         WWW www = new WWW(this.movieUrl + movieId + this.castQuery + this.apiKey);
         yield return www;
@@ -130,7 +130,7 @@ public class OnlineRetriever
     /// </summary>
     /// <param name="movieId"></param>
     /// <returns></returns>
-    public IEnumerator RetrieveCredits(int artistId)
+    public IEnumerator RetrieveCredits(long artistId)
     {
         WWW www = new WWW(this.personUrl + artistId + this.creditsQuery + this.apiKey);
         yield return www;
@@ -148,36 +148,36 @@ public class OnlineRetriever
     /// <summary>
     /// Get infos about the movie with specified id
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="movieId"></param>
     /// <returns></returns>
-    internal IEnumerator RetrieveMovie(int id)
+    public IEnumerator RetrieveMovie(long movieId)
     {
-        WWW www = new WWW(this.movieUrl + id + "?" + this.apiKey);
+        WWW www = new WWW(this.movieUrl + movieId + "?" + this.apiKey);
         yield return www;
 
         JSONNode node = JSON.Parse(www.text);
         this.NodeRetrieved = node;
         if (node == null)
         {
-            Logger.Trace("Query returned no result: " + this.movieUrl + id + "?" + "(apiKey)", LogLevel.Warning);
+            Logger.Trace("Query returned no result: " + this.movieUrl + movieId + "?" + "(apiKey)", LogLevel.Warning);
         }
     }
 
     /// <summary>
     /// Get infos about the artist with the specified id
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="artistId"></param>
     /// <returns></returns>
-    internal IEnumerator RetrieveArtist(int id)
+    public IEnumerator RetrieveArtist(long artistId)
     {
-        WWW www = new WWW(this.personUrl + id + "?" + this.apiKey);
+        WWW www = new WWW(this.personUrl + artistId + "?" + this.apiKey);
         yield return www;
 
         JSONNode node = JSON.Parse(www.text);
         this.NodeRetrieved = node;
         if (node == null)
         {
-            Logger.Trace("Query returned no result: " + this.personUrl + id + "?" + "(apiKey)", LogLevel.Warning);
+            Logger.Trace("Query returned no result: " + this.personUrl + artistId + "?" + "(apiKey)", LogLevel.Warning);
         }
     }
 }

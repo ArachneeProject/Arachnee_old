@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 public class DatabaseDialoger
 {
@@ -28,7 +29,6 @@ public class DatabaseDialoger
     {
         if (this.sqltConnection == null)
         {
-            Logger.Trace("Database Dialoger not initialized!", LogLevel.Error);
             return new DataSet();
         }
 
@@ -74,11 +74,11 @@ public class DatabaseDialoger
     /// <param name="leftId"></param>
     /// <param name="rightId"></param>
     /// <param name="tableName"></param>
-    internal void InsertConnection(Int64 leftId, Int64 rightId, string tableName)
+    public void InsertConnection(Int64 leftId, Int64 rightId, string tableName)
     {
         if (this.sqltConnection == null)
         {
-            Logger.Trace("Database Dialoger not initialized!", LogLevel.Error);
+            Debug.LogError("not init");
             return;
         }
 
@@ -90,16 +90,16 @@ public class DatabaseDialoger
         }
         catch (Exception ex) 
         {
-            Logger.Trace(ex.Message + " (on " + leftId + " - " + rightId + ")", LogLevel.Error);
+            Debug.LogError(ex.Message + " (on " + leftId + " - " + rightId + ")");
         }
         this.sqltConnection.Close();
     }
 
-    internal void InsertMovie(int id, string title, Int64 date, string poster)
+    public void InsertMovie(long id, string title, Int64 date, string poster)
     {
         if (this.sqltConnection == null)
         {
-            Logger.Trace("Database Dialoger not initialized!", LogLevel.Error);
+            Debug.LogError("not init");
             return;
         }
 
@@ -111,17 +111,17 @@ public class DatabaseDialoger
         }
         catch (Exception ex)
         {
-            Logger.Trace("query: " + "INSERT INTO movies VALUES (" + id + ", \"" + title + "\", " + date + ");" + " - has a problem", LogLevel.Error);
-            Logger.Trace(ex.Message, LogLevel.Error);
+            Debug.LogError("query: " + "INSERT INTO movies VALUES (" + id + ", \"" + title + "\", " + date + ");" + " - has a problem");
+            Debug.LogError(ex.Message);
         }
         this.sqltConnection.Close();
     }
 
-    internal void InsertArtist(int id, string firstName, string lastName, string posterPath)
+    internal void InsertArtist(long id, string firstName, string lastName, string posterPath)
     {
         if (this.sqltConnection == null)
         {
-            Logger.Trace("Database Dialoger not initialized!", LogLevel.Error);
+            Debug.LogError("not init");
             return;
         }
 
@@ -133,7 +133,7 @@ public class DatabaseDialoger
         }
         catch (Exception ex)
         {
-            Logger.Trace(ex.Message, LogLevel.Error);
+            Debug.LogError(ex.Message);
         }
         this.sqltConnection.Close();
     }
