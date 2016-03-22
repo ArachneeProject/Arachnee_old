@@ -38,7 +38,7 @@ public class Graph : MonoBehaviour
         }
 
         List<Entry> toUnfold = new List<Entry>();
-        uint seedMovieId = (uint)PlayerPrefs.GetInt("MovieID");
+        uint seedMovieId = (uint)PlayerPrefs.GetInt(Constants.PP_MOVIE_ID);
         foreach (Entry e in this.Vertices)
         {
             // init the event handling on entries

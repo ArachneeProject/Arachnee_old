@@ -31,7 +31,7 @@ public class SceneBuilder : MonoBehaviour
     /// </summary>
     void Start()
     {
-        this.dataDlg.Initialize("URI=file:" + Application.dataPath + "/Database/arachneeDatabase.db");
+        this.dataDlg.Initialize();
         this.GraphBuilder = new GraphBuilder(this.graph);
 
         buildScene();        
@@ -46,7 +46,7 @@ public class SceneBuilder : MonoBehaviour
         // init
         HashSet<uint> set = new HashSet<uint>();
         string setStr = "";
-        set.Add((uint) PlayerPrefs.GetInt("MovieID"));
+        set.Add((uint) PlayerPrefs.GetInt(Constants.PP_MOVIE_ID));
         setStr = this.formatCollection(set);
         
 
@@ -179,7 +179,7 @@ public class SceneBuilder : MonoBehaviour
             }
             else
             {
-                e.gameObject.GetComponent<Renderer>().material.mainTexture = Resources.Load("default") as Texture;
+                e.gameObject.GetComponent<Renderer>().material.mainTexture = Resources.Load(Constants.RES_DEFAULT_IMAGE) as Texture;
             }
         }
     }
@@ -227,7 +227,7 @@ public class SceneBuilder : MonoBehaviour
     {
         if (GUI.Button(new Rect(Screen.width - 110, 10, 100, 30), "Back to menu"))
         {
-            Application.LoadLevel(0);
+            Application.LoadLevel(Constants.SC_INTERNET_MOVIE_SEARCH);
         }
     }
 

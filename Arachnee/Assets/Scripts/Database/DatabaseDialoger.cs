@@ -14,8 +14,9 @@ public class DatabaseDialoger
     /// Initializes the database connection
     /// </summary>
     /// <param name="databasePath"></param>
-    public void Initialize(string databasePath)
+    public void Initialize()
     {
+        string databasePath = "URI=file:" + Application.dataPath + "/Database/arachneeDatabase.db";
         this.sqltConnection = new SqliteConnection(databasePath);
     }
 
@@ -53,6 +54,19 @@ public class DatabaseDialoger
     {
         return (this.GetDataSet("SELECT id FROM " + tableName + " WHERE id=\"" + id + "\" LIMIT 1;").Tables[0].Rows.Count != 0);
     }
+
+    /// <summary>
+    /// Check if the specified value in the specified column exists in the specified table
+    /// </summary>
+    /// <param name="columnName"></param>
+    /// <param name="valueToCheck"></param>
+    /// <param name="tableName"></param>
+    /// <returns></returns>
+    public bool CheckIfEntryExistsInTable(string columnName, string valueToCheck, string tableName)
+    {
+        return (this.GetDataSet("SELECT * FROM " + tableName + " WHERE " + columnName + "=\"" + valueToCheck + "\" LIMIT 1;").Tables[0].Rows.Count != 0);
+    }
+
 
     /// <summary>
     /// Check if the actor->movie connection exists in the given table

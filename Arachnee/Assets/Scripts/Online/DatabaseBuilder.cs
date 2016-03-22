@@ -18,7 +18,7 @@ public class DatabaseBuilder : MonoBehaviour
     void Start()
     {
         this.message.text = "Initialization...";               
-        this.dlg.Initialize("URI=file:" + Application.dataPath + "/Database/arachneeDatabase.db");
+        this.dlg.Initialize();
 
         StartCoroutine(this.mainCoroutine());        
     }
@@ -70,19 +70,19 @@ public class DatabaseBuilder : MonoBehaviour
     // load what needs to be done
     void loadToDo()
     {
-        long seed = PlayerPrefs.GetInt("MovieID");
+        long seed = PlayerPrefs.GetInt(Constants.PP_MOVIE_ID);
 
         // if the seed is present in database, load the scene
         if (this.dlg.CheckIfEntryExistsInTable(seed, "movies"))
         {
             this.message.text = "Launching scene...";
-            Application.LoadLevel(2);
+            Application.LoadLevel(Constants.SC_GRAPH);
         }
         else
         {
             // else let the routine run
-            this.moviesToDo.Add(PlayerPrefs.GetInt("MovieID"));
-            Logger.Trace("ID of movie: " + PlayerPrefs.GetInt("MovieID"), LogLevel.Debug);
+            this.moviesToDo.Add(PlayerPrefs.GetInt(Constants.PP_MOVIE_ID));
+            Logger.Trace("ID of movie: " + PlayerPrefs.GetInt(Constants.PP_MOVIE_ID), LogLevel.Debug);
         }        
     }
 
@@ -280,7 +280,7 @@ public class DatabaseBuilder : MonoBehaviour
     void saveToDo()
     {
         this.message.text = "Launching scene...";
-        Application.LoadLevel(2);
+        Application.LoadLevel(Constants.SC_GRAPH);
     }
 
 

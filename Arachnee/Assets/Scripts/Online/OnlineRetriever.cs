@@ -4,11 +4,11 @@ using SimpleJSON;
 using UnityEngine;
 
 public class OnlineRetriever 
-{
-    //private string testurl = "https://api.themoviedb.org/3/movie/550?api_key=The Skeleton Key";
-    //private string testurlSerach = "https://api.themoviedb.org/3/search/movie?query=cube&api_key= x x x";
-    //private string testposterUrl = "http://image.tmdb.org/t/p/w500/u50r6chJGO2iqxVAvtQ07obiCkB.jpg";
-    
+{    
+    // serach = "https://api.themoviedb.org/3/search/movie?query=cube&api_key=The Skeleton Key";
+    // poster "http://image.tmdb.org/t/p/w500/u50r6chJGO2iqxVAvtQ07obiCkB.jpg";
+    // example of movie https://api.themoviedb.org/3/movie/137?api_key=The Skeleton Key
+
     private string urlSearch = "https://api.themoviedb.org/3/search/movie?query=";
     private string posterUrl = "http://image.tmdb.org/t/p/w500";
     private string movieUrl = "https://api.themoviedb.org/3/movie/";
@@ -31,7 +31,7 @@ public class OnlineRetriever
         }
     }
 
-    public Texture Texture
+    public Texture2D Texture
     {
         get;
         private set;
@@ -97,10 +97,6 @@ public class OnlineRetriever
         if (www.isDone)
         {
             this.Texture = www.texture; 
-        }        
-        else
-        {
-            this.Texture = Resources.Load("default") as Texture;
         }
     }
 
