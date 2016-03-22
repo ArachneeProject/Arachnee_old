@@ -68,7 +68,7 @@ public abstract class Connection : MonoBehaviour
         if (o is Connection)
         {
             var otherConnec = (Connection)o;
-            return this.InitLeftId == otherConnec.InitLeftId && this.InitRightId == otherConnec.InitRightId;
+            return this.GetType() == o.GetType() && this.InitLeftId == otherConnec.InitLeftId && this.InitRightId == otherConnec.InitRightId;
         }
         return false;
     }

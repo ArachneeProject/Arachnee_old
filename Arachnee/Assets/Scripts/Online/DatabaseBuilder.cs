@@ -11,8 +11,8 @@ public class DatabaseBuilder : MonoBehaviour
     private DatabaseDialoger dlg = new DatabaseDialoger();
     private OnlineRetriever onlRet = new OnlineRetriever();
 
-    private List<long> moviesToDo = new List<long>();
-    private List<long> artistsToDo = new List<long>();
+    private HashSet<long> moviesToDo = new HashSet<long>();
+    private HashSet<long> artistsToDo = new HashSet<long>();
 
 
     void Start()

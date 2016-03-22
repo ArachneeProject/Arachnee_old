@@ -19,7 +19,8 @@ public class FolderPathSet : MonoBehaviour
         if (Directory.Exists(this.input.text))
         {
             PlayerPrefs.SetString(Constants.PP_FOLDER_PATH, this.input.text);
-            // application load level
+            Debug.Log(PlayerPrefs.GetString(Constants.PP_FOLDER_PATH));
+            Application.LoadLevel(Constants.SC_BROWSER);
             this.message.text = "Ok!";
         }
         else

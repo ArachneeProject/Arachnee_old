@@ -131,7 +131,7 @@ public class DatabaseDialoger
         this.sqltConnection.Close();
     }
 
-    internal void InsertArtist(long id, string firstName, string lastName, string posterPath)
+    public void InsertArtist(long id, string firstName, string lastName, string posterPath)
     {
         if (this.sqltConnection == null)
         {
