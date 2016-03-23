@@ -23,7 +23,7 @@ public class ArtistObjectBuilder : EntryGameObjectBuilder
     {
         Artist art = obj.AddComponent<Artist>();
 
-        art.DatabaseId = (uint)((Int64)row[0]);
+        art.DatabaseId = (Int64)row[0];
         art.FirstName = (string) row[1];
         art.LastName = (string) row[2];
         art.PosterPath = (string)row[3];

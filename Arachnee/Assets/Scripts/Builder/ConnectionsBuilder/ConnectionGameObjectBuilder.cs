@@ -28,8 +28,8 @@ public abstract class ConnectionGameObjectBuilder : IGameObjectBuilder
 
             connect.LineRenderer = lr;
 
-            connect.InitLeftId = (uint)((Int64) row[0]);
-            connect.InitRightId = (uint)((Int64) row[1]);
+            connect.InitLeftId = (Int64) row[0];
+            connect.InitRightId = (Int64) row[1];
             
             this.GraphBuilder.AddConnectionToGraph(connect);
         }

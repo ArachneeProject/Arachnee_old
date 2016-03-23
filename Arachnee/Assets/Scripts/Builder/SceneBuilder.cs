@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class SceneBuilder : MonoBehaviour
 {
-    public int rangeOfBuilding = 20;
+    public int rangeOfBuilding = 30;
 
     public Graph graph;
 
-    public int rangeOfConnection = 1;
+    public int maxInactiveEntries = 1000;
 
     public GameObject MoviePrefab;
     public GameObject ArtistPrefab;
@@ -40,77 +40,89 @@ public class SceneBuilder : MonoBehaviour
     // main
     private void buildScene()
     {
-        HashSet<uint> moviesDone = new HashSet<uint>();
-        HashSet<uint> artistsDone = new HashSet<uint>();
-        
-        // init
-        HashSet<uint> set = new HashSet<uint>();
-        string setStr = "";
-        set.Add((uint) PlayerPrefs.GetInt(Constants.PP_MOVIE_ID));
-        setStr = this.formatCollection(set);
+        int seed = PlayerPrefs.GetInt(Constants.PP_MOVIE_ID);
+        Debug.Log("seed: " + seed);
         
 
-        while (this.rangeOfConnection-- > 0)
+        HashSet<long> moviesToBuild = new HashSet<long>();
+        HashSet<long> artistsToBuild = new HashSet<long>();
+        moviesToBuild.Add(seed);
+        this.maxInactiveEntries--;
+
+        HashSet<long> movieStep = new HashSet<long>();
+        HashSet<long> artistStep = new HashSet<long>();
+        movieStep.Add(seed);
+        
+        while (this.maxInactiveEntries > 0 && movieStep.Count > 0)
         {
-            // build movies
-            buildMovies(setStr);
-
-            // build connections movie -> artist
-            buildActorsConnections(setStr, true);
-            buildDirectorsConnections(setStr, true);
-
-            // save what was done
-            foreach (uint id in set)
+            // movie -> artists
+            foreach (long mvId in movieStep)
             {
-                moviesDone.Add(id);
-            }
-            
-            // go on to artists
-            set.Clear();
-            foreach (Connection c in this.GraphBuilder.Graph.Edges)
-            {                
-                if ((c is ActorConnection || c is DirectorConnection) && !artistsDone.Contains(c.InitLeftId))
+                HashSet<long> connectedArtists = this.dataDlg.getConnectedIds(mvId,false);
+                foreach(long art in connectedArtists)
                 {
-                    set.Add(c.InitLeftId);
+                    if (artistsToBuild.Add(art))
+                    {
+                        if (this.maxInactiveEntries-- > 0)
+                        {
+                            artistStep.Add(art);
+                        }
+                        else
+                        {
+                            break;
+                        }                        
+                    }
+                }
+                if (this.maxInactiveEntries <= 0)
+                {
+                    break;
                 }
             }
-            setStr = this.formatCollection(set);
+            movieStep.Clear();
 
-
-            // build artists
-            buildArtists(setStr);
-
-            
-            // build connections artist->movie
-            buildActorsConnections(setStr, false);
-            buildDirectorsConnections(setStr, false);
-
-            // save what was done
-            foreach (uint id in set)
+            if (this.maxInactiveEntries<= 0 || artistStep.Count==0)
             {
-                artistsDone.Add(id);
+                break;
             }
 
-            // go on to movies
-            set.Clear();
-            foreach (Connection c in this.GraphBuilder.Graph.Edges)
+            // artist -> movies
+            foreach(long artId in artistStep)
             {
-                if ((c is ActorConnection || c is DirectorConnection ) && !moviesDone.Contains(c.InitRightId))
+                var connectedMovies = this.dataDlg.getConnectedIds(artId, true);                
+                foreach (long mvId in connectedMovies)
                 {
-                    set.Add(c.InitRightId);
-                }                
+                    if (moviesToBuild.Add(mvId))
+                    {
+                        if (this.maxInactiveEntries-- > 0)
+                        {
+                            movieStep.Add(mvId);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                if (this.maxInactiveEntries <= 0)
+                {
+                    break;
+                }
             }
-            setStr = this.formatCollection(set);
-
-            // terminate
-            if (this.rangeOfConnection == 0)
-            {
-                buildMovies(setStr);
-            }
-                                  
+            artistStep.Clear();
         }
 
+        // build entries
+        string movies = this.formatCollection(moviesToBuild);
+        string artists = this.formatCollection(artistsToBuild);
+        this.buildMovies(movies);
+        this.buildArtists(artists);
         
+        // build connections
+        this.buildActorsConnections(artists, movies);
+        this.buildDirectorsConnections(artists, movies);        
+
+        // unfold the graph
+        this.GraphBuilder.UnfoldStart();
 
         Logger.Trace("Vertices " + this.GraphBuilder.Graph.Vertices.Count, LogLevel.Info);
         Logger.Trace("Edges " + this.GraphBuilder.Graph.Edges.Count, LogLevel.Info);
@@ -123,14 +135,14 @@ public class SceneBuilder : MonoBehaviour
     /// </summary>
     /// <param name="collection"></param>
     /// <returns></returns>
-    private string formatCollection(ICollection<uint> collection)
+    private string formatCollection(ICollection<long> collection)
     {
         if (collection.Count == 0)
         {
             return "()";
         }
         string res = "(";
-        foreach (uint i in collection)
+        foreach (long i in collection)
         {
             res += i + ",";
         }
@@ -191,13 +203,9 @@ public class SceneBuilder : MonoBehaviour
     /// </summary>
     /// <param name="list"></param>
     /// <param name="isMovieList"></param>
-    private void buildActorsConnections(string list, bool isMovieList)
+    private void buildActorsConnections(string artistlist, string movielist)
     {
-        string query = "SELECT * FROM 'Actors' WHERE id_artist IN " + list;
-        if (isMovieList)
-        {
-            query = "SELECT * FROM 'Actors' WHERE id_movie IN " + list;
-        }
+        string query = "SELECT * FROM Actors WHERE id_artist IN " + artistlist + " AND id_movie IN " + movielist;
 
         ActorConnectionBuilder acb = new ActorConnectionBuilder(this.ActorConnectionPrefab, this.GraphBuilder);
         acb.BuildGameObject(this.dataDlg.GetDataSet(query));
@@ -208,13 +216,9 @@ public class SceneBuilder : MonoBehaviour
     /// </summary>
     /// <param name="list"></param>
     /// <param name="isMovieList"></param>
-    private void buildDirectorsConnections(string list, bool isMovieList)
+    private void buildDirectorsConnections(string artistlist, string movielist)
     {
-        string query = "SELECT * FROM 'Directors' WHERE id_artist IN " + list;
-        if (isMovieList)
-        {
-            query = "SELECT * FROM 'Directors' WHERE id_movie IN " + list;
-        }
+        string query = "SELECT * FROM Directors WHERE id_artist IN " + artistlist + " AND id_movie IN " + movielist;
 
         DirectorConnectionBuilder dcb = new DirectorConnectionBuilder(this.DirectorConnectionPrefab, this.GraphBuilder);
         dcb.BuildGameObject(this.dataDlg.GetDataSet(query));

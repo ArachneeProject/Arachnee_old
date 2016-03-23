@@ -3,8 +3,8 @@ using UnityEngine;
 
 public abstract class Connection : MonoBehaviour
 {
-    public uint InitLeftId { get; set; }
-    public uint InitRightId { get; set; }
+    public Int64 InitLeftId { get; set; }
+    public Int64 InitRightId { get; set; }
 
     public Entry Left
     {

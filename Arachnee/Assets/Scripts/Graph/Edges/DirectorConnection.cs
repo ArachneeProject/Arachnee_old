@@ -28,6 +28,7 @@ public class DirectorConnection : Connection
         if (this.Left == null)
         {
             Logger.Trace("Artist with id " + this.InitLeftId + " was not found", LogLevel.Error);
+            Destroy(this.gameObject);
         }
         else
         {
@@ -36,6 +37,7 @@ public class DirectorConnection : Connection
         if (this.Right == null)
         {
             Logger.Trace("Movie with id " + this.InitRightId + " was not found", LogLevel.Error);
+            Destroy(this.gameObject);
         }
         else
         {

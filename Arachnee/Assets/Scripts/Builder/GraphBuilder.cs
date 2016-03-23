@@ -5,7 +5,7 @@ using System.Text;
 
 public class GraphBuilder
 {
-    private uint idCounter = 1;
+    private int idCounter = 1;
 
     public Graph Graph
     {
@@ -32,6 +32,7 @@ public class GraphBuilder
     {
         entry.GraphId = idCounter++;
         this.Graph.Vertices.Add(entry);
+        entry.gameObject.SetActive(false);
     }
 
 
@@ -48,13 +49,71 @@ public class GraphBuilder
             return;
         }
         
-        this.Graph.Edges.Add(c);       
+        this.Graph.Edges.Add(c);
+        c.gameObject.SetActive(false);
 
         // update matrix
         // ...
     }
 
     
+    public void UnfoldStart()
+    {        
+        // init the connections
+        foreach (Connection c in this.Graph.Edges)
+        {
+            c.InitEntries(this.Graph.Vertices);
+            c.gameObject.SetActive(false);
+        }
+
+        // unfold initialization 
+        Int64 seed = UnityEngine.PlayerPrefs.GetInt(Constants.PP_MOVIE_ID);
+        Entry seedEntry = null;
+        foreach (Entry e in this.Graph.Vertices)
+        {
+            if (e.DatabaseId == seed)
+            {
+                seedEntry = e;
+                break;
+            }
+        }
+        if (seedEntry == null)
+        {
+            Logger.Trace("The seed movie with id " + seed + " was not found in the graph!",LogLevel.Error);
+            return;
+        }
+        
+        // unfold loop
+        List<Entry> toUnfold = new List<Entry>();
+        List<Entry> nextStep = new List<Entry>();
+        toUnfold.Add(seedEntry);
+
+        int max = this.Graph.maxActiveVertices;
+        while (max > 0 && toUnfold.Count>0)
+        {            
+            foreach (Entry e in toUnfold)
+            {                
+                if (max-- > 0)
+                {
+                    this.Graph.Activate(e);
+                    foreach(Connection c in e.ConnectedEdges)
+                    {
+                        nextStep.Add(c.OppositeEntry(e));
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+            toUnfold.Clear();
+            foreach(Entry e in nextStep)
+            {
+                toUnfold.Add(e);
+            }
+            nextStep.Clear();
+        }
+    }
 
 
 }

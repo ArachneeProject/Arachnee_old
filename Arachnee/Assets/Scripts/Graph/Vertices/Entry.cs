@@ -14,13 +14,13 @@ public abstract class Entry : MonoBehaviour
         set;
     }
 
-    public uint GraphId
+    public int GraphId
     {
         get;
         set;
     }
 
-    public uint DatabaseId
+    public Int64 DatabaseId
     {
         get;
         set;

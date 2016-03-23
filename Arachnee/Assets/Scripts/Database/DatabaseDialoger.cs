@@ -80,8 +80,7 @@ public class DatabaseDialoger
         return (this.GetDataSet("SELECT id_artist FROM " + tableName + " WHERE id_artist=\"" + artistId + "\" AND id_movie=\"" + movieId + "\" LIMIT 1;").Tables[0].Rows.Count != 0);
     }
 
-
-
+    
     /// <summary>
     /// Insert new values in database
     /// </summary>
@@ -150,5 +149,41 @@ public class DatabaseDialoger
             Debug.LogError(ex.Message);
         }
         this.sqltConnection.Close();
+    }
+
+
+
+    internal HashSet<long> getConnectedIds(long id, bool fromArtistToMovie)
+    {
+        HashSet<long> hSet = new HashSet<long>();
+        if (this.sqltConnection == null)
+        {
+            Logger.Trace("Connection not initialized", LogLevel.Error);
+            return hSet;
+        }
+
+        string columnFrom = "id_movie";
+        string columnTo = "id_artist";        
+        if (fromArtistToMovie)
+        {            
+            columnFrom = "id_artist";
+            columnTo = "id_movie";
+        }
+
+        this.sqltConnection.Open();
+
+        DataSet dSet = new DataSet();
+        SqliteDataAdapter ad = new SqliteDataAdapter("SELECT " + columnTo + " FROM Actors WHERE " + columnFrom + "=" + id + " UNION SELECT " + columnTo + " FROM Directors WHERE " + columnFrom + "=" + id, this.sqltConnection);
+        ad.Fill(dSet);
+
+        this.sqltConnection.Close();
+
+        var rows = dSet.Tables[0].Rows;
+        foreach (DataRow row in rows)
+        {
+            hSet.Add((Int64)row[0]);
+        }
+
+        return hSet;
     }
 }

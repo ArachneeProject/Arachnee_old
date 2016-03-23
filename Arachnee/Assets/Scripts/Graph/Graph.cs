@@ -8,7 +8,7 @@ public class Graph : MonoBehaviour
 {
     public float coulombRepulsion = 150;
     public float hookeAttraction = 1;
-    public int maxVertices = 200;
+    public int maxActiveVertices = 300;
 
     private HashSet<Entry> activeVertices = new HashSet<Entry>(); // entries affected by physics
     private HashSet<Connection> activeEdges = new HashSet<Connection>(); // connections affecting physics
@@ -30,59 +30,11 @@ public class Graph : MonoBehaviour
     
     void Start()
     {
-        // init the connections
-        foreach (Connection c in this.Edges)
-        {
-            c.InitEntries(this.Vertices);
-            c.gameObject.SetActive(false);       
-        }
-
-        List<Entry> toUnfold = new List<Entry>();
-        uint seedMovieId = (uint)PlayerPrefs.GetInt(Constants.PP_MOVIE_ID);
+        // init event handling
         foreach (Entry e in this.Vertices)
         {
-            // init the event handling on entries
             e.EntryClickedEvent += new Entry.EntryClickHandler(SelectEntry);
-            if (e is Movie && e.DatabaseId == seedMovieId)
-            {
-                toUnfold.Add(e);
-            }
-            e.gameObject.SetActive(false);
-        }
-
-        int counter = 0;
-
-        while (counter < this.maxVertices)
-        {
-            List<Entry> nextStep = new List<Entry>();
-            foreach (Entry e in toUnfold)
-            {                
-                if (counter++ < this.maxVertices)
-                {
-                    e.gameObject.SetActive(true);
-                    this.activeVertices.Add(e);
-                }
-                foreach (Connection c in e.ConnectedEdges)
-                {
-                    nextStep.Add(c.OppositeEntry(e));
-                }
-            }
-            toUnfold = nextStep;
-        }
-        
-        foreach (Entry e in this.activeVertices)
-        {
-            foreach (Connection c in e.ConnectedEdges)
-            {
-                if (this.activeVertices.Contains(c.OppositeEntry(e)))
-                {
-                    c.gameObject.SetActive(true);
-                    this.activeEdges.Add(c);
-                }
-            }
-        }
-
-        
+        }        
     }
 
     
@@ -140,7 +92,6 @@ public class Graph : MonoBehaviour
     /// <param name="e"></param>
     public void FoldSingleConnected(Entry e)
     {
-        Debug.Log("Entry clicked");
         foreach (Connection c in e.ConnectedEdges)
         {
             if (this.activeEdges.Contains(c))
@@ -176,9 +127,24 @@ public class Graph : MonoBehaviour
         return counter;
     }
 
+    public void Activate(Entry e)
+    {
+        e.gameObject.SetActive(true);
+        this.activeVertices.Add(e);
+        foreach (Connection c in e.ConnectedEdges)
+        {
+            Entry opposite = c.OppositeEntry(e);
+            if(this.activeVertices.Contains(opposite))
+            {
+                this.activeEdges.Add(c);
+                c.gameObject.SetActive(true);
+            }            
+        }
+    }
 
     public void FoldEntry(Entry e)
     {
+        this.FoldSingleConnected(e);
         foreach (Connection c in e.ConnectedEdges)
         {
             this.activeEdges.Remove(c);
@@ -190,6 +156,8 @@ public class Graph : MonoBehaviour
 
     public void UnfoldEntry(Entry e)
     {
+        e.gameObject.SetActive(true);
+        this.activeVertices.Add(e);
         foreach (Connection c in e.ConnectedEdges)
         {
             Entry opposite = c.OppositeEntry(e);

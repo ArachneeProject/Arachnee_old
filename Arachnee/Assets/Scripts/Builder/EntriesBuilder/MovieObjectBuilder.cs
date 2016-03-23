@@ -24,7 +24,7 @@ public class MovieObjectBuilder : EntryGameObjectBuilder
     {
         Movie mv = obj.AddComponent<Movie>();
 
-        mv.DatabaseId = (uint)(Int64) row[0];
+        mv.DatabaseId = (Int64) row[0];
         mv.Title = (string)row[1];
         mv.Year = (int)((Int64) row[2]);
         mv.PosterPath = (string)row[3];
