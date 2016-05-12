@@ -1,0 +1,343 @@
+﻿using Mono.Data.Sqlite;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using UnityEngine;
+
+public class DatabaseDialoger
+{
+    private SqliteConnection sqltConnection = null;
+      
+    public DatabaseDialoger()
+    {
+        string databasePath = "URI=file:" + Application.dataPath + "/Database/couch.db";
+        this.sqltConnection = new SqliteConnection(databasePath);
+    }
+
+    
+    public DataSet GetDataSet(string query)
+    {
+        this.sqltConnection.Open();
+
+        DataSet set = new DataSet();
+        SqliteDataAdapter ad = new SqliteDataAdapter(query,this.sqltConnection);
+        ad.Fill(set);
+
+        this.sqltConnection.Close();
+
+        return set;
+    }
+    
+    #region checks
+
+    // return true if movie id is in database, false otherwise
+    public bool MovieIsRegistered(Int64 id)
+    {
+        string query = "SELECT id FROM Movies WHERE id=@id LIMIT 1;";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddWithValue("@id", id);
+
+        this.sqltConnection.Open();
+        var reader = cmd.ExecuteReader();
+        var res = reader.Read();
+        this.sqltConnection.Close();
+        reader.Dispose();
+        cmd.Dispose();
+
+        return res;
+    }
+
+    // return true if artist id is in database, false otherwise
+    public bool ArtistIsRegistered(Int64 id)
+    {
+        string query = "SELECT id FROM Artists WHERE id=@id LIMIT 1;";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddWithValue("@id", id);
+
+        this.sqltConnection.Open();
+        var reader = cmd.ExecuteReader();
+        var res = reader.Read();
+        this.sqltConnection.Close();
+        reader.Dispose();
+        cmd.Dispose();
+
+        return res;
+    }
+
+
+    // return true if folder hash is in database, false otherwise
+    public bool FolderIsRegistered(string hash)
+    {
+        string query = "SELECT hash FROM FoldersM WHERE hash=@hash "
+            + " UNION SELECT hash FROM FoldersS WHERE hash=@hash"
+            + " UNION SELECT hash FROM Ignored WHERE hash=@hash";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddWithValue("@hash", hash);
+
+        this.sqltConnection.Open();
+        var reader = cmd.ExecuteReader();
+        var res = reader.Read();
+        this.sqltConnection.Close();
+        reader.Dispose();
+        cmd.Dispose();
+
+        return res;
+    }
+
+    // return true if actor connection is in database, false otherwise
+    public bool ActorIsRegistered(Int64 artistId, Int64 movieId)
+    {
+        string query = "SELECT id_artist FROM Actors WHERE id_artist=@artistId AND id_movie=@movieId LIMIT 1;";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddWithValue("@artistId", artistId);
+        cmd.Parameters.AddWithValue("@movieId", movieId);
+
+        this.sqltConnection.Open();
+        var reader = cmd.ExecuteReader();
+        var res = reader.Read();
+        this.sqltConnection.Close();
+        reader.Dispose();
+        cmd.Dispose();
+
+        return res;
+    }
+
+    // return true if actor connection is in database, false otherwise
+    public bool DirectorIsRegistered(Int64 artistId, Int64 movieId)
+    {
+        string query = "SELECT id_artist FROM Directors WHERE id_artist=@artistId AND id_movie=@movieId LIMIT 1;";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddWithValue("@artistId", artistId);
+        cmd.Parameters.AddWithValue("@movieId", movieId);
+
+        this.sqltConnection.Open();
+        var reader = cmd.ExecuteReader();
+        var res = reader.Read();
+        this.sqltConnection.Close();
+        reader.Dispose();
+        cmd.Dispose();
+
+        return res;
+    }
+
+    #endregion checks
+
+    #region insertFolders
+
+    // insert a new folder as ignored
+    public bool InsertIgnoredFolder(string hash)
+    {
+        string query = "INSERT OR IGNORE INTO Ignored VALUES (@hash)";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddWithValue("@hash", hash);
+
+        this.sqltConnection.Open();
+        int added = cmd.ExecuteNonQuery();
+        this.sqltConnection.Close();
+        cmd.Dispose();
+
+        return added > 0;
+    }
+
+    // insert a new movie folder
+    public bool InsertMovieFolder(string hash, long id, string quality)
+    {
+        string query = "INSERT OR IGNORE INTO FoldersM VALUES (@hash,@id,@quality)";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddWithValue("@hash", hash);
+        cmd.Parameters.AddWithValue("@id", id);
+        cmd.Parameters.AddWithValue("@quality", quality);
+
+        this.sqltConnection.Open();
+        int added = cmd.ExecuteNonQuery();
+        this.sqltConnection.Close();
+        cmd.Dispose();
+
+        return added > 0;
+    }
+
+    // insert a new serie folder
+    public bool InsertSerieFolder(string hash, long id)
+    {
+        string query = "INSERT OR IGNORE INTO FoldersS VALUES (@hash,@id)";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddWithValue("@hash", hash);
+        cmd.Parameters.AddWithValue("@id", id);
+
+        this.sqltConnection.Open();
+        int added = cmd.ExecuteNonQuery();
+        this.sqltConnection.Close();
+        cmd.Dispose();
+
+        return added > 0;
+    }
+
+    #endregion insertFolders
+
+    // insert a new movie
+    public bool InsertMovie(long id, string title, string date, string poster, bool seen)
+    {
+        int seenInt = 0;
+        if (seen)
+        {
+            seenInt = 1;
+        }
+
+        string query = "INSERT OR IGNORE INTO Movies VALUES (@id,@title,@date,@poster,@seen)";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddWithValue("@id", id);
+        cmd.Parameters.AddWithValue("@title", title);
+        cmd.Parameters.AddWithValue("@date", date);
+        cmd.Parameters.AddWithValue("@poster", poster);
+        cmd.Parameters.AddWithValue("@seen", seenInt);
+
+        this.sqltConnection.Open();
+        int added = cmd.ExecuteNonQuery();
+        this.sqltConnection.Close();
+        cmd.Dispose();
+
+        return added > 0;
+    }
+
+    // insert a new serie
+    public bool InsertSerie(int id, string title, string startYear, string posterPath, bool seen)
+    {
+        int seenInt = 0;
+        if (seen)
+        {
+            seenInt = 1;
+        }
+
+        string query = "INSERT OR IGNORE INTO Series VALUES (@id,@title,@startdate,@poster,@seen)";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddWithValue("@id", id);
+        cmd.Parameters.AddWithValue("@title", title);
+        cmd.Parameters.AddWithValue("@startdate", startYear);
+        cmd.Parameters.AddWithValue("@poster", posterPath);
+        cmd.Parameters.AddWithValue("@seen", seenInt);
+
+        this.sqltConnection.Open();
+        int added = cmd.ExecuteNonQuery();
+        this.sqltConnection.Close();
+        cmd.Dispose();
+
+        return added > 0;
+    }
+
+    // insert a new artist
+    public bool InsertArtist(long id, string firstName, string lastName, string posterPath)
+    {
+        string query = "INSERT OR IGNORE INTO Artists VALUES (@id,@firstName,@lastName,@poster)";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddWithValue("@id", id);
+        cmd.Parameters.AddWithValue("@firstName", firstName);
+        cmd.Parameters.AddWithValue("@lastName", lastName);
+        cmd.Parameters.AddWithValue("@poster", posterPath);
+
+        this.sqltConnection.Open();
+        int added = cmd.ExecuteNonQuery();
+        this.sqltConnection.Close();
+        cmd.Dispose();
+
+        return added > 0;
+    }
+
+    // insert a new actor connection
+    public bool InsertActorConnection(long idArtist, long idMovie)
+    {
+        string query = "INSERT OR IGNORE INTO Actors VALUES (@idArt,@idMv)";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddWithValue("@idArt", idArtist);
+        cmd.Parameters.AddWithValue("@idMv", idMovie);
+
+        this.sqltConnection.Open();
+        int added = cmd.ExecuteNonQuery();
+        this.sqltConnection.Close();
+        cmd.Dispose();
+
+        return added > 0;
+    }
+
+    // insert a new director connection
+    public bool InsertDirectorConnection(long idArtist, long idMovie)
+    {
+        string query = "INSERT OR IGNORE INTO Directors VALUES (@idArt,@idMv)";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddWithValue("@idArt", idArtist);
+        cmd.Parameters.AddWithValue("@idMv", idMovie);
+
+        this.sqltConnection.Open();
+        int added = cmd.ExecuteNonQuery();
+        this.sqltConnection.Close();
+        cmd.Dispose();
+
+        return added > 0;
+    }
+
+    // return the set of movie ids connected to the given artist id
+    public HashSet<long> getMovies(long artistId)
+    {
+        HashSet<long> hSet = new HashSet<long>();
+
+        string query = "SELECT id_movie FROM Actors WHERE id_artist=@id UNION SELECT id_movie FROM Directors WHERE id_artist=@id";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddWithValue("@id", artistId);
+
+        this.sqltConnection.Open();
+        var reader = cmd.ExecuteReader();
+
+        while (reader.Read())
+        {
+            hSet.Add(reader.GetInt64(0));
+        }
+
+        this.sqltConnection.Close();
+        reader.Dispose();
+        cmd.Dispose();
+
+        return hSet;
+    }
+
+    // return the set of artist ids connected to the given movie id
+    public HashSet<long> getArtists(long movieId)
+    {
+        HashSet<long> hSet = new HashSet<long>();
+
+        string query = "SELECT id_artist FROM Actors WHERE id_movie=@id UNION SELECT id_artist FROM Directors WHERE id_movie=@id";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddWithValue("@id", movieId);
+
+        this.sqltConnection.Open();
+        var reader = cmd.ExecuteReader();
+
+        while (reader.Read())
+        {
+            hSet.Add(reader.GetInt64(0));
+        }
+
+        this.sqltConnection.Close();
+        reader.Dispose();
+        cmd.Dispose();
+
+        return hSet;
+    }
+
+
+}
