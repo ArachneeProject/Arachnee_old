@@ -38,7 +38,7 @@ public class OverkillBrowser : MonoBehaviour
     {
         foreach (PrettyFolder pf in this.folders)
         {
-            string imgPath = Application.dataPath + "/Posters/" + pf.PosterPath.Replace("/", "") + ".jpg";
+            string imgPath = Application.dataPath + "/Posters/" + pf.PosterPath.Replace("/", "");
             Texture2D tex;
 
             if (!File.Exists(imgPath))
