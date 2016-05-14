@@ -16,7 +16,7 @@ public class Constants
     
 
     public static string GetHash(string text)
-    {
+    {        
         using (var sha = new System.Security.Cryptography.SHA256Managed())
         {
             byte[] textData = System.Text.Encoding.UTF8.GetBytes(text);

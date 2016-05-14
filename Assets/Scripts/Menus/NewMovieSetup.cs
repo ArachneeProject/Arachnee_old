@@ -49,18 +49,23 @@ public class NewMovieSetup : MonoBehaviour
         
         
         this.dlg.InsertMovieFolder(Constants.GetHash(folder), mv.Id, quality);
-        this.dlg.InsertMovie(mv.Id, mv.Title, mv.Year, mv.PosterPath, seenToggle.isOn);
 
-        string toUpdate = PlayerPrefs.GetString(Constants.PP_MoviesToUpdate);
-        if (toUpdate == string.Empty)
+        if (!this.dlg.MovieIsRegistered(mv.Id))
         {
-            toUpdate += mv.Id;
+            this.dlg.InsertMovie(mv.Id, mv.Title, mv.Year, mv.PosterPath, seenToggle.isOn);
+
+            string toUpdate = PlayerPrefs.GetString(Constants.PP_MoviesToUpdate);
+            if (toUpdate == string.Empty)
+            {
+                toUpdate += mv.Id;
+            }
+            else
+            {
+                toUpdate += "," + mv.Id;
+            }
+            PlayerPrefs.SetString(Constants.PP_MoviesToUpdate, toUpdate);
         }
-        else
-        {
-            toUpdate += "," + mv.Id;
-        }
-        PlayerPrefs.SetString(Constants.PP_MoviesToUpdate, toUpdate);
+        
 
         Application.LoadLevel(Navigation.MFCheck);
     }
