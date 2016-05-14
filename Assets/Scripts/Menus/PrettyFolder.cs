@@ -6,6 +6,7 @@ public class PrettyFolder : MonoBehaviour
 {
     public Image image;
     public Text info;
+    public GameObject seenUI;
 
     public int Id
     {
@@ -37,11 +38,18 @@ public class PrettyFolder : MonoBehaviour
         set;
     }
 
+
+    private bool _seen;
     public bool Seen
     {
-        get;
-        set;
+        get { return _seen; }
+        set 
+        { 
+            _seen = value;
+            seenUI.SetActive(value);
+        }
     }
+    
 
     public string PosterPath
     {

@@ -127,7 +127,57 @@ public class DatabaseDialoger
         return res;
     }
 
+    // return true if movie is marked as Seen
+    public bool MovieWasSeen(Int64 movieId)
+    {
+        string query = "SELECT seen FROM Movies WHERE id=@movieId";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddWithValue("@movieId", movieId);
+
+        this.sqltConnection.Open();
+        var reader = cmd.ExecuteReader();
+
+        bool res = false;
+        if (reader.Read())
+        {
+            res = reader.GetInt64(0) != 0;
+        }
+
+        this.sqltConnection.Close();
+        reader.Dispose();
+        cmd.Dispose();
+
+        return res;
+    }
+
+    // return true if serie is marked as Seen
+    public bool SerieWasSeen(Int64 serieId)
+    {
+        string query = "SELECT seen FROM Series WHERE id=@serieId";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddWithValue("@serieId", serieId);
+
+        this.sqltConnection.Open();
+        var reader = cmd.ExecuteReader();
+
+        bool res = false;
+        if (reader.Read())
+        {
+            res = reader.GetInt64(0) != 0;
+        }
+
+        this.sqltConnection.Close();
+        reader.Dispose();
+        cmd.Dispose();
+
+        return res;
+    }
+
     #endregion checks
+
+
 
     #region insertFolders
 
@@ -339,5 +389,44 @@ public class DatabaseDialoger
         return hSet;
     }
 
+    public void UpdateMovieSeen(long movieId, bool seen)
+    {
+        int seenInt = 0;
+        if (seen)
+        {
+            seenInt = 1;
+        }
+
+        string query = "UPDATE OR IGNORE Movies SET Seen=@seen WHERE id=@movieId;";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddWithValue("@seen", seenInt);
+        cmd.Parameters.AddWithValue("@movieId", movieId);
+
+        this.sqltConnection.Open();
+        cmd.ExecuteNonQuery();
+        this.sqltConnection.Close();
+        cmd.Dispose();
+    }
+
+    public void UpdateSerieSeen(long serieId, bool seen)
+    {
+        int seenInt = 0;
+        if (seen)
+        {
+            seenInt = 1;
+        }
+
+        string query = "UPDATE OR IGNORE Series SET Seen=@seen WHERE id=@serieId;";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+        cmd.Parameters.AddWithValue("@seen", seenInt);
+        cmd.Parameters.AddWithValue("@serieId", serieId);
+
+        this.sqltConnection.Open();
+        cmd.ExecuteNonQuery();
+        this.sqltConnection.Close();
+        cmd.Dispose();
+    }
 
 }
