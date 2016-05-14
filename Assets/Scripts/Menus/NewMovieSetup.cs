@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Text.RegularExpressions;
 
 public class NewMovieSetup : MonoBehaviour 
 {
@@ -19,10 +20,26 @@ public class NewMovieSetup : MonoBehaviour
         this.dlg = new DatabaseDialoger();
 
         this.folder = PlayerPrefs.GetString(Constants.PP_NewFolderName);
-        foldername.text = folder + " is a new folder.";
-        
-        // regexp...
-        input.text = folder.Replace(".", " ");
+        foldername.text = this.folder + " is a new folder.";
+
+
+        string toInput = PlayerPrefs.GetString(Constants.PP_NewFolderName);
+
+        toInput = toInput.Replace(".", " ");
+        toInput = toInput.Replace("_", " ");
+        toInput = Regex.Replace(toInput, @".\d{4}.*", "");
+
+        toInput = Regex.Replace(toInput, @"\[.*\]", "");
+        toInput = Regex.Replace(toInput, @"\(.*", "");
+        toInput = Regex.Replace(toInput, @"=.*", "");
+        toInput = Regex.Replace(toInput, @"-.*", "");
+        toInput = Regex.Replace(toInput, @"\{.*\}", "");
+
+        toInput = Regex.Replace(toInput, @"720p.*", "");
+        toInput = Regex.Replace(toInput, @"1080p.*", "");
+
+        input.text = toInput;
+        internetSearch.GoGetResults();
 	}
 	
 	public void MarkAsIgnored()

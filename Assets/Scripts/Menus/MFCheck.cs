@@ -18,9 +18,9 @@ public class MFCheck : MonoBehaviour
         }
         
         DirectoryInfo mf = new DirectoryInfo(mainFolder);
+        
         foreach (DirectoryInfo d in mf.GetDirectories())
         {
-
             var hash = Constants.GetHash(d.Name);
 
             if(!this.dlg.FolderIsRegistered(hash))
