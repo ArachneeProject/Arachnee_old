@@ -12,7 +12,7 @@ public class DatabaseDialoger
       
     public DatabaseDialoger()
     {
-        string databasePath = "URI=file:" + Application.dataPath + "/Database/couch.db";
+        string databasePath = "URI=file:" + Application.dataPath + "/Database/arachnee.db";
         this.sqltConnection = new SqliteConnection(databasePath);
     }
 

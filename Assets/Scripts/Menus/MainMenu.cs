@@ -11,7 +11,7 @@ public class MainMenu : MonoBehaviour
 
 	void Start () 
     {
-        string dbPath = Application.dataPath + "/Database/couch.db";
+        string dbPath = Application.dataPath + "/Database/arachnee.db";
         if (!File.Exists(dbPath))
         {
             message.text = "Database not found at " + dbPath + ")";
