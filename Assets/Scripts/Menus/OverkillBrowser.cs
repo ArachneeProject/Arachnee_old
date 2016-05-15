@@ -116,7 +116,7 @@ public class OverkillBrowser : MonoBehaviour
             pf.transform.SetParent(c.transform);
             
             pf.Title = (string) row[0];
-            pf.Year = (long)row[1];
+            pf.Year = (int)(long)row[1];
             pf.PosterPath = (string)row[2];
             pf.Seen = ((long)row[3] != 0);
             pf.Hash = (string)row[4];
@@ -138,7 +138,7 @@ public class OverkillBrowser : MonoBehaviour
             pf.transform.SetParent(c.transform);
 
             pf.Title = (string)row[0];
-            pf.Year = (long)row[1];
+            pf.Year = (int)(long)row[1];
             pf.PosterPath = (string)row[2];
             pf.Seen = ((long)row[3] != 0);
             pf.Hash = (string)row[4];
@@ -149,7 +149,7 @@ public class OverkillBrowser : MonoBehaviour
             list.Add(pf);
         }
         
-        return list;       
+        return list;
     }
 
 

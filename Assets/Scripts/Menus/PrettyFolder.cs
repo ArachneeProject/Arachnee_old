@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class PrettyFolder : MonoBehaviour 
 {
@@ -26,7 +27,7 @@ public class PrettyFolder : MonoBehaviour
         set;
     }
 
-    public long Year
+    public int Year
     {
         get;
         set;
@@ -55,13 +56,22 @@ public class PrettyFolder : MonoBehaviour
     {
         get;
         set;
-    }
+    } 
 
     public bool IsSerie
     {
         get;
         set;
     }
+
+    private List<string> _genres = new List<string>();
+
+    public List<string> Genres
+    {
+        get { return _genres; }
+        set { _genres = value; }
+    }
+    
 
     public void ClickOnThisFolder()
     {

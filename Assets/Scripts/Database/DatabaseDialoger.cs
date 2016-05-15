@@ -436,6 +436,29 @@ public class DatabaseDialoger
         return hSet;
     }
 
+    public HashSet<string> GetAllGenres()
+    {
+        HashSet<string> hSet = new HashSet<string>();
+
+        string query = "SELECT genre FROM GenresM UNION SELECT genre FROM GenresS";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+
+        this.sqltConnection.Open();
+        var reader = cmd.ExecuteReader();
+
+        while (reader.Read())
+        {
+            hSet.Add(reader.GetString(0));
+        }
+
+        this.sqltConnection.Close();
+        reader.Dispose();
+        cmd.Dispose();
+
+        return hSet;
+    }
+
     public void UpdateMovieSeen(long movieId, bool seen)
     {
         int seenInt = 0;
