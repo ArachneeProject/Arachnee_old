@@ -26,7 +26,6 @@ public class InternetSearch : MonoBehaviour
 
     void Start()
     {
-        this.loading.gameObject.SetActive(false);
         foreach (MovieSearchResult msr in this.movieSearch.results)
         {
             msr.gameObject.SetActive(false);

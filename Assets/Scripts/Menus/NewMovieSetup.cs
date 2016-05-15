@@ -70,6 +70,8 @@ public class NewMovieSetup : MonoBehaviour
         if (!this.dlg.MovieIsRegistered(mv.Id))
         {
             this.dlg.InsertMovie(mv.Id, mv.Title, mv.Year, mv.PosterPath, seenToggle.isOn);
+            
+            this.dlg.InsertGenresOfMovie(mv.Id, mv.Genres);
 
             string toUpdate = PlayerPrefs.GetString(Constants.PP_MoviesToUpdate);
             if (toUpdate == string.Empty)

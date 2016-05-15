@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class MovieSearchResult : MonoBehaviour 
 {
@@ -53,4 +54,18 @@ public class MovieSearchResult : MonoBehaviour
         get;
         set;
     }
+
+    private List<string> _genres = new List<string>();
+    public List<string> Genres
+    {
+        get
+        {
+            return _genres;
+        }
+        set
+        {
+            _genres = value;
+        }
+    }
+
 }

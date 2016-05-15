@@ -14,6 +14,8 @@ public class OnlineRetriever
     private string posterUrl = "http://image.tmdb.org/t/p/w500";
     private string movieUrl = "https://api.themoviedb.org/3/movie/";
     private string serieUrl = "https://api.themoviedb.org/3/tv/";
+    private string movieGenresUrl = "http://api.themoviedb.org/3/genre/movie/list";
+    private string serieGenresUrl = "http://api.themoviedb.org/3/genre/tv/list";
     private string personUrl = "https://api.themoviedb.org/3/person/";
     private string castQuery = "/credits?";
     private string creditsQuery = "/movie_credits?";
@@ -76,23 +78,6 @@ public class OnlineRetriever
         this.NodeRetrieved = node["results"];
     }
 
-
-    /// <summary>
-    /// Retrieve the poster at "posterPath" and apply it on the image "img"
-    /// </summary>
-    /// <param name="posterPath"></param>
-    /// <param name="img"></param>
-    /// <returns></returns>
-    public IEnumerator RetrievePoster(string posterPath, UnityEngine.UI.Image img)
-    {        
-        WWW www = new WWW(this.posterUrl + posterPath);
-        yield return www;
-
-        if (www.texture != null && img != null)
-        {
-            img.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), Vector2.zero);
-        }
-    }
 
 
     public IEnumerator RetrievePoster(string posterPath)
@@ -193,6 +178,32 @@ public class OnlineRetriever
         if (node == null)
         {
             Debug.LogWarning("Query returned no result: " + this.personUrl + artistId + "?" + "(apiKey)");
+        }
+    }
+
+    public IEnumerator RetrieveMovieGenres()
+    {
+        WWW www = new WWW(this.movieGenresUrl + "?" + this.apiKey);
+        yield return www;
+
+        JSONNode node = JSON.Parse(www.text);
+        this.NodeRetrieved = node;
+        if (node == null)
+        {
+            Debug.LogError("Nothing retrieved!");
+        }
+    }
+
+    public IEnumerator RetrieveSerieGenres()
+    {
+        WWW www = new WWW(this.serieGenresUrl + "?" + this.apiKey);
+        yield return www;
+
+        JSONNode node = JSON.Parse(www.text);
+        this.NodeRetrieved = node;
+        if (node == null)
+        {
+            Debug.LogError("Nothing retrieved!");
         }
     }
 }

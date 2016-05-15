@@ -260,6 +260,30 @@ public class DatabaseDialoger
         return added > 0;
     }
 
+    // insert genres of movie
+    public void InsertGenresOfMovie(long movieId, List<string> genres)
+    {
+        if (genres.Count == 0)
+        {
+            return;
+        }
+
+        foreach (string g in genres)
+        {
+            string query = "INSERT OR IGNORE INTO GenresM VALUES (@id,@genre)";
+            SqliteCommand cmd = this.sqltConnection.CreateCommand();
+            cmd.CommandText = query;
+            cmd.Parameters.AddWithValue("@id", movieId);
+            cmd.Parameters.AddWithValue("@genre", g);
+
+            this.sqltConnection.Open();
+            cmd.ExecuteNonQuery();
+            this.sqltConnection.Close();
+            cmd.Dispose();
+        }
+    }
+
+
     // insert a new serie
     public bool InsertSerie(int id, string title, string startYear, string posterPath, bool seen)
     {
