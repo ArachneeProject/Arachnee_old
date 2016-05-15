@@ -64,14 +64,9 @@ public class NewMovieSetup : MonoBehaviour
             quality = "BluRay 1080p";
         }
         
-        
-        this.dlg.InsertMovieFolder(Constants.GetHash(folder), mv.Id, quality);
-
         if (!this.dlg.MovieIsRegistered(mv.Id))
         {
             this.dlg.InsertMovie(mv.Id, mv.Title, mv.Year, mv.PosterPath, seenToggle.isOn);
-            
-            this.dlg.InsertGenresOfMovie(mv.Id, mv.Genres);
 
             string toUpdate = PlayerPrefs.GetString(Constants.PP_MoviesToUpdate);
             if (toUpdate == string.Empty)
@@ -84,7 +79,9 @@ public class NewMovieSetup : MonoBehaviour
             }
             PlayerPrefs.SetString(Constants.PP_MoviesToUpdate, toUpdate);
         }
-        
+
+        this.dlg.InsertMovieFolder(Constants.GetHash(folder), mv.Id, quality);
+        this.dlg.InsertGenresOfMovie(mv.Id, mv.Genres);
 
         Application.LoadLevel(Navigation.MFCheck);
     }
@@ -94,6 +91,7 @@ public class NewMovieSetup : MonoBehaviour
         var serie = this.internetSearch.movieSearch.results[internetSearch.SelectedResult];
         
         this.dlg.InsertSerie(serie.Id, serie.Title, serie.Year, serie.PosterPath, seenToggle.isOn);
+        this.dlg.InsertGenresOfSerie(serie.Id, serie.Genres);
         this.dlg.InsertSerieFolder(Constants.GetHash(folder), serie.Id);
 
         Application.LoadLevel(Navigation.MFCheck);

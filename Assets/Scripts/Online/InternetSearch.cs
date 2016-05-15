@@ -26,6 +26,7 @@ public class InternetSearch : MonoBehaviour
 
     void Start()
     {
+        this.loading.gameObject.SetActive(false);
         foreach (MovieSearchResult msr in this.movieSearch.results)
         {
             msr.gameObject.SetActive(false);
@@ -60,6 +61,7 @@ public class InternetSearch : MonoBehaviour
     /// </summary>
     private IEnumerator goGetResultsOnline()
     {
+        yield return new WaitForEndOfFrame();
         this.loading.gameObject.SetActive(true);
         yield return StartCoroutine(this.movieSearch.GetResults(this.inputField.text, isMovieSearch));
         this.loading.gameObject.SetActive(false);
