@@ -4,6 +4,7 @@ using System.Data;
 using System.Collections;
 using System.Linq;
 using System.IO;
+using UnityEngine.UI;
 
 public class OverkillBrowser : MonoBehaviour 
 {
@@ -16,6 +17,8 @@ public class OverkillBrowser : MonoBehaviour
     public Vector2 offset;
     public Vector2 spacing;
     public float scrollspeed = 200;
+    
+    public Toggle seenTog;
 
     private List<PrettyFolder> folders;
 
@@ -76,6 +79,13 @@ public class OverkillBrowser : MonoBehaviour
         int j = 0;
         foreach (PrettyFolder pf in folders)
         {
+            if (!seenTog.isOn && pf.Seen)
+            {
+                pf.gameObject.SetActive(false);
+                continue;
+            }
+            pf.gameObject.SetActive(true);
+
             pf.transform.position = new Vector3(
                 offset.x + i * (dimensions.x + spacing.x),
                 Screen.height - (offset.y + j * (dimensions.y + spacing.y)),
