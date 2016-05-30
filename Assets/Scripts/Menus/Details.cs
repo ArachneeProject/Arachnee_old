@@ -184,7 +184,7 @@ public class Details : MonoBehaviour
 
 	private IEnumerator fancy(string poster)
     {
-        string imgPath = Application.dataPath + "/Posters/" + poster.Replace("/", "") + ".jpg";
+        string imgPath = Application.dataPath + "/Posters/" + poster.Replace("/", "");
         Texture2D tex;
 
         if (!File.Exists(imgPath))
