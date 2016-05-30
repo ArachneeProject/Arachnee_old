@@ -149,8 +149,7 @@ public class JoliBrowser : MonoBehaviour
             pf.Seen = ((long)row[3] != 0);
             pf.Hash = (string)row[4];
             pf.Quality = (string)row[5];
-            pf.Id = (int)(long)row[6];
-            
+            pf.Id = (int)(long)row[6];            
             pf.IsSerie = false;
 
             pf.info.text = pf.Title + "\n" + pf.Year.ToString() + "\n" + pf.Quality;
@@ -247,7 +246,6 @@ public class JoliBrowser : MonoBehaviour
         float prefWidth = rectF.width;
         float prefHeight = rectF.height;
         int maxPerRow = (int)Mathf.Max(1, ((Screen.width - localOffset.x - globalOffset.x - prefWidth / 2) / (prefWidth + spacing.x)));
-        Debug.Log(maxPerRow);
         
 
         var rectS = this.sectionPrefab.GetComponent<RectTransform>().rect;
@@ -283,8 +281,8 @@ public class JoliBrowser : MonoBehaviour
             {
                 // check if need to be shown
                 if (!seenTog.isOn && pf.Seen
-                    || !movieTog && !pf.IsSerie
-                    || !serieTog && pf.IsSerie)
+                    || !movieTog.isOn && !pf.IsSerie
+                    || !serieTog.isOn && pf.IsSerie)
                 {
                     pf.gameObject.SetActive(false);
                     continue;
