@@ -231,12 +231,17 @@ public class Details : MonoBehaviour
             if (hash == targetHash)
             {
                 fullPath = d.FullName;
+                break;
             }
         }
 
         if (fullPath != string.Empty)
         {
             System.Diagnostics.Process.Start(fullPath);
+        }
+        else
+        {
+            Debug.LogError("Folder not found! (hash: " + targetHash + ")");
         }
     }
 }

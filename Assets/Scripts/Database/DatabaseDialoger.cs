@@ -177,8 +177,6 @@ public class DatabaseDialoger
 
     #endregion checks
 
-
-
     #region insertFolders
 
     // insert a new folder as ignored
@@ -233,6 +231,8 @@ public class DatabaseDialoger
     }
 
     #endregion insertFolders
+
+    #region insertGraphData
 
     // insert a new movie
     public bool InsertMovie(long id, string title, string date, string poster, bool seen)
@@ -385,6 +385,10 @@ public class DatabaseDialoger
 
         return added > 0;
     }
+    
+    #endregion insertGraphData
+
+    #region GetData
 
     // return the set of movie ids connected to the given artist id
     public HashSet<long> getMovies(long artistId)
@@ -436,11 +440,12 @@ public class DatabaseDialoger
         return hSet;
     }
 
-    public HashSet<string> GetAllGenres()
-    {
-        HashSet<string> hSet = new HashSet<string>();
 
-        string query = "SELECT genre FROM GenresM UNION SELECT genre FROM GenresS";
+    public List<object[]> getMovieFoldersData()
+    {
+        List<object[]> data = new List<object[]>();
+
+        string query = "SELECT id, title, year, poster_path, seen, hash, quality FROM Movies JOIN FoldersM ON Movies.id=FoldersM.idMovie";
         SqliteCommand cmd = this.sqltConnection.CreateCommand();
         cmd.CommandText = query;
 
@@ -449,16 +454,90 @@ public class DatabaseDialoger
 
         while (reader.Read())
         {
-            hSet.Add(reader.GetString(0));
+            object[] row = new object[reader.FieldCount + 1];
+            reader.GetValues(row);
+            data.Add(row);
         }
 
         this.sqltConnection.Close();
         reader.Dispose();
         cmd.Dispose();
 
-        return hSet;
+        foreach (object[] row in data)
+        {
+            query = "SELECT genre FROM GenresM WHERE movieId = " + row[0];
+            cmd = this.sqltConnection.CreateCommand();
+            cmd.CommandText = query;
+
+            List<string> rowGenres = new List<string>();
+
+            this.sqltConnection.Open();
+            reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                rowGenres.Add(reader.GetString(0));
+            }
+
+            this.sqltConnection.Close();
+            reader.Dispose();
+            cmd.Dispose();
+
+            row[row.Length - 1] = rowGenres;
+        }
+
+        return data;
     }
 
+    public List<object[]> getSerieFoldersData()
+    {
+        List<object[]> data = new List<object[]>();
+
+        string query = "SELECT id, title, startyear, poster_path, seen, hash FROM Series JOIN FoldersS ON Series.id=FoldersS.idSerie";
+        SqliteCommand cmd = this.sqltConnection.CreateCommand();
+        cmd.CommandText = query;
+
+        this.sqltConnection.Open();
+        var reader = cmd.ExecuteReader();
+
+        while (reader.Read())
+        {
+            object[] row = new object[reader.FieldCount + 1];
+            reader.GetValues(row);
+            data.Add(row);
+        }
+
+        this.sqltConnection.Close();
+        reader.Dispose();
+        cmd.Dispose();
+
+        foreach (object[] row in data)
+        {
+            query = "SELECT genre FROM GenresS WHERE serieId = " + row[0];
+            cmd = this.sqltConnection.CreateCommand();
+            cmd.CommandText = query;
+
+            List<string> rowGenres = new List<string>();
+
+            this.sqltConnection.Open();
+            reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                rowGenres.Add(reader.GetString(0));
+            }
+
+            this.sqltConnection.Close();
+            reader.Dispose();
+            cmd.Dispose();
+
+            row[row.Length - 1] = rowGenres;
+        }
+
+        return data;
+    }
+
+    #endregion GetData
+
+    #region update
     public void UpdateMovieSeen(long movieId, bool seen)
     {
         int seenInt = 0;
@@ -498,5 +577,7 @@ public class DatabaseDialoger
         this.sqltConnection.Close();
         cmd.Dispose();
     }
+
+    #endregion update
 
 }

@@ -14,8 +14,7 @@ public class JoliBrowser : MonoBehaviour
     private List<PrettyFolder> folders = new List<PrettyFolder>();
     private List<Text> sectionTexts = new List<Text>();
     private Dictionary<string, List<PrettyFolder>> arrangement = new Dictionary<string, List<PrettyFolder>>();
-    
-    private List<string> genres = new List<string>();
+
 
     public Canvas c;
     public PrettyFolder prettyFolderPrefab;
@@ -39,37 +38,9 @@ public class JoliBrowser : MonoBehaviour
 
         this.dlg = new DatabaseDialoger();
         this.getFolders();
-        this.getAllGenres();
         this.SortByTitle();
     }
 
-
-	
-    // sort by genres
-    public void SortByGenres()
-    {
-        Debug.LogError("not implemented yet, p.Genres.Count == 0");
-
-        this.arrangement.Clear();
-
-        foreach (string g in this.genres)
-        {
-            List<PrettyFolder> l = new List<PrettyFolder>();
-            foreach (PrettyFolder p in folders)
-            {                
-                if (p.Genres.Contains(g))
-                {
-                    l.Add(p);
-                }
-            }
-            if (l.Count > 0)
-            {
-                this.arrangement.Add(g, l);
-            }            
-        }
-        
-        this.Show();
-    }
 
     // sort by year, from most recent to oldest
     public void SortByYear()
@@ -130,55 +101,58 @@ public class JoliBrowser : MonoBehaviour
 
     private void getFolders()
     {
-        Debug.LogWarning("getFolders should be upgraded! Genres and isSerie are not here!");
-
-        List<PrettyFolder> list = new List<PrettyFolder>();
-
         // movies
-        var set = this.dlg.GetDataSet("SELECT title, year, poster_path, seen, hash, quality, id "
-        + "FROM Movies INNER JOIN FoldersM ON Movies.id = FoldersM.idMovie").Tables[0].Rows;
-
-        foreach (System.Data.DataRow row in set)
+        List<object[]> data = this.dlg.getMovieFoldersData();
+        foreach (object[] row in data)
         {
             PrettyFolder pf = Instantiate(this.prettyFolderPrefab) as PrettyFolder;
             pf.transform.SetParent(c.transform);
 
-            pf.Title = (string)row[0];
-            pf.Year = (int)(long)row[1];
-            pf.PosterPath = (string)row[2];
-            pf.Seen = ((long)row[3] != 0);
-            pf.Hash = (string)row[4];
-            pf.Quality = (string)row[5];
-            pf.Id = (int)(long)row[6];            
+            pf.Id = (int)(long)row[0];
+            pf.Title = (string)row[1];
+            pf.Year = (int)(long)row[2];
+            pf.PosterPath = (string)row[3];
+            pf.Seen = (int)(long)row[4] == 1;
+            pf.Hash = (string)row[5];
+            pf.Quality = (string)row[6];
+            pf.Genres = (List<string>)row[7];
             pf.IsSerie = false;
-
             pf.info.text = pf.Title + "\n" + pf.Year.ToString() + "\n" + pf.Quality;
-            list.Add(pf);
+
+            this.folders.Add(pf);
         }
 
         // series
-        set = this.dlg.GetDataSet("SELECT title, startYear, poster_path, seen, hash, id "
-        + "FROM Series INNER JOIN FoldersS ON Series.id = FoldersS.idSerie").Tables[0].Rows;
-
-        foreach (System.Data.DataRow row in set)
+        data = this.dlg.getSerieFoldersData();
+        foreach (object[] row in data)
         {
             PrettyFolder pf = Instantiate(this.prettyFolderPrefab) as PrettyFolder;
             pf.transform.SetParent(c.transform);
 
-            pf.Title = (string)row[0];
-            pf.Year = (int)(long)row[1];
-            pf.PosterPath = (string)row[2];
-            pf.Seen = ((long)row[3] != 0);
-            pf.Hash = (string)row[4];
-            pf.Id = (int)(long)row[5];
+            pf.Id = (int)(long)row[0];
+            pf.Title = (string)row[1];
+            pf.Year = (int)(long)row[2];
+            pf.PosterPath = (string)row[3];
+            pf.Seen = (int)(long)row[4] == 1;
+            pf.Hash = (string)row[5];
+            pf.Genres = (List<string>)row[6];
             pf.IsSerie = true;
-
             pf.info.text = pf.Title + "\n" + pf.Year.ToString() + "\n" + pf.Quality;
-            list.Add(pf);
+
+            this.folders.Add(pf);
         }
 
-        this.folders = list;
+        foreach (PrettyFolder pf in this.folders)
+        {
+            string output = pf.Title;
+            foreach (string s in pf.Genres)
+            {
+                output += " " + s;
+            }
+            Debug.Log(output);
+        }
 
+        this.folders = this.folders.OrderBy(f => f.Title).ToList();
         StartCoroutine(fancy());
     }
 
@@ -215,13 +189,6 @@ public class JoliBrowser : MonoBehaviour
         }
     }
 
-    private void getAllGenres()
-    {
-        HashSet<string> s = this.dlg.GetAllGenres();
-
-        this.genres = new List<string>(s);
-        this.genres.Sort();
-    }
 
     // display the folders on screen
     public void Show()
@@ -241,6 +208,13 @@ public class JoliBrowser : MonoBehaviour
         }
         mvTogWasOn = movieTog.isOn;
 
+        // clear the sections
+        foreach (Text t in this.sectionTexts)
+        {
+            Destroy(t);
+        }
+        this.sectionTexts.Clear();
+
         // init values for arrangement
         var rectF = this.prettyFolderPrefab.GetComponent<RectTransform>().rect;
         float prefWidth = rectF.width;
@@ -254,13 +228,6 @@ public class JoliBrowser : MonoBehaviour
 
         int sectionIndex = 0;
         float cumulativeHeightOfSections = 0;
-
-        // clear the sections
-        foreach (Text t in this.sectionTexts)
-        {
-            Destroy(t);
-        }
-        this.sectionTexts.Clear();
 
         // set the arrangement
         foreach (string key in this.arrangement.Keys)
@@ -311,8 +278,7 @@ public class JoliBrowser : MonoBehaviour
             // not sure of what i'm doin'
             if (i == 0 && j == 0)
             {
-                sectionName.gameObject.SetActive(false);
-                Debug.Log("nothing in section " + key);
+                sectionName.gameObject.SetActive(false);                
                 continue;
             }
 
@@ -322,13 +288,11 @@ public class JoliBrowser : MonoBehaviour
                 j++;
             }
             cumulativeHeightOfSections += rectS.height + j * (rectF.height + spacing.y);
-            
 
             // next section
             sectionIndex++;
         }
     }
-
 
     void Update()
     {
