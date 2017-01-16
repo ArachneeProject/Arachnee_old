@@ -12,7 +12,7 @@ public class FreeSearch : MonoBehaviour
 
         var selected = this.internetSearch.movieSearch.results[internetSearch.SelectedResult];
 
-        PlayerPrefs.SetInt(Constants.PP_MovieID, selected.Id);
+        PlayerPrefs.SetInt(Constants.PP_SeedVertexIdentifier, selected.Id);
 
         if (!dlg.MovieIsRegistered(selected.Id))
         {

@@ -13,7 +13,8 @@ public class MovieSearch : MonoBehaviour
     {
         foreach (MovieSearchResult res in this.results)
         {
-            res.Id = Constants.NULL_MOVIE_ID;
+            Debug.LogError("shit over here");
+            //res.Id = Constants.NULL_MOVIE_ID;
             res.Title = "";
             res.Year = "";
             res.Texture = null;

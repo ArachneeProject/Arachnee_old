@@ -27,6 +27,9 @@ public static class MiniMath
         return vector.x * vector.x + vector.y * vector.y + vector.z * vector.z;
     }
 
-
+    public static bool CanSee(Transform watcher, Transform target)
+    {
+        return Vector3.Angle(watcher.position - target.position, watcher.forward) > 90;
+    }
     
 }

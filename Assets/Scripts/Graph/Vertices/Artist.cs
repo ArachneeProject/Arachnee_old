@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
 
 public class Artist : Entry
 {
-
     public string FirstName
     {
         get;
@@ -23,6 +18,11 @@ public class Artist : Entry
     {
         get;
         set;
+    }
+
+    public Artist(long databaseId)
+    {
+        this.DatabaseId = databaseId;
     }
 
     public override string ToString()

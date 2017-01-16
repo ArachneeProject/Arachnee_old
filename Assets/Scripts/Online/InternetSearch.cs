@@ -85,10 +85,14 @@ public class InternetSearch : MonoBehaviour
 
         foreach (MovieSearchResult res in this.movieSearch.results)
         {
+            Debug.LogError("caca here");
+
+            /*
             if (res.Id != Constants.NULL_MOVIE_ID)
             {
                 res.gameObject.SetActive(true);
             }
+             */
         }
     }
 

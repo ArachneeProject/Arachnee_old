@@ -114,8 +114,11 @@ public class OverkillBrowser : MonoBehaviour
 
     private List<PrettyFolder> buildFolders()
     {
+        Debug.LogError("Not implemented");
         List<PrettyFolder> list = new List<PrettyFolder>();
+        return list;
 
+        /*
         // movies
         var set = this.dlg.GetDataSet("SELECT title, year, poster_path, seen, hash, quality, id "
         + "FROM Movies INNER JOIN FoldersM ON Movies.id = FoldersM.idMovie").Tables[0].Rows;
@@ -160,6 +163,7 @@ public class OverkillBrowser : MonoBehaviour
         }
         
         return list;
+        */
     }
 
 

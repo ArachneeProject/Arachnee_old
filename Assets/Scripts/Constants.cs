@@ -7,13 +7,13 @@ public class Constants
     public const string PP_NewFolderName = "NewFolderName";
     public const string PP_FolderHash = "FolderHash";
     public const string PP_PreviousLevel = "PreviousLevel";
-    public const string PP_MovieID = "MovieID";
+    public const string PP_SeedVertexIdentifier = "SeedVertexIdentifier";
     public const string PP_MoviesToUpdate = "MoviesUpdate";
 
-    public const int NULL_MOVIE_ID = 0;
     public const string Res_DefaultImage = "default";
     public const string Res_LoadingImage = "loading";
-    
+
+    public const char EntryIdentifierSeparator = '-';
 
     public static string GetHash(string text)
     {        

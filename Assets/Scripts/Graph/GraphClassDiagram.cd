@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Entry">
+    <Position X="6.5" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAIAAAAAQgEBAAAAAAAAAAIAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Graph\Vertices\Entry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Artist">
+    <Position X="5.25" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAECAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Assets\Scripts\Graph\Vertices\Artist.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FloattingLabel">
+    <Position X="1.5" Y="16" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAQAAAAAIAAACAAAAAAAAAAQBAAAAAACACAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Graph\Vertices\FloattingLabel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Movie">
+    <Position X="7.25" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAEAECAAAAAAAAAAAAAEAAAAEAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Graph\Vertices\Movie.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PhysicalGraphEngine">
+    <Position X="11.75" Y="3.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAgAAIBAAAAAAEAAAQAAAAAAAAAAIAAABAgA=</HashCode>
+      <FileName>Assets\Scripts\Graph\PhysicalGraphEngine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DatabaseDialoger">
+    <Position X="16" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EhAMAABACAIABQAJAABgQYQAAADw0ABAAABQAAAQAYQ=</HashCode>
+      <FileName>Assets\Scripts\Database\DatabaseDialoger.Browser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PhysicalEdge">
+    <Position X="2.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAgAAAAAAAAAAAAACACAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Graph\Vertices\PhysicalEdge.cs</FileName>
+      <NewMemberFileName>Assets\Scripts\Graph\Vertices\PhysicalVertex.cs</NewMemberFileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

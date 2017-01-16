@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
 
 public class Movie : Entry
 {
-
     public string Title
     {
         get;
@@ -40,8 +35,7 @@ public class Movie : Entry
         {
         }
     }
-
-
+    
     public int Rating
     {
         get
@@ -52,7 +46,11 @@ public class Movie : Entry
         {
         }
     }
-
+    
+    public Movie(long databaseId)
+    {
+        this.DatabaseId = databaseId;
+    }
 
     public override string ToString()
     {

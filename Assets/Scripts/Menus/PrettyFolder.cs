@@ -81,7 +81,8 @@ public class PrettyFolder : MonoBehaviour
             id = -id;
         }
 
-        PlayerPrefs.SetInt(Constants.PP_MovieID, id);
+        Debug.LogError("Not rebuilt");
+        //PlayerPrefs.SetInt(Constants.PP_MovieID, id);
         PlayerPrefs.SetString(Constants.PP_FolderHash, Hash);
         Application.LoadLevel(Navigation.Details);
     }

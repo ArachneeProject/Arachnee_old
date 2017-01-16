@@ -25,7 +25,7 @@ public class Details : MonoBehaviour
     {
         seeGraphButton.gameObject.SetActive(false);
 
-        long id = PlayerPrefs.GetInt(Constants.PP_MovieID);
+        long id = PlayerPrefs.GetInt(Constants.PP_SeedVertexIdentifier);
         if (id == 0)
         {
             Debug.LogWarning("nothing provided");

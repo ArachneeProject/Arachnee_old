@@ -10,9 +10,13 @@ public class SeenButton : MonoBehaviour
     private bool seen = false;
 	void Start () 
     {
+        Debug.LogError("Huge shit");
+
+	    return;
+
         this.dlg = new DatabaseDialoger();
 
-        this.id = PlayerPrefs.GetInt(Constants.PP_MovieID);
+        //this.id = PlayerPrefs.GetInt(Constants.PP_MovieID);
         if (this.id > 0)
         {
             seen = this.dlg.MovieWasSeen(id);

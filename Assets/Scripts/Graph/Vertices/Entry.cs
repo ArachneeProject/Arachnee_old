@@ -1,91 +1,50 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public abstract class Entry : MonoBehaviour
+public abstract class Entry
 {
-    public GUIEntry GUI;
+    public long DatabaseId { get; protected set; }
 
-    public Rigidbody RigidBody
+    public string PosterPath { get; set; }
+
+    private static Movie _defaultMovie = null;
+    public static Entry DefaultEntry
     {
-        get;
-        set;
+        get { return _defaultMovie ?? (_defaultMovie = new Movie(long.MinValue)); }
     }
 
-    public int GraphId
+    public string GetIdentifier()
     {
-        get;
-        set;
+        return this.GetType().Name + Constants.EntryIdentifierSeparator + this.DatabaseId;
     }
 
-    public Int64 DatabaseId
+    public static bool IsNullOrDefault(Entry entry)
     {
-        get;
-        set;
-    }
-
-    public string PosterPath
-    {
-        get;
-        set;
-    }
-
-
-    private List<Connection> _connectedEdges = new List<Connection>();
-    public List<Connection> ConnectedEdges
-    {
-        get { return _connectedEdges; }
-        set { _connectedEdges = value; }
-    }
-    
-
-    /// <summary>
-    /// Init
-    /// </summary>
-    void Start()
-    {
-        // init the label
-        this.GUI = this.GetComponentInChildren<GUIEntry>();
-        this.GUI.text = this.ToString();
-        this.GUI.gameObject.SetActive(false);
-
-        // load the texture
-        this.GetComponent<Renderer>().material.mainTexture = Resources.Load(Constants.Res_LoadingImage) as Texture;
-
-        // init the rigidbody
-        this.RigidBody = this.GetComponent<Rigidbody>();
-            
-    }
-
-    /// <summary>
-    /// show the label when visible
-    /// </summary>
-    void OnBecameVisible()
-    {
-        this.GUI.gameObject.SetActive(true);
-    }
-
-    /// <summary>
-    /// mask the label when not visible
-    /// </summary>
-    void OnBecameInvisible()
-    {
-        this.GUI.gameObject.SetActive(false);
-    }
-
-    
-    // Define an Event based on the above Delegate
-    public delegate void EntryClickHandler(Entry e);
-
-    public event EntryClickHandler EntryClickedEvent;
-
-    void OnMouseDown()
-    {
-        if (EntryClickedEvent != null) // check if there is at least one suscriber
+        if (entry == null)
         {
-            EntryClickedEvent(this);
+            Debug.LogError("Entry was null");
+            return true;
         }
+        if (entry.GetIdentifier() == DefaultEntry.GetIdentifier())
+        {
+            Debug.LogError("Entry was the default entry");
+            return true;
+        }
+        return false;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is Entry)
+        {
+            return obj.GetType() == this.GetType() && ((Entry) obj).GetIdentifier() == this.GetIdentifier();
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return this.GetIdentifier().GetHashCode();
     }
 }
