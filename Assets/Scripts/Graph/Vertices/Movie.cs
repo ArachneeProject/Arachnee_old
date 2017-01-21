@@ -2,18 +2,11 @@
 
 public class Movie : Entry
 {
-    public string Title
-    {
-        get;
-        set;
-    }
+    public string Title { get; set; }
 
-    public int Year
-    {
-        get;
-        set;
-    }
+    public int Year { get; set; }
 
+    public bool Seen { get; set; }
     public int Runtime
     {
         get

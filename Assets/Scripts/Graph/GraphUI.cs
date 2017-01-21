@@ -56,7 +56,7 @@ public class GraphUI : MonoBehaviour
     {
         foreach (var vertexWithNoPoster in vertices.Where(v => string.IsNullOrEmpty(v.Entry.PosterPath)))
         {
-            vertexWithNoPoster.gameObject.GetComponent<Renderer>().material.mainTexture = TexturesManager.GetDefaultTexture();
+            vertexWithNoPoster.gameObject.GetComponent<Renderer>().material.mainTexture = TexturesRetriever.GetDefaultTexture();
             Debug.LogError(vertexWithNoPoster + " doesn't have any poster");
         }
 
@@ -66,19 +66,25 @@ public class GraphUI : MonoBehaviour
         priorities.Add(0, vertices.Where(v => MiniMath.CanSee(Camera.main.transform, v.transform)) ); // visible vertices
         priorities.Add(1, vertices.Where(v => v.isActiveAndEnabled && !priorities[0].Contains(v))); // active vertices
         priorities.Add(2, vertices.Where(v => !priorities[0].Contains(v) && !priorities[1].Contains(v))); // all others
-
-        var textureManager = new TexturesManager(this);
-
+        
         for (int priority = 0; priority < 3; priority++)
         {
-            yield return StartCoroutine(textureManager.RetrieveTexture(new HashSet<string>(priorities[priority]
+            var textureRetriever = new TexturesRetriever();
+            yield return StartCoroutine(textureRetriever.RetrieveData(new HashSet<string>(priorities[priority]
                                                                         .Select(v => v.Entry.PosterPath))));
             foreach (var physicalVertex in priorities[priority])
             {
-                Texture2D texture;
-                if(!textureManager.RetrievedTextures.TryGetValue(physicalVertex.Entry.PosterPath, out texture))
+                object textureObj;
+                if (!textureRetriever.RetrievedData.TryGetValue(physicalVertex.Entry.PosterPath, out textureObj))
                 {
                     Debug.LogError("No texture found for " + physicalVertex + " (posterpath is \"" + physicalVertex.Entry.PosterPath + "\")");
+                    continue;
+                }
+
+                var texture = textureObj as Texture2D;
+                if (texture == null)
+                {
+                    Debug.LogError("Texture object was not a Texture2D for " + physicalVertex + " (posterpath is \"" + physicalVertex.Entry.PosterPath + "\")");
                     continue;
                 }
 
