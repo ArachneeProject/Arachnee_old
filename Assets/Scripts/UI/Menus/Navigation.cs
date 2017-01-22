@@ -8,7 +8,7 @@ public class Navigation : MonoBehaviour
     public const int IgnoredFolders = 2;
     public const int MFChange = 3;
     public const int ClearDB = 4;
-    public const int MFCheck = 5;
+    public const int FoldersCheck = 5;
     public const int AddNewMovie = 6;
     public const int AddNewSerie = 7;
     public const int DatabaseUpdate = 8;
@@ -50,7 +50,7 @@ public class Navigation : MonoBehaviour
     public void GoToMFCheck()
     {
         PlayerPrefs.SetInt(Constants.PP_PreviousLevel, Application.loadedLevel);
-        Application.LoadLevel(MFCheck);
+        Application.LoadLevel(FoldersCheck);
     }
     
     public void GoToAddNewMovie()

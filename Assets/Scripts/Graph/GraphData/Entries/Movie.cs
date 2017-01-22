@@ -6,7 +6,6 @@ public class Movie : Entry
 
     public int Year { get; set; }
 
-    public bool Seen { get; set; }
     public int Runtime
     {
         get

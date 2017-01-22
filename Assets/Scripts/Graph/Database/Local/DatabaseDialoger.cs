@@ -5,13 +5,13 @@ using System.Linq;
 using Mono.Data.Sqlite;
 using UnityEngine;
 
-public partial class DatabaseDialoger
+public class DatabaseDialoger
 {
     private readonly SqliteConnection _sqltConnection = null;
     
     public DatabaseDialoger()
     {
-        string databasePath = "URI=file:" + Path.Combine(Path.Combine(Application.dataPath, "Database"), "arachnee.db");
+        string databasePath = "URI=file:" + Path.Combine(Path.Combine(Application.dataPath, "Database"), "arachneeGraph.db");
         this._sqltConnection = new SqliteConnection(databasePath);
     }
     
@@ -42,36 +42,39 @@ public partial class DatabaseDialoger
             return Entry.DefaultEntry;
         }
 
+        IEnumerable<Entry> correspondingEntries = Enumerable.Empty<Entry>();
+
         // #switch#
         // movie
         if (identifierTypeStr == typeof(Movie).Name)
         {
-            var correspondingMovies = this.GetMovies(new[] {databaseId}).ToList();
-            if (correspondingMovies.Count() != 1)
-            {
-                Debug.LogError(identifier + " returned " + correspondingMovies.Count() + " movie(s).");
-                return Entry.DefaultEntry;
-            }
-            return correspondingMovies.First();
+            correspondingEntries = this.GetMovies(new[] {databaseId}).Select(m => (Entry) m).ToList();
         }
-
         // artist
-        if (identifierTypeStr == typeof (Artist).Name)
+        else if (identifierTypeStr == typeof (Artist).Name)
         {
-            var correspondingArtists = this.GetArtists(new[] { databaseId }).ToList();
-            if (correspondingArtists.Count() != 1)
-            {
-                Debug.LogError(identifier + " returned " + correspondingArtists.Count() + " artist(s).");
-                return Entry.DefaultEntry;
-            }
-            return correspondingArtists.First();
+            correspondingEntries = this.GetArtists(new[] { databaseId }).Select(m => (Entry)m).ToList();
+        }
+        // serie
+        else if (identifierTypeStr == typeof (Serie).Name)
+        {
+            correspondingEntries = this.GetSeries(new[] {databaseId}).Select(m => (Entry) m).ToList();
+        }
+        // default
+        else
+        {
+            Debug.LogError(identifierTypeStr + " is not handled as an Entry type.");
+            return Entry.DefaultEntry;
         }
 
-        // default
-        Debug.LogError(identifierTypeStr + " is not handled as an Entry type.");
-        return Entry.DefaultEntry;
+        if (correspondingEntries.Count() != 1)
+        {
+            Debug.LogError(identifier + " returned " + correspondingEntries.Count() + " element(s).");
+            return Entry.DefaultEntry;
+        }
+        return correspondingEntries.First();
     }
-    
+
     /// <summary>
     /// return the movies corresponding to the given ids
     /// </summary>
@@ -139,6 +142,41 @@ public partial class DatabaseDialoger
             }
             cmd.Dispose();
         }
+        return list;
+    }
+
+    /// <summary>
+    /// return the series corresponding to the given ids
+    /// </summary>
+    public IEnumerable<Serie> GetSeries(IEnumerable<long> serieIds)
+    {
+        var idsSet = new HashSet<long>(serieIds);
+        var list = new List<Serie>();
+
+        string query = "SELECT * FROM Series WHERE id IN (" + string.Join(",", idsSet.Select(l => l.ToString()).ToArray()) + ")";
+
+        using (var cmd = this._sqltConnection.CreateCommand())
+        {
+            cmd.CommandText = query;
+
+            this._sqltConnection.Open();
+            using (var reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Serie serie = new Serie(reader.GetInt64(0));
+                    serie.Title = reader.GetString(1);
+                    serie.StartYear = reader.GetInt32(2);
+                    serie.PosterPath = reader.GetString(3);
+
+                    list.Add(serie);
+                }
+                reader.Dispose();
+            }
+            this._sqltConnection.Close();
+            cmd.Dispose();
+        }
+
         return list;
     }
 
@@ -464,9 +502,8 @@ public partial class DatabaseDialoger
             return false;
         }
 
-        var seenInt = movie.Seen ? 1 : 0;
         int added = 0;
-        const string query = "INSERT OR REPLACE INTO Movies VALUES (@id,@title,@date,@poster,@seen)";
+        const string query = "INSERT OR REPLACE INTO Movies VALUES (@id,@title,@date,@poster)";
         using (var cmd = this._sqltConnection.CreateCommand())
         {
             cmd.CommandText = query;
@@ -474,7 +511,6 @@ public partial class DatabaseDialoger
             cmd.Parameters.AddWithValue("@title", movie.Title);
             cmd.Parameters.AddWithValue("@date", movie.Year);
             cmd.Parameters.AddWithValue("@poster", movie.PosterPath);
-            cmd.Parameters.AddWithValue("@seen", seenInt);
 
             this._sqltConnection.Open();
             added = cmd.ExecuteNonQuery();
@@ -485,23 +521,32 @@ public partial class DatabaseDialoger
         return added > 0;
     }
 
-    public bool InsertSerie(int id, string title, string startYear, string posterPath, bool seen)
+    /// <summary>
+    /// Insert a new serie or update an existing one
+    /// </summary>
+    public bool InsertOrUpdateSerie(Serie serie)
     {
-        int seenInt = seen ? 1 : 0;
+        if (Entry.IsNullOrDefault(serie))
+        {
+            return false;
+        }
 
-        string query = "INSERT OR REPLACE INTO Series VALUES (@id,@title,@startdate,@poster,@seen)";
-        SqliteCommand cmd = this._sqltConnection.CreateCommand();
-        cmd.CommandText = query;
-        cmd.Parameters.AddWithValue("@id", id);
-        cmd.Parameters.AddWithValue("@title", title);
-        cmd.Parameters.AddWithValue("@startdate", startYear);
-        cmd.Parameters.AddWithValue("@poster", posterPath);
-        cmd.Parameters.AddWithValue("@seen", seenInt);
+        const string query = "INSERT OR REPLACE INTO Series VALUES (@id,@title,@startdate,@poster,@seen)";
+        int added = 0;
 
-        this._sqltConnection.Open();
-        int added = cmd.ExecuteNonQuery();
-        this._sqltConnection.Close();
-        cmd.Dispose();
+        using (var cmd = this._sqltConnection.CreateCommand())
+        {
+            cmd.CommandText = query;
+            cmd.Parameters.AddWithValue("@id", serie.DatabaseId);
+            cmd.Parameters.AddWithValue("@title", serie.Title);
+            cmd.Parameters.AddWithValue("@startdate", serie.StartYear);
+            cmd.Parameters.AddWithValue("@poster", serie.PosterPath);
+
+            this._sqltConnection.Open();
+            added = cmd.ExecuteNonQuery();
+            this._sqltConnection.Close();
+            cmd.Dispose();
+        }
 
         return added > 0;
     }

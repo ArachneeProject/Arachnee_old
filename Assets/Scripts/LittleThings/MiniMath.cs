@@ -33,14 +33,4 @@ public static class MiniMath
     {
         return Vector3.Angle(watcher.position - target.position, watcher.forward) > 90;
     }
-
-    public static string GetHash(string text)
-    {
-        using (var sha = new System.Security.Cryptography.SHA256Managed())
-        {
-            byte[] textData = System.Text.Encoding.UTF8.GetBytes(text);
-            byte[] hash = sha.ComputeHash(textData);
-            return System.BitConverter.ToString(hash).Replace("-", String.Empty);
-        }
-    }
 }
