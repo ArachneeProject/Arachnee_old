@@ -68,11 +68,7 @@ public class TexturesRetriever : OnlineRetriever
 
     private bool TextureIsOnDisk(string posterPath)
     {
-        if (string.IsNullOrEmpty(posterPath))
-        {
-            return false;
-        }
-        return File.Exists(GetFilePathFromPoster(posterPath));
+        return !string.IsNullOrEmpty(posterPath) && File.Exists(GetFilePathFromPoster(posterPath));
     }
 
     private string GetFilePathFromPoster(string posterPath)

@@ -1,50 +1,22 @@
-﻿using System.Collections;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using SimpleJSON;
-using UnityEngine;
+﻿using SimpleJSON;
 
-public abstract class EntryRetriever : OnlineRetriever
+public abstract class EntryRetriever : GraphElementRetriever
 {
-    protected override IEnumerator RetrieveDataImpl(HashSet<string> identifiers)
+    protected override object BuildResult(JSONNode node)
     {
-        var entryIds = identifiers.Where(id => !string.IsNullOrEmpty(id));
-
-        foreach (var entryId in entryIds)
+        string posterPath = node["poster_path"].Value;
+        if (posterPath == "null")
         {
-            var www = new WWW(GetEntryQuery(entryId));
-            yield return www;
-
-            if (!string.IsNullOrEmpty(www.error))
-            {
-                Debug.LogError(www.error);
-                yield break;
-            }
-
-            var node = JSON.Parse(www.text);
-            if (node == null)
-            {
-                Debug.LogWarning("No result found");
-                yield break;
-            }
-
-            // build the entry
-            string posterPath = node["poster_path"].Value;
-            if (posterPath == "null")
-            {
-                _retrievedData.Add(entryId, Entry.DefaultEntry);
-                yield break;
-            }
-
-            _retrievedData.Add(entryId, BuildEntry(node));
+            return Entry.DefaultEntry;
         }
+
+        return BuildEntry(node);
     }
 
-    protected abstract string GetEntryQuery(string entryId);
     protected abstract Entry BuildEntry(JSONNode node);
-    
-    #region userSearch
+}
+
+#region userSearch
     /*
     
     /// <summary>
@@ -227,4 +199,4 @@ public abstract class EntryRetriever : OnlineRetriever
     }
      */
     #endregion genres
-}
+

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class GraphUI : MonoBehaviour
 {
+    public PhysicalGraphEngine graphEngine;
     public Text selectedEntryName;
     public Button foldupButton;
     public Button maskButton;

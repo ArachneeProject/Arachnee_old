@@ -19,18 +19,18 @@ public abstract class OnlineRetriever
             }
         }
     }
-
+    
     public IEnumerator RetrieveData(HashSet<string> dataIdentifiers)
     {
-        if (_wasAlreadyUsed)
-        {
-            Debug.LogError("Retreiver already used");
-            yield break;
-        }
-        _wasAlreadyUsed = true;
-
         lock (_tinyLock)
         {
+            if (_wasAlreadyUsed)
+            {
+                Debug.LogError("Retreiver already used");
+                yield break;
+            }
+            _wasAlreadyUsed = true;
+
             // hacking hack of hackerz allowing starting a nested coroutine
             var e = RetrieveDataImpl(dataIdentifiers);
             while (e.MoveNext())

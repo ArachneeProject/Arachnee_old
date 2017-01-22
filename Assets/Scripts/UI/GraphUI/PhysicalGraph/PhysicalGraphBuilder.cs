@@ -1,24 +1,22 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class GraphBuilder : MonoBehaviour
+public class PhysicalGraphBuilder : MonoBehaviour
 {
     public int buildingRadius = 50;
     public int maxVertices = 1000;
 
     public PhysicalGraphEngine graphEngine;
-    public GraphUI graphUi;
 
     public PhysicalVertex moviePrefab;
     public PhysicalVertex artistPrefab;
     public PhysicalEdge ActorConnectionPrefab;
     public PhysicalEdge DirectorConnectionPrefab;
 
-    private Dictionary<Type, PhysicalVertex> _vertexAssociation = new Dictionary<Type, PhysicalVertex>();
-    private Dictionary<ConnectionType,PhysicalEdge> _edgeAssociation = new Dictionary<ConnectionType, PhysicalEdge>();
+    private readonly Dictionary<Type, PhysicalVertex> _vertexAssociation = new Dictionary<Type, PhysicalVertex>();
+    private readonly Dictionary<ConnectionType,PhysicalEdge> _edgeAssociation = new Dictionary<ConnectionType, PhysicalEdge>();
 
     private DatabaseDialoger _dbDialoger;
     
@@ -35,9 +33,6 @@ public class GraphBuilder : MonoBehaviour
 
         this.graphEngine.AddPhysicalVertices(physicalVertices);
         this.graphEngine.AddPhysicalEdges(physicalEdges);
-
-        this.graphUi.AddPhysicalVertices(physicalVertices);
-        this.graphUi.AddPhysicalEdges(physicalEdges);
     }
 
     private void InitPrefabAssociation()
@@ -224,64 +219,4 @@ public class GraphBuilder : MonoBehaviour
         return physicalEdges;
     }
 
-    /*
-    
-    /// <summary>
-    /// Retrive poster for each entry
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator retrievePosters()
-    {
-        OnlineRetriever onlret = new OnlineRetriever();
-
-        List<Entry> lowPriorityEntries = new List<Entry>();
-
-        
-        foreach (Entry e in this.GraphManager.Graph.Vertices)
-        {
-            if (e.PosterPath == "null")
-            {
-                e.gameObject.GetComponent<Renderer>().material.mainTexture = Resources.Load(Constants.Res_DefaultImage) as Texture;
-                continue;
-            }
-
-            if (!e.gameObject.activeInHierarchy)
-            {
-                lowPriorityEntries.Add(e);
-                continue;
-            }
-
-            yield return StartCoroutine(onlret.RetrievePoster(e.PosterPath));
-            if (onlret.Texture != null)
-            {
-                e.gameObject.GetComponent<Renderer>().material.mainTexture = onlret.Texture;
-            }
-            else
-            {
-                e.gameObject.GetComponent<Renderer>().material.mainTexture = Resources.Load(Constants.Res_DefaultImage) as Texture;
-            }
-        }
-        
-
-        foreach (Entry e in lowPriorityEntries)
-        {
-            if (e.PosterPath == "null")
-            {
-                e.gameObject.GetComponent<Renderer>().material.mainTexture = Resources.Load(Constants.Res_DefaultImage) as Texture;
-                continue;
-            }
-
-            yield return StartCoroutine(onlret.RetrievePoster(e.PosterPath));
-            if (onlret.Texture != null)
-            {
-                e.gameObject.GetComponent<Renderer>().material.mainTexture = onlret.Texture;
-            }
-            else
-            {
-                e.gameObject.GetComponent<Renderer>().material.mainTexture = Resources.Load(Constants.Res_DefaultImage) as Texture;
-            }
-        }
-    }
-    #endregion Entries
-    */
 }

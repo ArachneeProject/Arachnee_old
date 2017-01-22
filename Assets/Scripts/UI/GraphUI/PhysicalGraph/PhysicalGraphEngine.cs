@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PhysicalGraphEngine : MonoBehaviour
 {
+    public GraphUI graphUI;
     public float coulombRepulsion = 150;
     public float hookeAttraction = 1;
     public float coulombRepulsionSquaredMaxDistance = 10000;
@@ -15,11 +16,13 @@ public class PhysicalGraphEngine : MonoBehaviour
     public void AddPhysicalVertices(IEnumerable<PhysicalVertex> physicalVertices)
     {
         _activeVertices.AddRange(physicalVertices);
+        graphUI.AddPhysicalVertices(physicalVertices);
     }
 
     public void AddPhysicalEdges(IEnumerable<PhysicalEdge> physicalEdges)
     {
         _activeEdges.AddRange(physicalEdges);
+        graphUI.AddPhysicalEdges(physicalEdges);
     }
 
     /// <summary>
