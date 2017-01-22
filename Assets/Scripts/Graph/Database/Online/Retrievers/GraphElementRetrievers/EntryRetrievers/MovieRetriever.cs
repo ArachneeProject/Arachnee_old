@@ -1,13 +1,13 @@
 ﻿using SimpleJSON;
 
-public class MovieRetriever : EntryRetriever
+public class MovieRetriever : GraphElementRetriever
 {
     protected override string GetQuery(string entryId)
     {
         return Constants.movieUrl + entryId + "?" + Constants.apiKey;
     }
 
-    protected override Entry BuildEntry(JSONNode node)
+    protected override object BuildResult(JSONNode node)
     {
         long movieId;
         if (!long.TryParse(node["id"].Value, out movieId))
@@ -15,7 +15,13 @@ public class MovieRetriever : EntryRetriever
             return Entry.DefaultEntry;
         }
         var movie = new Movie(movieId);
-            
+
+        if (node["poster_path"].Value == "null")
+        {
+            return Entry.DefaultEntry;
+        }
+        movie.PosterPath = node["poster_path"].Value;
+
         movie.Title = node["original_title"].Value;
 
         string date = node["release_date"].Value;

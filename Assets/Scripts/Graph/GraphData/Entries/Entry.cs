@@ -28,7 +28,7 @@ public abstract class Entry
         }
         if (entry.GetIdentifier() == DefaultEntry.GetIdentifier())
         {
-            Debug.LogError("Entry was the default entry");
+            Debug.LogWarning("Entry was the default entry");
             return true;
         }
         return false;

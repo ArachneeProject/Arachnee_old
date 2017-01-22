@@ -7,7 +7,7 @@ public abstract class OnlineRetriever
     private readonly object _tinyLock = new object();
     private bool _wasAlreadyUsed = false;
 
-    protected Dictionary<string, object> _retrievedData = new Dictionary<string, object>();
+    private readonly Dictionary<string, object> _retrievedData = new Dictionary<string, object>();
 
     public Dictionary<string, object> RetrievedData
     {
@@ -30,13 +30,12 @@ public abstract class OnlineRetriever
                 yield break;
             }
             _wasAlreadyUsed = true;
-
-            // hacking hack of hackerz allowing starting a nested coroutine
-            var e = RetrieveDataImpl(dataIdentifiers);
-            while (e.MoveNext())
-            {
-                yield return e.Current;
-            }
+        }
+        // hacking hack of hackerz allowing starting a nested coroutine
+        var e = RetrieveDataImpl(dataIdentifiers);
+        while (e.MoveNext())
+        {
+            yield return e.Current;
         }
     }
 

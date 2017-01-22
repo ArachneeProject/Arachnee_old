@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SimpleJSON;
 
-public class CastRetriever : GraphElementRetriever
+public abstract class ArtistMovieConnectionRetriever : GraphElementRetriever
 {
-    protected override string GetQuery(string entryId)
-    {
-        return Constants.movieUrl + entryId + Constants.castQuery + Constants.apiKey;
-    }
+    protected override abstract string GetQuery(string entryId);
 
     protected override object BuildResult(JSONNode node)
     {
@@ -41,4 +37,3 @@ public class CastRetriever : GraphElementRetriever
         return connectedIds;
     }
 }
-

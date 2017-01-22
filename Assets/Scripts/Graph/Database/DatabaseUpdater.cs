@@ -1,50 +1,101 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class DatabaseUpdater : MonoBehaviour
 {
+    public Text bigStep;
+    public Text smallStep;
+
     private DatabaseDialoger _databaseDlg;
+
 	void Start () 
     {
-        _databaseDlg = new DatabaseDialoger();
-	    var movies = _databaseDlg.GetMovies(new HashSet<long>(new long[] { 218 }));
-	    StartCoroutine(UpdateEntry(movies.Select(m => (Entry) m)));
-    }
-	
-    public IEnumerator UpdateEntry(IEnumerable<Entry> entries)
-    {
-        //  processing movies among the given entries
-        //      |
-        //      -- artists connected to these movies
-        
-        var castRetriever = new CastRetriever();
-        yield return StartCoroutine(castRetriever.RetrieveData(new HashSet<string>(
-            entries.OfType<Movie>().Select(e => e.DatabaseId.ToString()))));
-        
-        // data is Dictionary with key:movie and value:(Dictionary with key:artist and value:List of connection types)
-        var data = castRetriever.RetrievedData; 
-
-        foreach (var movieId in data.Keys)
+        if (Application.internetReachability == NetworkReachability.NotReachable)
         {
-            var connections = data[movieId] as Dictionary<string, List<ConnectionType>>;
+            bigStep.text = "Sorry, it looks like your Internet connection is not available.";
+            bigStep.color = Color.red;
 
-            if (connections == null)
+            smallStep.text = "Update aborted.";
+	        return;
+	    }
+
+        _databaseDlg = new DatabaseDialoger();
+
+        StartCoroutine(UpdateEntries(GetEntriesToUpdate()));
+    }
+
+    private IEnumerable<Entry> GetEntriesToUpdate()
+    {
+        return  _databaseDlg.GetArtists(new HashSet<long>(new long[] { 1100 })).Select(a => (Entry) a).Concat( 
+                (_databaseDlg.GetMovies(new HashSet<long>(new long[] { 218 })).Select(m => (Entry) m)));
+    }
+
+    private IEnumerator UpdateEntries(IEnumerable<Entry> entriesToUpdate)
+    {
+        // #switch#
+        bigStep.text = "Processing movies";
+        yield return new WaitForEndOfFrame();
+        yield return StartCoroutine(UpdateEntriesFrom<Movie>(entriesToUpdate.OfType<Movie>()));
+
+        bigStep.text = "Processing artists";
+        yield return new WaitForEndOfFrame();
+        yield return StartCoroutine(UpdateEntriesFrom<Artist>(entriesToUpdate.OfType<Artist>()));
+
+        bigStep.text = "Done!";
+        Application.LoadLevel(Navigation.Graph);
+    }
+
+    private IEnumerator UpdateEntriesFrom<T>(IEnumerable<T> entriesToUpdate) where T : Entry
+    {
+        // #switch#
+        smallStep.text = "Getting connected artists";
+        yield return new WaitForEndOfFrame();
+        yield return StartCoroutine(UpdateEntriesFromTo<T, Artist>(entriesToUpdate));
+
+        smallStep.text = "Getting connected movies";
+        yield return new WaitForEndOfFrame();
+        yield return StartCoroutine(UpdateEntriesFromTo<T, Movie>(entriesToUpdate));
+
+        smallStep.text = "Done!";
+    }
+
+    private IEnumerator UpdateEntriesFromTo<TFrom, TTo>(IEnumerable<TFrom> entriesToUpdate) 
+        where TFrom : Entry where TTo : Entry
+    {
+        var retriever = GraphElementRetriever.GetConnectionRetriever<TFrom, TTo>();
+        yield return StartCoroutine(retriever.RetrieveData(
+            new HashSet<string>(entriesToUpdate.Select(e => e.DatabaseId.ToString()))));
+
+        var data = retriever.RetrievedData;
+
+        foreach (var entryId in data.Keys)
+        {
+            var connectedEntries = data[entryId] as Dictionary<string, List<ConnectionType>>;
+            if (connectedEntries == null)
             {
-                Debug.LogError("Error trying to get artists connected to movie " + movieId);
+                Debug.LogWarning("No connection found from " + typeof(TFrom).Name + " " + entryId + " to " + typeof(TTo).Name);
                 continue;
             }
 
-            // get the Artists connected to the movie
-            var artistRetriever = new ArtistRetriever();
-            yield return StartCoroutine(artistRetriever.RetrieveData(new HashSet<string>(
-                connections.Keys.Where(k => connections[k].Contains(ConnectionType.Actor) 
-                                         || connections[k].Contains(ConnectionType.Director)))));
-            var artists = artistRetriever.RetrievedData.Values.Where(a => !Entry.IsNullOrDefault((Entry) a));
+            var oppositeRetriever = GraphElementRetriever.GetEntryRetriever<TTo>();
 
-            Debug.Log("Movie " + movieId + " is connected to " + string.Join(",", artists.Select(a => a.ToString()).ToArray()));
+            yield return StartCoroutine(oppositeRetriever.RetrieveData(
+                new HashSet<string>(connectedEntries.Keys)));
+            var oppositeEntries = oppositeRetriever.RetrievedData.Values.OfType<Entry>().Where(e => !Entry.IsNullOrDefault(e));
+
+            foreach (var oppositeEntry in oppositeEntries)
+            {
+                this._databaseDlg.InsertOrUpdateEntry<TTo>(oppositeEntry);
+
+                foreach (var connectionType in connectedEntries[oppositeEntry.DatabaseId.ToString()])
+                {
+                    this._databaseDlg.InsertConnection<TFrom,TTo>(long.Parse(entryId), oppositeEntry.DatabaseId, connectionType);
+                }
+            }
         }
     }
-    
+
 }

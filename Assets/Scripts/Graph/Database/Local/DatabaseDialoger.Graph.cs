@@ -42,6 +42,7 @@ public partial class DatabaseDialoger
             return Entry.DefaultEntry;
         }
 
+        // #switch#
         // movie
         if (identifierTypeStr == typeof(Movie).Name)
         {
@@ -149,6 +150,7 @@ public partial class DatabaseDialoger
     /// </summary>
     public IDictionary<Entry, IEnumerable<ConnectionType>> GetEntriesConnectedTo(Entry entry)
     {
+        // #switch#
         if (Entry.IsNullOrDefault(entry))
         {
             return new Dictionary<Entry, IEnumerable<ConnectionType>>();
@@ -249,6 +251,7 @@ public partial class DatabaseDialoger
     /// </summary>
     private IEnumerable<Entry> GetEntriesOppositeOf<T>(IEnumerable<long> entryIds, ConnectionType connectionType)
     {
+        // #switch#
         if (typeof(T) == typeof(Movie))
         {
             switch (connectionType)
@@ -275,6 +278,7 @@ public partial class DatabaseDialoger
     #region databaseFields
     private string GetOppositeIdFieldOf<T>(ConnectionType connectionType) where T : Entry
     {
+        // #switch#
         if (typeof(T) == typeof(Movie))
         {
             switch (connectionType)
@@ -433,6 +437,23 @@ public partial class DatabaseDialoger
     #region insertData
 
     #region entries
+
+    public bool InsertOrUpdateEntry<T>(Entry e)
+    {
+        // #switch#
+        if (typeof (T) == typeof (Movie))
+        {
+            return InsertOrUpdateMovie((Movie) e);
+        }
+        if (typeof (T) == typeof (Artist))
+        {
+            return InsertOrUpdateArtist((Artist) e);
+        }
+
+        Debug.LogError(typeof(T).Name + " is not handled as an Entry type");
+        return false;
+    }
+
     /// <summary>
     /// Insert a new movie or update an existing one
     /// </summary>
@@ -503,7 +524,7 @@ public partial class DatabaseDialoger
             cmd.Parameters.AddWithValue("@id", artist.DatabaseId);
             cmd.Parameters.AddWithValue("@firstName", artist.FirstName);
             cmd.Parameters.AddWithValue("@lastName", artist.LastName);
-            cmd.Parameters.AddWithValue("@poster", artist.LastName);
+            cmd.Parameters.AddWithValue("@poster", artist.PosterPath);
 
             this._sqltConnection.Open();
             added = cmd.ExecuteNonQuery();
@@ -516,18 +537,65 @@ public partial class DatabaseDialoger
     #endregion entries
 
     #region connections
+
+    public bool InsertConnection<TFrom, TTo>(long fromEntryId, long toEntryId, ConnectionType connectionType) where TFrom : Entry where TTo : Entry
+    {
+        // #switch#
+        if (typeof (TFrom) == typeof (Movie))
+        {
+            if (typeof (TTo) == typeof (Artist))
+            {
+                return InsertArtistToMovieConnection(toEntryId, fromEntryId, connectionType);
+            }
+
+            Debug.LogError("Connection from Movie to " + typeof(TTo) + " is not handled.");
+            return false;
+        }
+        if (typeof(TFrom) == typeof(Artist))
+        {
+            if (typeof(TTo) == typeof(Movie))
+            {
+                return InsertArtistToMovieConnection(fromEntryId, toEntryId, connectionType);
+            }
+
+            Debug.LogError("Connection from Artist to " + typeof(TTo) + " is not handled.");
+            return false;
+        }
+
+        Debug.LogError(typeof(TFrom) + " is not handled as an entry type.");
+        return false;
+    }
+
+    /// <summary>
+    /// Insert a new connection between an artist and a movie
+    /// </summary>
+    public bool InsertArtistToMovieConnection(long artistId, long movieId, ConnectionType connectionType)
+    {
+        // #switch#
+        switch (connectionType)
+        {
+            case ConnectionType.Actor:
+                return this.InsertActorConnection(artistId, movieId);
+            case ConnectionType.Director:
+                return this.InsertDirectorConnection(artistId, movieId);
+            default:
+                Debug.LogError(connectionType + " is not handled as a connection between an artist and a movie.");
+                return false;
+        }
+    }
+
     /// <summary>
     /// Insert a new actor connection
     /// </summary>
-    public bool InsertActorConnection(Artist artist, Movie movie)
+    public bool InsertActorConnection(long artistId, long movieId)
     {
         int added = 0;
         const string query = "INSERT OR IGNORE INTO Actors VALUES (@idArt,@idMv)";
         using (var cmd = this._sqltConnection.CreateCommand())
         {
             cmd.CommandText = query;
-            cmd.Parameters.AddWithValue("@idArt", artist.DatabaseId);
-            cmd.Parameters.AddWithValue("@idMv", movie.DatabaseId);
+            cmd.Parameters.AddWithValue("@idArt", artistId);
+            cmd.Parameters.AddWithValue("@idMv", movieId);
 
             this._sqltConnection.Open();
             added = cmd.ExecuteNonQuery();
@@ -540,15 +608,15 @@ public partial class DatabaseDialoger
     /// <summary>
     /// Insert a new director connection
     /// </summary>
-    public bool InsertDirectorConnection(Artist artist, Movie movie)
+    public bool InsertDirectorConnection(long artistId, long movieId)
     {
         int added = 0;
         const string query = "INSERT OR IGNORE INTO Directors VALUES (@idArt,@idMv)";
         using (var cmd = this._sqltConnection.CreateCommand())
         {
             cmd.CommandText = query;
-            cmd.Parameters.AddWithValue("@idArt", artist.DatabaseId);
-            cmd.Parameters.AddWithValue("@idMv", movie.DatabaseId);
+            cmd.Parameters.AddWithValue("@idArt", artistId);
+            cmd.Parameters.AddWithValue("@idMv", movieId);
 
             this._sqltConnection.Open();
             added = cmd.ExecuteNonQuery();

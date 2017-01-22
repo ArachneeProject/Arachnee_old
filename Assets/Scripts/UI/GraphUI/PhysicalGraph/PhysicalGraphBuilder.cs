@@ -37,6 +37,7 @@ public class PhysicalGraphBuilder : MonoBehaviour
 
     private void InitPrefabAssociation()
     {
+        // #switch#
         _vertexAssociation.Add(typeof(Movie), moviePrefab);
         _vertexAssociation.Add(typeof(Artist), artistPrefab);
 

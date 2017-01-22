@@ -67,9 +67,9 @@
     </TypeIdentifier>
   </Class>
   <Class Name="CastRetriever" Collapsed="true">
-    <Position X="12.25" Y="9.75" Width="1.5" />
+    <Position X="12.5" Y="11.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
       <FileName>Assets\Scripts\Graph\Database\Online\ConnectionRetrievers\CastRetriever.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -85,6 +85,20 @@
     <TypeIdentifier>
       <HashCode>EhAMAABAGAIABQAJAAhgQQQAAADw0ABAAABAAAAQAYQ=</HashCode>
       <FileName>Assets\Scripts\Graph\Database\Local\DatabaseDialoger.Browser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArtistMovieConnectionRetriever" Collapsed="true">
+    <Position X="12.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Assets\Scripts\Graph\Database\Online\ConnectionRetrievers\ArtistMovieConnectionRetriever.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CreditsRetriever" Collapsed="true">
+    <Position X="14.25" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Assets\Scripts\Graph\Database\Online\ConnectionRetrievers\CreditsRetriever.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Enum Name="ConnectionType">

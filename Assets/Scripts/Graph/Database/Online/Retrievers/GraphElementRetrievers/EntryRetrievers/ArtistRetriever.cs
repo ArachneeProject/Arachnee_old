@@ -2,14 +2,14 @@
 using SimpleJSON;
 using UnityEngine;
 
-public class ArtistRetriever : EntryRetriever
+public class ArtistRetriever : GraphElementRetriever
 {
     protected override string GetQuery(string entryId)
     {
         return Constants.personUrl + entryId + "?" + Constants.apiKey;
     }
 
-    protected override Entry BuildEntry(JSONNode node)
+    protected override object BuildResult(JSONNode node)
     {
         long artistId;
         if (!long.TryParse(node["id"].Value, out artistId))
@@ -17,9 +17,14 @@ public class ArtistRetriever : EntryRetriever
             Debug.LogError("Unable to parse artist id");
             return Entry.DefaultEntry;
         }
-
         var artist = new Artist(artistId);
-        
+
+        if (node["profile_path"].Value == "null")
+        {
+            return Entry.DefaultEntry;
+        }
+        artist.PosterPath = node["profile_path"].Value;
+
         var name = node["name"].Value;
         int idx = name.LastIndexOf(' ');
         if (idx < 0)
@@ -30,8 +35,9 @@ public class ArtistRetriever : EntryRetriever
         else
         {
             artist.FirstName = name.Substring(0, idx);
-            artist.FirstName = name.Substring(idx + 1);
+            artist.LastName = name.Substring(idx + 1);
         }
+        
         return artist;
     }
 }

@@ -18,7 +18,7 @@ public class TexturesRetriever : OnlineRetriever
             {
                 var texture = new Texture2D(2, 2);
                 texture.LoadImage(File.ReadAllBytes(GetFilePathFromPoster(path)));
-                _retrievedData.Add(path, texture);
+                RetrievedData.Add(path, texture);
             }
             catch (Exception e)
             {
@@ -27,7 +27,7 @@ public class TexturesRetriever : OnlineRetriever
         }
 
         // load texture from internet
-        foreach (var path in posterPaths.Where(p => !_retrievedData.Keys.Contains(p)))
+        foreach (var path in posterPaths.Where(p => !RetrievedData.Keys.Contains(p)))
         {
             using (var www = new WWW(Constants.posterUrl + path))
             {
@@ -42,7 +42,7 @@ public class TexturesRetriever : OnlineRetriever
                 try
                 {
                     File.WriteAllBytes(GetFilePathFromPoster(path), www.texture.EncodeToJPG());
-                    _retrievedData.Add(path, www.texture);
+                    RetrievedData.Add(path, www.texture);
                 }
                 catch (Exception e)
                 {
@@ -52,9 +52,9 @@ public class TexturesRetriever : OnlineRetriever
         }
 
         // load default texture
-        foreach (var path in posterPaths.Where(p => !_retrievedData.Keys.Contains(p)))
+        foreach (var path in posterPaths.Where(p => !RetrievedData.Keys.Contains(p)))
         {
-            _retrievedData.Add(path, GetDefaultTexture());
+            RetrievedData.Add(path, GetDefaultTexture());
         }
     }
     
