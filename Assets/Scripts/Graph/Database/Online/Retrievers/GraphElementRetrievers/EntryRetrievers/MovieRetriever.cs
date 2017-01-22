@@ -4,17 +4,12 @@ public class MovieRetriever : GraphElementRetriever
 {
     protected override string GetQuery(string entryId)
     {
-        return Constants.movieUrl + entryId + "?" + Constants.apiKey;
+        return Constants.MovieUrl + entryId + "?" + Constants.ApiKey;
     }
 
     protected override object BuildResult(JSONNode node)
     {
-        long movieId;
-        if (!long.TryParse(node["id"].Value, out movieId))
-        {
-            return Entry.DefaultEntry;
-        }
-        var movie = new Movie(movieId);
+        var movie = new Movie(long.Parse(node["id"]));
 
         if (node["poster_path"].Value == "null")
         {

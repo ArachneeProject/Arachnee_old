@@ -6,18 +6,12 @@ public class ArtistRetriever : GraphElementRetriever
 {
     protected override string GetQuery(string entryId)
     {
-        return Constants.personUrl + entryId + "?" + Constants.apiKey;
+        return Constants.ArtistUrl + entryId + "?" + Constants.ApiKey;
     }
 
     protected override object BuildResult(JSONNode node)
     {
-        long artistId;
-        if (!long.TryParse(node["id"].Value, out artistId))
-        {
-            Debug.LogError("Unable to parse artist id");
-            return Entry.DefaultEntry;
-        }
-        var artist = new Artist(artistId);
+        var artist = new Artist(long.Parse(node["id"].Value));
 
         if (node["profile_path"].Value == "null")
         {

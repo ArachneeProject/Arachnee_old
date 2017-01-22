@@ -29,7 +29,7 @@ public class TexturesRetriever : OnlineRetriever
         // load texture from internet
         foreach (var path in posterPaths.Where(p => !RetrievedData.Keys.Contains(p)))
         {
-            using (var www = new WWW(Constants.posterUrl + path))
+            using (var www = new WWW(Constants.PosterUrl + path))
             {
                 yield return www;
                 if (!string.IsNullOrEmpty(www.error))
@@ -63,7 +63,7 @@ public class TexturesRetriever : OnlineRetriever
     /// </summary>
     public static Texture2D GetDefaultTexture()
     {
-        return Resources.Load(Constants.Res_DefaultImage) as Texture2D;
+        return Resources.Load(Constants.DefaultImageName) as Texture2D;
     }
 
     private bool TextureIsOnDisk(string posterPath)

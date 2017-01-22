@@ -2,6 +2,6 @@
 {
     protected override string GetQuery(string entryId)
     {
-        return Constants.personUrl + entryId + Constants.creditsQuery + Constants.apiKey;
+        return Constants.ArtistUrl + entryId + Constants.CreditsQuery + Constants.ApiKey;
     }
 }

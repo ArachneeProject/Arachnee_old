@@ -2,7 +2,7 @@
 {
     protected override string GetQuery(string entryId)
     {
-        return Constants.movieUrl + entryId + Constants.castQuery + Constants.apiKey;
+        return Constants.MovieUrl + entryId + Constants.CastQuery + Constants.ApiKey;
     }
 }
 

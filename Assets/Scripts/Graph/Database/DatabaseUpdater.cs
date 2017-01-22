@@ -33,8 +33,14 @@ public class DatabaseUpdater : MonoBehaviour
                 (_databaseDlg.GetMovies(new HashSet<long>(new long[] { 218 })).Select(m => (Entry) m)));
     }
 
-    private IEnumerator UpdateEntries(IEnumerable<Entry> entriesToUpdate)
+    /// <summary>
+    /// Update the given entries
+    /// </summary>
+    public IEnumerator UpdateEntries(IEnumerable<Entry> entriesToUpdate, bool forceUpdate = false)
     {
+        entriesToUpdate = entriesToUpdate.Where(e => !Entry.IsNullOrDefault(e) 
+                            && (forceUpdate || !_databaseDlg.EntryIsUpToDate(e.GetIdentifier()))).ToList();
+
         // #switch#
         bigStep.text = "Processing movies";
         yield return new WaitForEndOfFrame();
@@ -44,7 +50,19 @@ public class DatabaseUpdater : MonoBehaviour
         yield return new WaitForEndOfFrame();
         yield return StartCoroutine(UpdateEntriesFrom<Artist>(entriesToUpdate.OfType<Artist>()));
 
+        // mark the entries up to date
+        bigStep.text = "Almost there...";
+        smallStep.text = "Marking entries as up to date...";
+        yield return new WaitForEndOfFrame();
+        foreach (var entry in entriesToUpdate)
+        {
+            this._databaseDlg.InsertUpToDate(entry.GetIdentifier());
+        }
+
+        // load next scene
         bigStep.text = "Done!";
+        smallStep.text = "";
+        yield return new WaitForEndOfFrame();
         Application.LoadLevel(Navigation.Graph);
     }
 
@@ -97,5 +115,4 @@ public class DatabaseUpdater : MonoBehaviour
             }
         }
     }
-
 }

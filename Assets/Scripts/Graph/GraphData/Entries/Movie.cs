@@ -17,16 +17,7 @@ public class Movie : Entry
         }
     }
 
-    public int Plot
-    {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
-        set
-        {
-        }
-    }
+    public string Overview { get; set; }
     
     public int Rating
     {

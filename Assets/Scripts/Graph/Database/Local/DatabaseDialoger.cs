@@ -676,4 +676,50 @@ public class DatabaseDialoger
 
     #endregion insertData
 
+    #region upToDate
+    /// <summary>
+    /// add the entry identifier as Up To Date
+    /// </summary>
+    public bool InsertUpToDate(string entryIdentifier)
+    {
+        int added = 0;
+        const string query = "INSERT OR REPLACE INTO EntriesUpToDate VALUES (@entryId)";
+        using (var cmd = this._sqltConnection.CreateCommand())
+        {
+            cmd.CommandText = query;
+            cmd.Parameters.AddWithValue("@entryId", entryIdentifier);
+
+            this._sqltConnection.Open();
+            added = cmd.ExecuteNonQuery();
+            this._sqltConnection.Close();
+            cmd.Dispose();
+        }
+        return added > 0;
+    }
+
+    /// <summary>
+    /// return wether or not the entry is up to date
+    /// </summary>
+    public bool EntryIsUpToDate(string entryIdentifier)
+    {
+        bool upToDate = false;
+        const string query = "SELECT * FROM EntriesUpToDate WHERE entryId=@entryId";
+        using (var cmd = this._sqltConnection.CreateCommand())
+        {
+            cmd.CommandText = query;
+            cmd.Parameters.AddWithValue("@entryId", entryIdentifier);
+
+            this._sqltConnection.Open();
+            using (var reader = cmd.ExecuteReader())
+            {
+                upToDate = reader.Read();
+
+                this._sqltConnection.Close();
+                reader.Dispose();
+            }
+            cmd.Dispose();
+        }
+        return upToDate;
+    }
+    #endregion upToDate
 }

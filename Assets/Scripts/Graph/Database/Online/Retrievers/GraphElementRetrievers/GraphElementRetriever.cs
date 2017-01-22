@@ -37,6 +37,9 @@ public abstract class GraphElementRetriever : OnlineRetriever
     protected abstract string GetQuery(string entryId);
     protected abstract object BuildResult(JSONNode node);
 
+    /// <summary>
+    /// Return a new retriever corresponding to the given T
+    /// </summary>
     public static OnlineRetriever GetEntryRetriever<T>()
     {
         // #switch#
@@ -53,30 +56,36 @@ public abstract class GraphElementRetriever : OnlineRetriever
         return new EmptyRetriever();
     }
 
-    public static OnlineRetriever GetConnectionRetriever<T1, T2>()
+    /// <summary>
+    /// Return a new retriever corresponding to a connection from the given TFrom to the given TTo
+    /// </summary>
+    public static OnlineRetriever GetConnectionRetriever<TFrom, TTo>()
     {
         // #switch#
-        if (typeof (T1) == typeof (Movie))
+        if (typeof (TFrom) == typeof (Movie))
         {
-            if (typeof (T2) == typeof (Artist))
+            if (typeof (TTo) == typeof (Artist))
             {
                 return new CastRetriever();
             }
         }
-        else if (typeof (T1) == typeof (Artist))
+        else if (typeof (TFrom) == typeof (Artist))
         {
-            if (typeof(T2) == typeof(Movie))
+            if (typeof(TTo) == typeof(Movie))
             {
                 return new CreditsRetriever();
             }
         }
 
         Debug.LogWarning("No retriever found for connection" +
-                       " between " + typeof(T1) +
-                       " and " + typeof(T2));
+                       " between " + typeof(TFrom) +
+                       " and " + typeof(TTo));
         return new EmptyRetriever();
     }
 
+    /// <summary>
+    /// Return a new retriever corresponding to the opposite type in a connection including the given type T
+    /// </summary>
     public static OnlineRetriever GetEntryRetrieverOppositeOf<T>(ConnectionType connectionType)
     {
         // #switch#
@@ -107,5 +116,29 @@ public abstract class GraphElementRetriever : OnlineRetriever
         Debug.LogError(typeof(T) + " is not handled as an entry type.");
         return new EmptyRetriever();
     }
+
+    /// <summary>
+    /// Return a new retriever corresponding to the given T
+    /// </summary>
+    public static OnlineRetriever GetEntrySearchRetriever<T>()
+    {
+        // #switch#
+        if (typeof(T) == typeof(Movie))
+        {
+            return new MovieSearchRetriever();
+        }
+        if (typeof(T) == typeof(Artist))
+        {
+            return new ArtistSearchRetriever();
+        }
+        if (typeof(T) == typeof(Serie))
+        {
+            return new SerieSearchRetriever();
+        }
+
+        Debug.LogWarning(typeof(T) + " is not handled as an entry type.");
+        return new EmptyRetriever();
+    }
+
 }
 
