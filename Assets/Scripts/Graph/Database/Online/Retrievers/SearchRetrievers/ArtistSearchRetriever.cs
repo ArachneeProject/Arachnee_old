@@ -5,7 +5,7 @@ public class ArtistSearchRetriever : GraphElementRetriever
 {
     protected override string GetQuery(string entryId)
     {
-        return Constants.ArtistSearchUrl + entryId + "&" + Constants.ApiKey;
+        return Constants.ArtistSearchUrl + entryId + "&" + Credentials.ApiKey;
     }
 
     protected override object BuildResult(JSONNode node)

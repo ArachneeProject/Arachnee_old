@@ -14,7 +14,7 @@ public class EntryButtonBuilder : MonoBehaviour
     /// <summary>
     /// Instantiate some Entry Buttons from the given queries
     /// </summary>
-    IEnumerator BuidButtonsFromQueries<T>(IEnumerable<string> queries)
+    public IEnumerator BuidButtonsFromQueries<T>(IEnumerable<string> queries)
     {
         var retriever = GraphElementRetriever.GetEntrySearchRetriever<T>();
         yield return StartCoroutine(retriever.RetrieveData(new HashSet<string>(queries)));

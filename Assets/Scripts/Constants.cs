@@ -26,9 +26,7 @@ public class Constants
     
     public const string CastQuery = "/credits?";
     public const string CreditsQuery = "/movie_credits?";
-
-    public const string ApiKey = "api_key=The Skeleton Key";
-
+    
     // search example https://api.themoviedb.org/3/search/movie?query=cube&api_key= x x x
     // poster example http://image.tmdb.org/t/p/w500/u50r6chJGO2iqxVAvtQ07obiCkB.jpg
     // movie example https://api.themoviedb.org/3/movie/137?api_key= x x x

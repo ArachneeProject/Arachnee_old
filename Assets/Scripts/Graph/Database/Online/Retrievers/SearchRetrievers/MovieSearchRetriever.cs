@@ -8,7 +8,7 @@ public class MovieSearchRetriever : GraphElementRetriever
 {
     protected override string GetQuery(string entryId)
     {
-        return Constants.MovieSearchUrl + entryId + "&" + Constants.ApiKey;
+        return Constants.MovieSearchUrl + entryId + "&" + Credentials.ApiKey;
     }
 
     protected override object BuildResult(JSONNode node)
