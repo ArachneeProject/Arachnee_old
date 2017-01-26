@@ -55,6 +55,7 @@ public class Movie : Entry
         {
             {"id_movie", this.DatabaseId},
             {"title", this.Title},
+            {"year", this.Year},
             {"poster_path", this.PosterPath}
         };
     }
@@ -63,6 +64,7 @@ public class Movie : Entry
     {
         this.DatabaseId = (long) data["id_movie"];
         this.Title = (string) data["title"];
+        this.Year = (int) (long) data["year"];
         this.PosterPath = (string) data["poster_path"];
     }
 
@@ -88,5 +90,30 @@ public class Movie : Entry
         }
         Debug.LogWarning("Movie type is not linked to any other type by " + connectionType + " connection");
         return typeof (object);
+    }
+
+    public override OnlineRetriever GetConnectionRetriever(ConnectionType connectionType)
+    {
+        switch (connectionType)
+        {
+            case ConnectionType.Actor:
+                return new ActorRetriever(Constants.MovieUrl, Constants.CastQuery);
+            case ConnectionType.Director:
+                return new DirectorRetriever(Constants.MovieUrl, Constants.CastQuery);
+        }
+        Debug.LogWarning("Movie type is not linked to any other type by " + connectionType + " connection");
+        return new EmptyRetriever();
+    }
+
+    public override OnlineRetriever GetOppositeEntryRetriever(ConnectionType connectionType)
+    {
+        switch (connectionType)
+        {
+            case ConnectionType.Actor:
+            case ConnectionType.Director:
+                return new ArtistRetriever();
+        }
+        Debug.LogWarning("Movie type is not linked to any other type by " + connectionType + " connection");
+        return new EmptyRetriever();
     }
 }

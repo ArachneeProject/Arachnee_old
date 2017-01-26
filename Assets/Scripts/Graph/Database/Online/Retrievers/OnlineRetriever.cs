@@ -31,7 +31,7 @@ public abstract class OnlineRetriever
             }
             _wasAlreadyUsed = true;
         }
-        // hacking hack of hackerz allowing starting a nested coroutine
+        // hacking hack of hackerz allowing to start a nested coroutine
         var e = RetrieveDataImpl(dataIdentifiers);
         while (e.MoveNext())
         {

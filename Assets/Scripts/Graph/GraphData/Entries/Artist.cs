@@ -45,7 +45,7 @@ public class Artist : Entry
         {
             {"id_artist", this.DatabaseId},
             {"first_name", this.FirstName},
-            {"last_name", this.FirstName},
+            {"last_name", this.LastName},
             {"poster_path", this.PosterPath}
         };
     }
@@ -80,5 +80,30 @@ public class Artist : Entry
         }
         Debug.LogWarning("Artist type is not linked to any other type by " + connectionType + " connection");
         return typeof(object);
+    }
+
+    public override OnlineRetriever GetConnectionRetriever(ConnectionType connectionType)
+    {
+        switch (connectionType)
+        {
+            case ConnectionType.Actor:
+                return new ActorRetriever(Constants.ArtistUrl, Constants.CreditsQuery);
+            case ConnectionType.Director:
+                return new DirectorRetriever(Constants.ArtistUrl, Constants.CreditsQuery);
+        }
+        Debug.LogWarning("Artist type is not linked to any other type by " + connectionType + " connection");
+        return new EmptyRetriever();
+    }
+
+    public override OnlineRetriever GetOppositeEntryRetriever(ConnectionType connectionType)
+    {
+        switch (connectionType)
+        {
+            case ConnectionType.Actor:
+            case ConnectionType.Director:
+                return new MovieRetriever();
+        }
+        Debug.LogWarning("Artist type is not linked to any other type by " + connectionType + " connection");
+        return new EmptyRetriever();
     }
 }

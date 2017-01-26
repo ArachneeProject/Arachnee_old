@@ -224,12 +224,37 @@ public class DatabaseDialoger
     #region insertOrUpdate
 
     /// <summary>
+    /// Insert new entries or update existing ones
+    /// </summary>
+    public bool InsertOrUpdate(IEnumerable<Entry> entries)
+    {
+        bool result = true;
+        foreach (var movie in entries.OfType<Movie>())
+        {
+            result = result && InsertOrUpdate<Movie>(movie);
+        }
+        foreach (var artist in entries.OfType<Artist>())
+        {
+            result = result && InsertOrUpdate<Artist>(artist);
+        }
+
+        foreach (var unhandledEntry in entries.Where(e => e.GetType() != typeof(Movie) 
+                                                && e.GetType() != typeof(Artist)))
+        {
+            Debug.LogError(unhandledEntry + " (" + unhandledEntry.GetType().Name + ") is not handled");
+        }
+
+        return result;
+    }
+
+    /// <summary>
     /// Insert a new entry or update an existing one
     /// </summary>
     public bool InsertOrUpdate<T>(Entry entry)
     {
         if (Entry.IsNullOrDefault(entry))
         {
+            Debug.LogError("You tired to add the default entry");
             return false;
         }
 
@@ -245,6 +270,7 @@ public class DatabaseDialoger
         var serializedEntry = entry.Serialize();
 
         string query = "INSERT OR REPLACE INTO " + entryAttribute.TableName +
+                       "(" + string.Join(",",serializedEntry.Keys.ToArray()) + ")" +
                        " VALUES (" + string.Join(",", serializedEntry.Keys.Select(f => "@" + f).ToArray()) + ")";
 
         using (var cmd = this._sqltConnection.CreateCommand())
@@ -272,6 +298,7 @@ public class DatabaseDialoger
     {
         if (Entry.IsNullOrDefault(fromEntry) || Entry.IsNullOrDefault(toEntry))
         {
+            Debug.LogError("You tired to add the default entry");
             return false;
         }
 
@@ -294,7 +321,7 @@ public class DatabaseDialoger
         // execute query
         string query = "INSERT OR IGNORE INTO " + this.GetTableName(connectionType) +
                        "(" + fromAttribute.IdFieldName + "," + toAttribute.IdFieldName + ")" +
-                       " VALUES (@" + fromAttribute.IdFieldName + ",@" + toAttribute + ")";
+                       " VALUES (@" + fromAttribute.IdFieldName + ",@" + toAttribute.IdFieldName + ")";
 
         Debug.Log("Inserting " + connectionType + " from " + fromEntry + " to " + toEntry + " with query " + query);
 
@@ -342,6 +369,9 @@ public class DatabaseDialoger
     /// </summary>
     public bool EntryIsUpToDate(string entryIdentifier)
     {
+        Debug.LogWarning("assuming " + entryIdentifier + " is not up to date");
+        return false;
+
         bool upToDate = false;
         const string query = "SELECT entryId FROM EntriesUpToDate WHERE entryId=@entryId LIMIT 1";
         using (var cmd = this._sqltConnection.CreateCommand())

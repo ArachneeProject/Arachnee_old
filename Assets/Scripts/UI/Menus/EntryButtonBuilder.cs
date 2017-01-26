@@ -16,6 +16,8 @@ public class EntryButtonBuilder : MonoBehaviour
     /// </summary>
     public IEnumerator BuidButtonsFromQueries<T>(IEnumerable<string> queries)
     {
+        yield break;
+        /*
         var retriever = GraphElementRetriever.GetEntrySearchRetriever<T>();
         yield return StartCoroutine(retriever.RetrieveData(new HashSet<string>(queries)));
 
@@ -45,6 +47,7 @@ public class EntryButtonBuilder : MonoBehaviour
                 yield return StartCoroutine(BuildEntryButton(entry));
             }
         }
+        */
     }
 
     /// <summary>

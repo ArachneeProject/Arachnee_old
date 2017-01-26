@@ -19,7 +19,6 @@ public class MovieSearchRetriever : GraphElementRetriever
             return Entry.DefaultEntry;
         }
         var movie = new Movie(movieId);
-
         if (node["poster_path"].Value == "null")
         {
             return Entry.DefaultEntry;

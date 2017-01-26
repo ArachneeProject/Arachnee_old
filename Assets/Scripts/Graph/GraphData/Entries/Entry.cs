@@ -33,7 +33,7 @@ public abstract class Entry
         }
         if (entry.DatabaseId == DefaultId)
         {
-            Debug.LogError("Entry has the default id");
+            Debug.LogError("Entry " + entry + " has the default id");
             return true;
         }
         if (entry.GetIdentifier() == DefaultEntry.GetIdentifier())
@@ -60,4 +60,6 @@ public abstract class Entry
 
     public abstract IEnumerable<Entry> GetOppositeEntries(ConnectionType connectionType, HashSet<long> oppositeIds, DatabaseDialoger database);
     public abstract Type GetOppositeOf(ConnectionType connectionType);
+    public abstract OnlineRetriever GetConnectionRetriever(ConnectionType connectionType);
+    public abstract OnlineRetriever GetOppositeEntryRetriever(ConnectionType connectionType);
 }

@@ -38,5 +38,15 @@ public class Serie : Entry
     {
         throw new NotImplementedException();
     }
+
+    public override OnlineRetriever GetConnectionRetriever(ConnectionType connectionType)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override OnlineRetriever GetOppositeEntryRetriever(ConnectionType connectionType)
+    {
+        throw new NotImplementedException();
+    }
 }
 

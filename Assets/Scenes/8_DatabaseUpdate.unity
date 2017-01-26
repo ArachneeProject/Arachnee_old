@@ -113,10 +113,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 96928554}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cae9aa8463fc57145a108c22ce84c4e7, type: 3}
+  m_Script: {fileID: 11500000, guid: 23cbbbc870b2e4b4e84afbb3a984f315, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: -3
+  rotationSpeed: -5
   axis: {x: 0, y: 0, z: 1}
 --- !u!114 &96928556
 MonoBehaviour:
@@ -186,7 +186,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 493429384}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d222fd7df989ce4e89ad2a5269843c5, type: 3}
+  m_Script: {fileID: 11500000, guid: 33dee16133c5ec046ae3737ad65efc52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bigStep: {fileID: 1134789442}

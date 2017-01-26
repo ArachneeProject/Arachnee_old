@@ -1,4 +1,5 @@
 ﻿using SimpleJSON;
+using UnityEngine;
 
 public class MovieRetriever : GraphElementRetriever
 {
@@ -9,16 +10,14 @@ public class MovieRetriever : GraphElementRetriever
 
     protected override object BuildResult(JSONNode node)
     {
-        var movie = new Movie(long.Parse(node["id"]));
-
         if (node["poster_path"].Value == "null")
         {
             return Entry.DefaultEntry;
         }
+        var movie = new Movie(long.Parse(node["id"].Value));
+        
         movie.PosterPath = node["poster_path"].Value;
-
         movie.Title = node["original_title"].Value;
-
         string date = node["release_date"].Value;
         if (date.Length >= 4)
         {

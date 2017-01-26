@@ -11,12 +11,11 @@ public class ArtistRetriever : GraphElementRetriever
 
     protected override object BuildResult(JSONNode node)
     {
-        var artist = new Artist(long.Parse(node["id"].Value));
-
         if (node["profile_path"].Value == "null")
         {
             return Entry.DefaultEntry;
         }
+        var artist = new Artist(long.Parse(node["id"].Value));
         artist.PosterPath = node["profile_path"].Value;
 
         var name = node["name"].Value;
