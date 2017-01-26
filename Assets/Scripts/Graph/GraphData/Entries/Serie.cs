@@ -18,5 +18,25 @@ public class Serie : Entry
     {
         return this.Title;
     }
+
+    public override Dictionary<string, object> Serialize()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void Deserialize(Dictionary<string, object> data)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override IEnumerable<Entry> GetOppositeEntries(ConnectionType connectionType, HashSet<long> oppositeIds, DatabaseDialoger database)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override Type GetOppositeOf(ConnectionType connectionType)
+    {
+        throw new NotImplementedException();
+    }
 }
 

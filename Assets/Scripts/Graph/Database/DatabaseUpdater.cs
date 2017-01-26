@@ -10,7 +10,7 @@ public class DatabaseUpdater : MonoBehaviour
     public Text smallStep;
 
     private DatabaseDialoger _databaseDlg;
-
+    /*
 	void Start () 
     {
         if (Application.internetReachability == NetworkReachability.NotReachable)
@@ -29,8 +29,8 @@ public class DatabaseUpdater : MonoBehaviour
 
     private IEnumerable<Entry> GetEntriesToUpdate()
     {
-        return  _databaseDlg.GetArtists(new HashSet<long>(new long[] { 1100 })).Select(a => (Entry) a).Concat( 
-                (_databaseDlg.GetMovies(new HashSet<long>(new long[] { 218 })).Select(m => (Entry) m)));
+        return  _databaseDlg.GetEntries<Artist>(new HashSet<long>(new long[] { 1100 })).Select(a => (Entry) a).Concat( 
+                (_databaseDlg.GetEntries<Movie>(new HashSet<long>(new long[] { 218 })).Select(m => (Entry) m)));
     }
 
     /// <summary>
@@ -115,4 +115,5 @@ public class DatabaseUpdater : MonoBehaviour
             }
         }
     }
+    */
 }

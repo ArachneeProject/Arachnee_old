@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -8,10 +9,11 @@ public abstract class Entry
 
     public string PosterPath { get; set; }
 
+    protected const long DefaultId = long.MinValue;
     private static Movie _defaultMovie = null;
     public static Entry DefaultEntry
     {
-        get { return _defaultMovie ?? (_defaultMovie = new Movie(long.MinValue)); }
+        get { return _defaultMovie ?? (_defaultMovie = new Movie(DefaultId)); }
     }
 
     public string GetIdentifier()
@@ -19,11 +21,19 @@ public abstract class Entry
         return this.GetType().Name + Constants.EntryIdentifierSeparator + this.DatabaseId;
     }
 
+    public abstract Dictionary<string, object> Serialize();
+    public abstract void Deserialize(Dictionary<string, object> data);
+
     public static bool IsNullOrDefault(Entry entry)
     {
         if (entry == null)
         {
             Debug.LogError("Entry was null");
+            return true;
+        }
+        if (entry.DatabaseId == DefaultId)
+        {
+            Debug.LogError("Entry has the default id");
             return true;
         }
         if (entry.GetIdentifier() == DefaultEntry.GetIdentifier())
@@ -47,4 +57,7 @@ public abstract class Entry
     {
         return this.GetIdentifier().GetHashCode();
     }
+
+    public abstract IEnumerable<Entry> GetOppositeEntries(ConnectionType connectionType, HashSet<long> oppositeIds, DatabaseDialoger database);
+    public abstract Type GetOppositeOf(ConnectionType connectionType);
 }

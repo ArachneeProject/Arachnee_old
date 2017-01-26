@@ -79,7 +79,7 @@ public class PhysicalGraphBuilder : MonoBehaviour
 
             foreach (var entryToConnect in entriesToConnect)
             {
-                var connections = this._dbDialoger.GetEntriesConnectedTo(entryToConnect);
+                var connections = this._dbDialoger.GetConnectedEntries(entryToConnect);
 
                 foreach (var connectedEntry in connections.Keys)
                 {
