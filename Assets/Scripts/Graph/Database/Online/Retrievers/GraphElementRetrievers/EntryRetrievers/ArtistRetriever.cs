@@ -15,23 +15,7 @@ public class ArtistRetriever : GraphElementRetriever
         {
             return Entry.DefaultEntry;
         }
-        var artist = new Artist(long.Parse(node["id"].Value));
-        artist.PosterPath = node["profile_path"].Value;
-
-        var name = node["name"].Value;
-        int idx = name.LastIndexOf(' ');
-        if (idx < 0)
-        {
-            artist.LastName = name;
-            // also known as...
-        }
-        else
-        {
-            artist.FirstName = name.Substring(0, idx);
-            artist.LastName = name.Substring(idx + 1);
-        }
-        
-        return artist;
+        return new Artist(node);
     }
 }
 

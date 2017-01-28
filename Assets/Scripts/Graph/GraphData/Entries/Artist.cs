@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SimpleJSON;
 using UnityEngine;
 
 [Database("Artists","id_artist")]
@@ -29,9 +30,32 @@ public class Artist : Entry
         this.DatabaseId = DefaultId;
     }
 
-    public Artist(long databaseId)
+    public Artist(JSONNode node)
     {
-        this.DatabaseId = databaseId;
+        this.DatabaseId = long.Parse(node["id"].Value);
+
+        var name = node["name"].Value;
+        int idx = name.LastIndexOf(' ');
+        if (idx < 0)
+        {
+            this.LastName = name;
+            // also known as...
+        }
+        else
+        {
+            this.FirstName = name.Substring(0, idx);
+            this.LastName = name.Substring(idx + 1);
+        }
+
+        if (node["profile_path"].Value == "null")
+        {
+            Debug.LogError("profile path is null");
+            this.PosterPath = null;
+        }
+        else
+        {
+            this.PosterPath = node["profile_path"].Value;
+        }
     }
 
     public override string ToString()

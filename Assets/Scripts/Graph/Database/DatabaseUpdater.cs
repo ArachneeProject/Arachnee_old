@@ -29,7 +29,7 @@ public class DatabaseUpdater : MonoBehaviour
 
     private IEnumerable<Entry> GetEntriesToUpdate()
     {
-        return  _databaseDlg.GetEntries<Artist>(new HashSet<long>(new long[] { 1100 })).Select(a => (Entry) a).Concat( 
+        return  _databaseDlg.GetEntries<Artist>(new HashSet<long>(new long[] { 1100, 2710 })).Select(a => (Entry) a).Concat( 
                 (_databaseDlg.GetEntries<Movie>(new HashSet<long>(new long[] { 218 })).Select(m => (Entry) m)));
     }
 
@@ -62,14 +62,14 @@ public class DatabaseUpdater : MonoBehaviour
 
         foreach (ConnectionType connectionType in Enum.GetValues(typeof(ConnectionType)))
         {
-            yield return StartCoroutine(GetConnectedEntries(entry, connectionType));
+            yield return StartCoroutine(UpdateConnectedEntries(entry, connectionType));
         }
     }
 
-    public IEnumerator GetConnectedEntries(Entry entry, ConnectionType connectionType)
+    public IEnumerator UpdateConnectedEntries(Entry entry, ConnectionType connectionType)
     {
         #region ui
-        this.smallStep.text = "Getting " + connectionType + "s";
+        this.smallStep.text = "Getting connections...";
         yield return new WaitForEndOfFrame();
         #endregion ui
 
@@ -92,12 +92,18 @@ public class DatabaseUpdater : MonoBehaviour
 
         Debug.Log(connectionType + "(s) of " + entry + ":" + string.Join(", ", connectedIds.Select(x => x.ToString()).ToArray()));
 
-        OnlineRetriever oppositeRetriever = entry.GetOppositeEntryRetriever(connectionType);
-        yield return StartCoroutine(oppositeRetriever.RetrieveData(new HashSet<string>(connectedIds.Select(id => id.ToString()))));
-
-        List<Entry> connectedEntries = new List<Entry>();
-        foreach (object connectedEntryObj in oppositeRetriever.RetrievedData.Values)
+        foreach (var connectedId in connectedIds)
         {
+            var oppositeRetriever = entry.GetOppositeEntryRetriever(connectionType);
+            yield return StartCoroutine(oppositeRetriever.RetrieveData(new HashSet<string>(new[] {connectedId.ToString()})));
+            
+            object connectedEntryObj;
+            if (!oppositeRetriever.RetrievedData.TryGetValue(connectedId.ToString(), out connectedEntryObj))
+            {
+                Debug.LogError("Unable to find anything for " + connectedId);
+                continue;
+            }
+
             var connectedEntry = connectedEntryObj as Entry;
             if (connectedEntry == null)
             {
@@ -106,22 +112,17 @@ public class DatabaseUpdater : MonoBehaviour
             }
             if (!Entry.IsNullOrDefault(connectedEntry))
             {
-                connectedEntries.Add(connectedEntry);
+                #region ui
+                string message = connectedEntry + " (" + connectionType + ")";
+                Debug.Log(message);
+                this.smallStep.text = message;
+                yield return new WaitForEndOfFrame();
+                #endregion ui
+
+                this._databaseDlg.InsertOrUpdate(new[] { connectedEntry });
+                this._databaseDlg.InsertConnection(entry, connectedEntry, connectionType);
             }
         }
         
-        #region ui
-        string message = entry + " has " + connectionType + "(s)  " +
-                         string.Join(", ", connectedEntries.Select(e => e.ToString()).ToArray());
-        Debug.Log(message);
-        this.smallStep.text = message;
-        yield return new WaitForEndOfFrame();
-        #endregion ui
-        
-        foreach (var oppositeEntry in connectedEntries)
-        {
-            this._databaseDlg.InsertOrUpdate(new[] {oppositeEntry});
-            this._databaseDlg.InsertConnection(entry, oppositeEntry, connectionType);
-        }
     }
 }

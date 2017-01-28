@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using SimpleJSON;
+using UnityEngine;
 
 public class ArtistSearchRetriever : GraphElementRetriever
 {
@@ -10,13 +13,21 @@ public class ArtistSearchRetriever : GraphElementRetriever
 
     protected override object BuildResult(JSONNode node)
     {
-        var artist = new Artist(long.Parse(node["id"].Value));
-
-        if (node["profile_path"].Value == "null")
+        if (node["results"] == null)
         {
-            
+            Debug.LogError("Unable to get any result");
+            return Enumerable.Empty<Artist>();
         }
-        return artist;
+
+        var results = new List<Artist>();
+        foreach (var artistNode in node["results"].Childs)
+        {
+            if (artistNode["profile_path"].Value != "null")
+            {
+                results.Add(new Artist(artistNode));
+            }
+        }
+        return results;
     }
 }
 

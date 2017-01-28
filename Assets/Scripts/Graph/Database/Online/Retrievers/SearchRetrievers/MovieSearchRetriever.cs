@@ -1,8 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SimpleJSON;
+using UnityEngine;
 
 public class MovieSearchRetriever : GraphElementRetriever
 {
@@ -13,21 +12,20 @@ public class MovieSearchRetriever : GraphElementRetriever
 
     protected override object BuildResult(JSONNode node)
     {
-        long movieId;
-        if (!long.TryParse(node["id"].Value, out movieId))
+        if (node["results"] == null)
         {
-            return Entry.DefaultEntry;
-        }
-        var movie = new Movie(movieId);
-        if (node["poster_path"].Value == "null")
-        {
-            return Entry.DefaultEntry;
+            Debug.LogError("Unable to get any result");
+            return Enumerable.Empty<Movie>();
         }
 
-        movie.PosterPath = node["poster_path"].Value;
-        movie.Title = node["title"].Value;
-        movie.Overview = node["overview"];
-
-        return movie;
+        var results = new List<Movie>();
+        foreach (var movieNode in node["results"].Childs)
+        {
+            if (movieNode["poster_path"].Value != "null")
+            {
+                results.Add(new Movie(movieNode));
+            }
+        }
+        return results;
     }
 }

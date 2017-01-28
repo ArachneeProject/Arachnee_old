@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SimpleJSON;
 using UnityEngine;
 
 [Database("Movies","id_movie")]
@@ -38,10 +39,33 @@ public class Movie : Entry
     {
         this.DatabaseId = DefaultId;
     }
-
-    public Movie(long databaseId)
+    internal Movie(long defaultId)
     {
-        this.DatabaseId = databaseId;
+        this.DatabaseId = defaultId;
+    }
+    
+    public Movie(JSONNode node)
+    {
+        this.DatabaseId = long.Parse(node["id"].Value);
+        this.Title = node["original_title"].Value;
+
+        string date = node["release_date"].Value;
+        if (date.Length >= 4)
+        {
+            int year;
+            int.TryParse(date.Substring(0, 4), out year);
+            this.Year = year;
+        }
+
+        if (node["poster_path"].Value == "null")
+        {
+            Debug.LogError("poster path is null");
+            this.PosterPath = null;
+        }
+        else
+        {
+            this.PosterPath = node["poster_path"].Value;
+        }
     }
 
     public override string ToString()

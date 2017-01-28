@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public abstract class Entry
@@ -10,10 +9,11 @@ public abstract class Entry
     public string PosterPath { get; set; }
 
     protected const long DefaultId = long.MinValue;
-    private static Movie _defaultMovie = null;
+
+    private static Movie _default = null;
     public static Entry DefaultEntry
     {
-        get { return _defaultMovie ?? (_defaultMovie = new Movie(DefaultId)); }
+        get { return _default ?? (_default = new Movie(DefaultId)); }
     }
 
     public string GetIdentifier()
