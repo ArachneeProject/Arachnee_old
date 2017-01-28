@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 public class EntryGraph
 {
@@ -84,6 +82,30 @@ public class EntryGraph
         return correctlyAddedA && connectedToB[entryA].Add(connectionType);
     }
 
+    /// <summary>
+    /// Add to this graph all vertices and edges from the given graph
+    /// </summary>
+    public void MergeWith(EntryGraph graph)
+    {
+        foreach (var vertex in graph.Vertices)
+        {
+            this.AddVertex(vertex);
+        }
+        foreach (var fromEntry in graph.Edges.Keys)
+        {
+            foreach (var toEntry in graph.Edges[fromEntry].Keys)
+            {
+                foreach (var connectionType in graph.Edges[fromEntry][toEntry])
+                {
+                    this.AddConnection(fromEntry, toEntry, connectionType);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Get number of edges in this graph
+    /// </summary>
     public int EdgesCount()
     {
         return _edges.Values.Sum(key => key.Values.Count);

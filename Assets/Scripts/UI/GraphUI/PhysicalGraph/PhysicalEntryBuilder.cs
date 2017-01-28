@@ -1,56 +1,44 @@
-﻿using System.Collections;
+﻿using System;
+using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
-using UnityEngine.UI;
 
-public class GraphUI : MonoBehaviour
+public class PhysicalEntryBuilder : MonoBehaviour
 {
-    public PhysicalGraphEngine graphEngine;
-    public Text selectedEntryName;
-    public Button foldupButton;
-    public Button maskButton;
-    public Button unfoldButton;
+    public PhysicalVertex moviePrefab;
+    public PhysicalVertex artistPrefab;
 
-    private PhysicalVertex _selectedVertex;
-    
+    private readonly Dictionary<Type, PhysicalVertex> _vertexAssociation = new Dictionary<Type, PhysicalVertex>();
+
     void Start()
     {
-        /*
-        this.selectedEntryName.gameObject.SetActive(false);
-        this.foldupButton.gameObject.SetActive(false);
-        this.unfoldButton.gameObject.SetActive(false);
-        this.maskButton.gameObject.SetActive(false);
-        */
-    }
-    
-    void SelectEntry(PhysicalVertex vertex)
-    {
-        this._selectedVertex = vertex;
-        selectedEntryName.text = vertex.Entry.ToString();
-
-        // active gui
-        this.selectedEntryName.gameObject.SetActive(true);
-        this.foldupButton.gameObject.SetActive(true);
-        this.unfoldButton.gameObject.SetActive(true);
-        this.maskButton.gameObject.SetActive(true);
+        _vertexAssociation.Add(typeof(Movie), moviePrefab);
+        _vertexAssociation.Add(typeof(Artist), artistPrefab);
     }
 
-    public void AddPhysicalVertices(IEnumerable<PhysicalVertex> physicalVertices)
+    /// <summary>
+    /// Instantiate the gameobjects corresponding to the given entries. Return the instantiated gameobjects.
+    /// </summary>
+    public IEnumerable<PhysicalVertex> BuildEntries(IEnumerable<Entry> entries, PhysicalVertex.EntryClickHandler entryClickedHandler)
     {
-        // init event
-        foreach (PhysicalVertex vertex in physicalVertices)
+        var builtEntries = new List<PhysicalVertex>();
+        foreach (var entry in entries.Where(e => !Entry.IsNullOrDefault(e)))
         {
-            vertex.EntryClickedEvent += SelectEntry;
+            PhysicalVertex prefab;
+            if (!_vertexAssociation.TryGetValue(entry.GetType(), out prefab))
+            {
+                Debug.LogError("Unable to find prefab for " + entry.GetType().Name);
+                continue;
+            }
+            var physicalVertex = Instantiate(prefab);
+            physicalVertex.Entry = entry;
+            physicalVertex.EntryClickedEvent += entryClickedHandler;
+            builtEntries.Add(physicalVertex);
         }
-
-        // get posters
-        StartCoroutine(PutPosters(physicalVertices));
-    }
-
-    public void AddPhysicalEdges(IEnumerable<PhysicalEdge> physicalEdges)
-    {
         
+        StartCoroutine(PutPosters(builtEntries));
+        return builtEntries;
     }
 
     private IEnumerator PutPosters(IEnumerable<PhysicalVertex> vertices)
@@ -94,5 +82,4 @@ public class GraphUI : MonoBehaviour
             }
         }
     }
-
 }

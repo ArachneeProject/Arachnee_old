@@ -1,75 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
-public class PhysicalGraphEngine : MonoBehaviour
+public class GraphSceneUI : MonoBehaviour
 {
-    public GraphUI graphUI;
-    public float coulombRepulsion = 150;
-    public float hookeAttraction = 1;
-    public float coulombRepulsionSquaredMaxDistance = 10000;
-    public int maxActiveVertices = 300;
+    public Text selectedEntryName;
+
+    public Button foldupButton;
+    public Button maskButton;
+    public Button unfoldButton;
+
+    private PhysicalVertex _selectedVertex;
     
-    private readonly List<PhysicalVertex> _activeVertices = new List<PhysicalVertex>();
-    private readonly List<PhysicalEdge> _activeEdges = new List<PhysicalEdge>();
-
-    public void AddPhysicalVertices(IEnumerable<PhysicalVertex> physicalVertices)
+    void Start()
     {
-        _activeVertices.AddRange(physicalVertices);
-        graphUI.AddPhysicalVertices(physicalVertices);
+        /*
+        this.selectedEntryName.gameObject.SetActive(false);
+        this.foldupButton.gameObject.SetActive(false);
+        this.unfoldButton.gameObject.SetActive(false);
+        this.maskButton.gameObject.SetActive(false);
+         */ 
     }
-
-    public void AddPhysicalEdges(IEnumerable<PhysicalEdge> physicalEdges)
+    
+    public void SelectEntry(PhysicalVertex vertex)
     {
-        _activeEdges.AddRange(physicalEdges);
-        graphUI.AddPhysicalEdges(physicalEdges);
+        this._selectedVertex = vertex;
+        selectedEntryName.text = vertex.Entry.ToString();
+
+        // active gui
+        this.selectedEntryName.gameObject.SetActive(true);
+        this.foldupButton.gameObject.SetActive(true);
+        this.unfoldButton.gameObject.SetActive(true);
+        this.maskButton.gameObject.SetActive(true);
     }
-
-    /// <summary>
-    /// Update the force between the entries
-    /// </summary>
-    void FixedUpdate()
-    {
-        foreach (var vertex in this._activeVertices)
-        {
-            // repulsion
-            foreach (var otherVertex in this._activeVertices)
-            {
-                if (vertex != otherVertex)
-                {
-                    float squaredDistance = MiniMath.getSquaredDistance(vertex.transform.position, otherVertex.transform.position);
-                    if (squaredDistance < coulombRepulsionSquaredMaxDistance)
-                    {
-                        Vector3 repulsion = this.coulombRepulsion * (vertex.transform.position - otherVertex.transform.position) * (1F / squaredDistance);
-                        if (vertex.RigidBody != null)
-                        {
-                            vertex.RigidBody.AddForce(repulsion);
-                        }
-                    }
-                }
-            }
-
-            // attraction to center
-            if (vertex.RigidBody != null)
-            {
-                vertex.RigidBody.AddForce(-vertex.transform.position);
-            }
-        }
-
-        // attraction
-        foreach (var edge in this._activeEdges)
-        {
-            Vector3 attraction = this.hookeAttraction * (edge.Left.transform.position - edge.Right.transform.position);
-            if (edge.Left.RigidBody != null && edge.Right.RigidBody != null)
-            {
-                edge.Left.RigidBody.AddForce(-attraction);
-                edge.Right.RigidBody.AddForce(attraction);
-            }
-        }
-    }
-
+    
+    
     /*
-
     /// <summary>
     /// Fold entries having only one active connection to the given entry
     /// </summary>

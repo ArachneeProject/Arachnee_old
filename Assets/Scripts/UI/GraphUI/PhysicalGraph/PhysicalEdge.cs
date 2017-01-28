@@ -6,6 +6,8 @@ public class PhysicalEdge : MonoBehaviour
     public PhysicalVertex Left { get; set; }
     public PhysicalVertex Right { get; set; }
 
+    public ConnectionType ConnectionType { get; set; }
+
     void Start()
     {
         _lineRenderer = GetComponent<LineRenderer>();

@@ -8,14 +8,7 @@ public class PhysicalVertex : MonoBehaviour
     private Entry _entry;
     public Entry Entry
     {
-        get
-        {
-            if (_entry == null)
-            {
-                return Entry.DefaultEntry;
-            }
-            return _entry;
-        }
+        get { return _entry ?? (_entry = Entry.DefaultEntry); }
         set
         {
             if (Entry.IsNullOrDefault(value))
@@ -39,10 +32,6 @@ public class PhysicalVertex : MonoBehaviour
     void Start()
     {
         this.RigidBody = this.GetComponent<Rigidbody>();
-        if (string.IsNullOrEmpty(this.label.Text))
-        {
-            this.label.Text = "<no entry>";
-        }
     }
     
     public delegate void EntryClickHandler(PhysicalVertex v);
